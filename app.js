@@ -15,7 +15,8 @@
 const CITIES_URL = 'data/cities.json';
 const LS_LANG    = 'seyyah-lang';
 const LS_THEME   = 'seyyah-theme';
-const LS_FAVS    = 'seyyah-favs';
+const LS_FAVS        = 'seyyah-favs';
+const LS_PLACE_FAVS  = 'seyyah-place-favs';
 
 // ── 2. Durum ──────────────────────────────────────────────────────────
 const state = {
@@ -29,7 +30,10 @@ const state = {
   favorites:   new Set(JSON.parse(localStorage.getItem(LS_FAVS) || '[]')),
   lang:        localStorage.getItem(LS_LANG)  || 'tr',
   theme:       localStorage.getItem(LS_THEME) || 'light',
-  mapInstance: null,
+  mapInstance:  null,
+  modalPlace:   null,
+  modalMapInst: null,
+  placeFavs:    new Set(JSON.parse(localStorage.getItem(LS_PLACE_FAVS) || '[]')),
 };
 
 // ── 3. Çeviriler ──────────────────────────────────────────────────────
@@ -66,7 +70,13 @@ const STRINGS = {
     map_legend:   'Haritada gösterilen mekanlar',
     share_label:  'Paylaş',
     load_err:     'Veri yüklenemedi: ',
-    no_coord:     'Koordinat bilgisi olan mekan bulunamadı.',
+    no_coord:       'Koordinat bilgisi olan mekan bulunamadı.',
+    modal_close:    'Kapat',
+    modal_share:    'Linki Kopyala',
+    modal_share_ok: 'Mekan linki kopyalandı!',
+    modal_plan:     'Gezi Planına Ekle',
+    place_fav_add:  'Mekanı favorile',
+    place_fav_rm:   'Favoriden çıkar',
   },
   en: {
     tagline:      "Discover Turkey's cities",
@@ -100,7 +110,13 @@ const STRINGS = {
     map_legend:   'Places shown on map',
     share_label:  'Share',
     load_err:     'Failed to load data: ',
-    no_coord:     'No places with coordinates found.',
+    no_coord:       'No places with coordinates found.',
+    modal_close:    'Close',
+    modal_share:    'Copy Link',
+    modal_share_ok: 'Place link copied!',
+    modal_plan:     'Add to Plan',
+    place_fav_add:  'Save place',
+    place_fav_rm:   'Unsave place',
   },
 };
 
@@ -137,6 +153,8 @@ const IC = {
   landmark:  svg('<line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/>'),
   bino:      svg('<circle cx="8.5" cy="13" r="4"/><circle cx="15.5" cy="13" r="4"/><path d="M1 13h4M19 13h4M8.5 9V7M15.5 9V7M10.5 13h3"/>'),
   tag:       svg('<path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><path d="M7 7h.01"/>'),
+  link:      svg('<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>'),
+  plan:      svg('<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="16" x2="15" y2="16"/><line x1="12" y1="13" x2="12" y2="19"/>'),
 };
 
 const CAT_IC  = { yemek: IC.utensils, cami: IC.mosque, muze: IC.landmark, gezi: IC.bino };
@@ -155,8 +173,20 @@ function mapsUrl(lat, lng) {
   return 'https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng;
 }
 
+function slugify(str) {
+  return String(str == null ? '' : str).toLowerCase()
+    .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+    .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 function saveFavs() {
   localStorage.setItem(LS_FAVS, JSON.stringify(Array.from(state.favorites)));
+}
+
+function savePlaceFavs() {
+  localStorage.setItem(LS_PLACE_FAVS, JSON.stringify(Array.from(state.placeFavs)));
 }
 
 // ── 6. Tema & Dil ─────────────────────────────────────────────────────
@@ -472,7 +502,9 @@ function placeCardHTML(place) {
     ? '<footer class="place-card-footer">' + hoursHTML + priceHTML + dirHTML + '</footer>'
     : '';
 
-  return '<article class="place-card">'
+  return '<article class="place-card place-card-clickable" '
+    + 'data-place-name="' + esc(place.name) + '" '
+    + 'role="button" tabindex="0" aria-label="' + esc(place.name) + ' – detayları gör">'
     + '<div class="place-card-accent place-accent-' + esc(place.category) + '"></div>'
     + '<div class="place-card-body">'
     + '<div class="place-card-header">'
@@ -601,6 +633,9 @@ function bindDetailEvents() {
   });
 
   bindTagChipEvents();
+
+  var grid = document.getElementById('place-grid');
+  if (grid) bindPlaceCardClicks(grid);
 }
 
 function bindTagChipEvents() {
@@ -653,6 +688,8 @@ function updatePlaceGrid() {
       updatePlaceGrid();
     });
   });
+
+  bindPlaceCardClicks(grid);
 }
 
 // ── 11. Leaflet Harita ────────────────────────────────────────────────
@@ -739,7 +776,213 @@ function initMap() {
   }
 }
 
-// ── 12. Favoriler Paylaş ──────────────────────────────────────────────
+// ── 12. Yer Detay Modalı ──────────────────────────────────────────────
+
+function modalInnerHTML(place) {
+  var hasLoc  = place.location && place.location.lat && place.location.lng;
+  var imgSeed = slugify(place.name) || 'place';
+  var imgUrl  = 'https://picsum.photos/seed/' + encodeURIComponent(imgSeed + '-detail') + '/800/420';
+  var favKey  = (state.slug || '') + '__' + slugify(place.name);
+  var isFav   = state.placeFavs.has(favKey);
+
+  var tagsHTML = '';
+  if (place.tags && place.tags.length) {
+    tagsHTML = '<div class="modal-tags">'
+      + place.tags.map(function(tag) {
+          return '<span class="chip-tag">' + esc(tag) + '</span>';
+        }).join('') + '</div>';
+  }
+
+  var mustEatHTML = '';
+  if (place.mustEat && place.mustEat.length) {
+    mustEatHTML = '<div class="must-eat"><span class="must-eat-label">' + esc(t('must_eat')) + '</span>'
+      + '<div class="must-eat-chips">'
+      + place.mustEat.map(function(item) {
+          return '<span class="must-chip">' + esc(item) + '</span>';
+        }).join('') + '</div></div>';
+  }
+
+  var infoItems = '';
+  if (place.openHours) {
+    infoItems += '<div class="modal-info-item"><span class="modal-info-label">'
+      + IC.clock + ' ' + esc(t('open_hours')) + '</span>'
+      + '<span class="modal-info-val">' + esc(place.openHours) + '</span></div>';
+  }
+  if (place.priceLevel) {
+    var priceLabel = state.lang === 'tr' ? 'Fiyat' : 'Price';
+    infoItems += '<div class="modal-info-item"><span class="modal-info-label">₺ ' + esc(priceLabel) + '</span>'
+      + '<span class="modal-info-val">' + esc(t('price', place.priceLevel)) + '</span></div>';
+  }
+
+  var mapHTML = hasLoc ? '<div id="modal-map" class="modal-map-mini"></div>' : '';
+  var dirBtn  = hasLoc
+    ? '<a class="modal-btn modal-btn-primary" href="' + esc(mapsUrl(place.location.lat, place.location.lng))
+      + '" target="_blank" rel="noopener noreferrer">' + IC.mapPin + ' ' + esc(t('directions')) + '</a>'
+    : '';
+
+  return '<div class="modal" role="document">'
+    + '<div class="modal-banner">'
+    + '<img class="modal-banner-img" src="' + imgUrl + '" alt="' + esc(place.name) + '" loading="eager">'
+    + '<div class="modal-banner-overlay"></div>'
+    + '<button class="modal-close" id="modal-close" aria-label="' + esc(t('modal_close')) + '">' + IC.xMark + '</button>'
+    + '<div class="modal-banner-badge">' + badgeHTML(place.category) + '</div>'
+    + '</div><div class="modal-body">'
+    + '<h2 class="modal-place-name" id="modal-place-name">' + esc(place.name) + '</h2>'
+    + tagsHTML
+    + '<p class="modal-desc">' + esc(place.description) + '</p>'
+    + (infoItems ? '<div class="modal-info-grid">' + infoItems + '</div>' : '')
+    + mustEatHTML + mapHTML
+    + '<div class="modal-actions">' + dirBtn
+    + '<button class="modal-btn modal-btn-secondary" id="modal-share-btn">'
+    + IC.share + ' ' + esc(t('modal_share')) + '</button>'
+    + '<button class="modal-btn modal-btn-fav ' + (isFav ? 'is-fav' : '') + '" id="modal-fav-btn" '
+    + 'aria-label="' + esc(isFav ? t('place_fav_rm') : t('place_fav_add')) + '">'
+    + (isFav ? IC.heartFill : IC.heart) + '</button>'
+    + '</div></div></div>';
+}
+
+function openPlaceModal(place, updateUrl) {
+  var old = document.getElementById('place-modal-overlay');
+  if (old) {
+    old.remove();
+    if (state.modalMapInst) { state.modalMapInst.remove(); state.modalMapInst = null; }
+  }
+  state.modalPlace = place;
+  if (updateUrl !== false && state.slug) {
+    history.pushState(null, '', '#' + state.slug + '/' + slugify(place.name));
+  }
+
+  var overlay = document.createElement('div');
+  overlay.id        = 'place-modal-overlay';
+  overlay.className = 'modal-overlay';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.setAttribute('aria-labelledby', 'modal-place-name');
+
+  // Güvenli HTML enjeksiyonu: tüm içerik esc() ile sanitize edilmiştir (dosya başı notuna bak)
+  var safeHTML = modalInnerHTML(place);
+  var frag = document.createRange().createContextualFragment(safeHTML);
+  overlay.appendChild(frag);
+
+  document.body.appendChild(overlay);
+  document.body.classList.add('modal-open');
+
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { overlay.classList.add('modal-overlay-visible'); });
+  });
+
+  if (place.location && place.location.lat) {
+    setTimeout(function() { initModalMap(place); }, 100);
+  }
+  bindModalEvents(overlay, place);
+
+  var closeBtn = overlay.querySelector('#modal-close');
+  if (closeBtn) setTimeout(function() { closeBtn.focus(); }, 60);
+}
+
+function closePlaceModal(updateUrl) {
+  var overlay = document.getElementById('place-modal-overlay');
+  if (!overlay) return;
+  overlay.classList.remove('modal-overlay-visible');
+  setTimeout(function() {
+    if (overlay.parentNode) overlay.remove();
+    document.body.classList.remove('modal-open');
+    state.modalPlace = null;
+    if (state.modalMapInst) { state.modalMapInst.remove(); state.modalMapInst = null; }
+  }, 270);
+  if (updateUrl !== false && state.slug) {
+    history.pushState(null, '', '#' + state.slug);
+  }
+}
+
+function initModalMap(place) {
+  var mapEl = document.getElementById('modal-map');
+  if (!mapEl || typeof window.L === 'undefined') return;
+  if (!place.location || !place.location.lat) return;
+  if (state.modalMapInst) { state.modalMapInst.remove(); state.modalMapInst = null; }
+  try {
+    var map = L.map('modal-map', { zoomControl: true, scrollWheelZoom: false, attributionControl: false });
+    state.modalMapInst = map;
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+    var color  = MAP_COL[place.category] || '#555';
+    var marker = L.marker([place.location.lat, place.location.lng], {
+      icon: L.divIcon({
+        className: 'map-marker',
+        html: '<div class="map-marker-inner" style="background:' + color + ';width:18px;height:18px;border-width:3px"></div>',
+        iconSize: [18, 18], iconAnchor: [9, 9], popupAnchor: [0, -12],
+      }),
+      alt: place.name,
+    });
+    marker.addTo(map);
+    marker.bindPopup('<strong>' + esc(place.name) + '</strong>', { closeButton: false }).openPopup();
+    map.setView([place.location.lat, place.location.lng], 15);
+  } catch(_) {}
+}
+
+function bindModalEvents(overlay, place) {
+  var closeBtn = overlay.querySelector('#modal-close');
+  if (closeBtn) closeBtn.addEventListener('click', function() { closePlaceModal(); });
+
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) closePlaceModal();
+  });
+
+  var shareBtn = overlay.querySelector('#modal-share-btn');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', function() {
+      var url = location.origin + location.pathname + '#' + (state.slug || '') + '/' + slugify(place.name);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url)
+          .then(function() { showToast(t('modal_share_ok')); })
+          .catch(function() { fallbackCopy(url); showToast(t('modal_share_ok')); });
+      } else {
+        fallbackCopy(url);
+        showToast(t('modal_share_ok'));
+      }
+    });
+  }
+
+  var favBtn = overlay.querySelector('#modal-fav-btn');
+  if (favBtn) {
+    favBtn.addEventListener('click', function() {
+      var favKey = (state.slug || '') + '__' + slugify(place.name);
+      if (state.placeFavs.has(favKey)) {
+        state.placeFavs.delete(favKey);
+        favBtn.classList.remove('is-fav');
+        favBtn.innerHTML = IC.heart;
+        favBtn.setAttribute('aria-label', t('place_fav_add'));
+      } else {
+        state.placeFavs.add(favKey);
+        favBtn.classList.add('is-fav');
+        favBtn.innerHTML = IC.heartFill;
+        favBtn.setAttribute('aria-label', t('place_fav_rm'));
+      }
+      savePlaceFavs();
+    });
+  }
+}
+
+function bindPlaceCardClicks(container) {
+  if (!container) return;
+  container.querySelectorAll('.place-card-clickable[data-place-name]').forEach(function(card) {
+    card.addEventListener('click', function(e) {
+      if (e.target.closest('a, .chip-tag')) return;
+      var placeName = card.dataset.placeName;
+      var place = state.cityData && state.cityData.places.find(function(p) { return p.name === placeName; });
+      if (place) openPlaceModal(place);
+    });
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        var placeName = card.dataset.placeName;
+        var place = state.cityData && state.cityData.places.find(function(p) { return p.name === placeName; });
+        if (place) openPlaceModal(place);
+      }
+    });
+  });
+}
+
+// ── 13. Favoriler Paylaş ──────────────────────────────────────────────
 
 function shareFavorites() {
   var slugs = Array.from(state.favorites).join(',');
@@ -805,6 +1048,50 @@ async function router() {
     return;
   }
 
+  // #cityslug/placeslug → şehir detayı + yer modalı
+  var slashIdx = hash.indexOf('/');
+  if (slashIdx !== -1) {
+    var citySlug  = hash.slice(0, slashIdx);
+    var placeSlug = hash.slice(slashIdx + 1);
+    if (citySlug && placeSlug) {
+      // Açık modal varsa hemen temizle
+      var oldM = document.getElementById('place-modal-overlay');
+      if (oldM) {
+        oldM.remove();
+        document.body.classList.remove('modal-open');
+        if (state.modalMapInst) { state.modalMapInst.remove(); state.modalMapInst = null; }
+        state.modalPlace = null;
+      }
+      // Şehri yükle (zaten yüklüyse tekrar yükleme)
+      if (state.slug !== citySlug || !state.cityData) {
+        state.slug       = citySlug;
+        state.category   = 'all';
+        state.activeTags = new Set();
+        await renderCityDetail();
+      }
+      // Yeri bul ve modalı aç
+      if (state.cityData) {
+        var target = null;
+        for (var pi = 0; pi < state.cityData.places.length; pi++) {
+          if (slugify(state.cityData.places[pi].name) === placeSlug) {
+            target = state.cityData.places[pi]; break;
+          }
+        }
+        if (target) openPlaceModal(target, false);
+      }
+      return;
+    }
+  }
+
+  // Modal açıksa kapat (city URL'e geri döndük)
+  var oldM2 = document.getElementById('place-modal-overlay');
+  if (oldM2) {
+    oldM2.remove();
+    document.body.classList.remove('modal-open');
+    if (state.modalMapInst) { state.modalMapInst.remove(); state.modalMapInst = null; }
+    state.modalPlace = null;
+  }
+
   if (hash && hash !== '/') {
     state.slug       = hash;
     state.category   = 'all';
@@ -836,12 +1123,30 @@ async function init() {
   var langBtn = document.getElementById('btn-lang');
   if (langBtn) langBtn.addEventListener('click', toggleLang);
 
-  // ⌘K / Ctrl+K → search odağı
+  // ⌘K / Ctrl+K → search odağı  |  ESC → modal kapat
   document.addEventListener('keydown', function(e) {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
       e.preventDefault();
       var inp = document.getElementById('search-input');
       if (inp) { inp.focus(); inp.select(); }
+    }
+    if (e.key === 'Escape') { closePlaceModal(); }
+  });
+
+  // Tarayıcı geri butonu → modal kapat
+  window.addEventListener('popstate', function() {
+    var h = location.hash.slice(1).split('?')[0];
+    if (h.indexOf('/') === -1) {
+      var ov = document.getElementById('place-modal-overlay');
+      if (ov) {
+        ov.classList.remove('modal-overlay-visible');
+        setTimeout(function() {
+          if (ov.parentNode) ov.remove();
+          document.body.classList.remove('modal-open');
+          state.modalPlace = null;
+          if (state.modalMapInst) { state.modalMapInst.remove(); state.modalMapInst = null; }
+        }, 270);
+      }
     }
   });
 
