@@ -19,6 +19,8 @@ const LS_FAVS        = 'seyyah-favs';
 const LS_PLACE_FAVS  = 'seyyah-place-favs';
 const LS_PLAN        = 'seyyah-plan';
 const LS_VISITS      = 'seyyah-visits';
+const LS_SEARCH_HIST = 'seyyah-search-hist';
+const MAX_HIST       = 5;
 
 // ── 2. Durum ──────────────────────────────────────────────────────────
 const state = {
@@ -41,6 +43,8 @@ const state = {
   visits:       JSON.parse(localStorage.getItem(LS_VISITS) || '{}'),
   sortBy:       'default',
   openOnly:     false,
+  allPlaces:    [],
+  allPlacesLoaded: false,
 };
 
 // ── 3. Çeviriler ──────────────────────────────────────────────────────
@@ -514,7 +518,11 @@ function renderCityList() {
 
   if (state.search) {
     var inp = document.getElementById('search-input');
-    if (inp) { inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); }
+    if (inp) {
+      inp.focus();
+      inp.setSelectionRange(inp.value.length, inp.value.length);
+      refreshAutocomplete(inp);
+    }
   }
 }
 
@@ -523,9 +531,47 @@ function bindCityListEvents() {
 
   var inp = main.querySelector('#search-input');
   if (inp) {
+    // Odaklanınca: tüm mekanları arka planda yükle + geçmişi göster
+    inp.addEventListener('focus', function() {
+      loadAllPlaces();
+      if (!inp.value.trim()) {
+        var hist = loadSearchHist();
+        if (hist.length) openAutocomplete(inp, hist, true);
+      }
+    });
+
     inp.addEventListener('input', function(e) {
       state.search = e.target.value;
-      renderCityList();
+      var q = (e.target.value || '').trim();
+      renderCityList(); // şehir listesini filtrele (mevcut davranış)
+      // renderCityList DOM'u yeniden oluşturur, taze referans al
+      var freshInp = document.getElementById('search-input');
+      refreshAutocomplete(freshInp);
+    });
+
+    inp.addEventListener('blur', function() {
+      setTimeout(closeAutocomplete, 160);
+    });
+
+    inp.addEventListener('keydown', function(e) {
+      var ac = document.getElementById('ac-dropdown');
+      if (!ac) return;
+      var items   = Array.from(ac.querySelectorAll('.ac-item'));
+      var focIdx  = items.findIndex(function(i) { return i.classList.contains('ac-item-focused'); });
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (focIdx >= 0) items[focIdx].classList.remove('ac-item-focused');
+        items[Math.min(focIdx + 1, items.length - 1)].classList.add('ac-item-focused');
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (focIdx >= 0) items[focIdx].classList.remove('ac-item-focused');
+        items[Math.max(focIdx - 1, 0)].classList.add('ac-item-focused');
+      } else if (e.key === 'Enter') {
+        var focused = ac.querySelector('.ac-item-focused');
+        if (focused) { e.preventDefault(); focused.dispatchEvent(new MouseEvent('mousedown', { bubbles: true })); }
+      } else if (e.key === 'Escape') {
+        closeAutocomplete();
+      }
     });
   }
 
@@ -533,6 +579,7 @@ function bindCityListEvents() {
   if (clrBtn) {
     clrBtn.addEventListener('click', function() {
       state.search = '';
+      closeAutocomplete();
       renderCityList();
       var i = document.getElementById('search-input');
       if (i) i.focus();
@@ -1695,7 +1742,169 @@ function createPlanFab() {
   updatePlanBtn();
 }
 
-// ── 14. Favoriler Paylaş ──────────────────────────────────────────────
+// ── 14. Gelişmiş Arama & Autocomplete ────────────────────────────────
+
+// Tek seferlik Promise — eş zamanlı çoklu fetch'i önler
+var _allPlacesPromise = null;
+
+function loadAllPlaces() {
+  if (state.allPlacesLoaded) return Promise.resolve();
+  if (_allPlacesPromise)     return _allPlacesPromise;
+  _allPlacesPromise = Promise.all(
+    state.cities.map(function(city) {
+      return fetchJSON(city.data).then(function(data) {
+        return data.places.map(function(p) {
+          return {
+            name:       p.name,
+            category:   p.category,
+            citySlug:   city.slug,
+            cityName:   data.city,
+            tags:       p.tags       || [],
+            openHours:  p.openHours  || '',
+          };
+        });
+      }).catch(function() { return []; });
+    })
+  ).then(function(results) {
+    state.allPlaces      = [].concat.apply([], results);
+    state.allPlacesLoaded = true;
+    _allPlacesPromise    = null;
+  });
+  return _allPlacesPromise;
+}
+
+function runSearch(query) {
+  if (!query || !state.allPlacesLoaded) return [];
+  var q = query.toLowerCase().trim();
+  return state.allPlaces.filter(function(p) {
+    return p.name.toLowerCase().indexOf(q) !== -1
+      || p.cityName.toLowerCase().indexOf(q) !== -1
+      || p.tags.some(function(tag) { return tag.toLowerCase().indexOf(q) !== -1; });
+  }).slice(0, 8);
+}
+
+function loadSearchHist() {
+  return JSON.parse(localStorage.getItem(LS_SEARCH_HIST) || '[]');
+}
+
+function addToSearchHist(query) {
+  if (!query || !query.trim()) return;
+  var q    = query.trim();
+  var hist = loadSearchHist().filter(function(h) { return h !== q; });
+  hist.unshift(q);
+  if (hist.length > MAX_HIST) hist = hist.slice(0, MAX_HIST);
+  localStorage.setItem(LS_SEARCH_HIST, JSON.stringify(hist));
+}
+
+function removeFromSearchHist(query) {
+  var hist = loadSearchHist().filter(function(h) { return h !== query; });
+  localStorage.setItem(LS_SEARCH_HIST, JSON.stringify(hist));
+}
+
+function closeAutocomplete() {
+  var ac = document.getElementById('ac-dropdown');
+  if (ac) ac.remove();
+}
+
+function openAutocomplete(inp, items, isHist) {
+  closeAutocomplete();
+  if (!items || !items.length) return;
+  var wrap = inp && inp.closest('.search-wrap');
+  if (!wrap) return;
+
+  var itemsHTML = items.map(function(item) {
+    if (isHist) {
+      return '<div class="ac-item ac-hist-item" role="option" tabindex="-1" data-query="' + esc(item) + '">'
+        + '<span class="ac-item-icon" aria-hidden="true">' + IC.clock + '</span>'
+        + '<span class="ac-item-text">' + esc(item) + '</span>'
+        + '<button class="ac-hist-rm" data-query="' + esc(item) + '" aria-label="' + esc(state.lang === 'tr' ? 'Geçmişten sil' : 'Remove') + '" tabindex="-1">'
+        + IC.xMark + '</button>'
+        + '</div>';
+    }
+    return '<div class="ac-item" role="option" tabindex="-1" '
+      + 'data-city="' + esc(item.citySlug) + '" data-place="' + esc(slugify(item.name)) + '">'
+      + '<span class="ac-item-icon" aria-hidden="true">' + (CAT_IC[item.category] || IC.mapPin) + '</span>'
+      + '<div class="ac-item-info">'
+      + '<span class="ac-item-name">' + esc(item.name) + '</span>'
+      + '<span class="ac-item-city">' + esc(item.cityName) + '</span>'
+      + '</div>'
+      + '<span class="ac-badge badge badge-' + esc(item.category) + '">' + esc(t('cats.' + item.category)) + '</span>'
+      + '</div>';
+  }).join('');
+
+  var ac = document.createElement('div');
+  ac.id        = 'ac-dropdown';
+  ac.className = 'ac-dropdown';
+  ac.setAttribute('role', 'listbox');
+
+  var frag = document.createRange().createContextualFragment(itemsHTML);
+  ac.appendChild(frag);
+  wrap.appendChild(ac);
+
+  // Mekan sonuçlarına tıklama
+  ac.querySelectorAll('.ac-item[data-city]').forEach(function(el) {
+    el.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      var q = inp ? inp.value.trim() : '';
+      if (q) addToSearchHist(q);
+      closeAutocomplete();
+      state.search = '';
+      location.hash = el.dataset.city + '/' + el.dataset.place;
+    });
+  });
+
+  // Geçmiş öğelerine tıklama
+  ac.querySelectorAll('.ac-item[data-query]').forEach(function(el) {
+    el.addEventListener('mousedown', function(e) {
+      if (e.target.closest('.ac-hist-rm')) return;
+      e.preventDefault();
+      var q = el.dataset.query;
+      if (inp) inp.value = q;
+      state.search = q;
+      closeAutocomplete();
+      renderCityList();
+    });
+  });
+
+  // Geçmişten sil butonları
+  ac.querySelectorAll('.ac-hist-rm').forEach(function(btn) {
+    btn.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      removeFromSearchHist(btn.dataset.query);
+      var freshInp = document.getElementById('search-input');
+      var hist = loadSearchHist();
+      if (hist.length && freshInp) openAutocomplete(freshInp, hist, true);
+      else closeAutocomplete();
+    });
+  });
+}
+
+// Belirli bir input için autocomplete içeriğini güncelle (render sonrası)
+function refreshAutocomplete(inp) {
+  if (!inp) return;
+  var q = inp.value.trim();
+  if (!q) {
+    var hist = loadSearchHist();
+    if (hist.length) openAutocomplete(inp, hist, true);
+    else closeAutocomplete();
+  } else if (state.allPlacesLoaded) {
+    var results = runSearch(q);
+    if (results.length) openAutocomplete(inp, results, false);
+    else closeAutocomplete();
+  } else {
+    closeAutocomplete();
+    loadAllPlaces().then(function() {
+      var fi = document.getElementById('search-input');
+      if (fi && state.search === q) {
+        var r = runSearch(q);
+        if (r.length) openAutocomplete(fi, r, false);
+      }
+    });
+  }
+}
+
+// ── 15. Favoriler Paylaş ──────────────────────────────────────────────
 
 function shareFavorites() {
   var slugs = Array.from(state.favorites).join(',');
@@ -1853,9 +2062,15 @@ async function init() {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
       e.preventDefault();
       var inp = document.getElementById('search-input');
-      if (inp) { inp.focus(); inp.select(); }
+      if (inp) {
+        inp.focus(); inp.select();
+        if (!inp.value.trim()) {
+          var hist = loadSearchHist();
+          if (hist.length) openAutocomplete(inp, hist, true);
+        }
+      }
     }
-    if (e.key === 'Escape') { closePlaceModal(); closePlanDrawer(); }
+    if (e.key === 'Escape') { closePlaceModal(); closePlanDrawer(); closeAutocomplete(); }
   });
 
   // Tarayıcı geri butonu → modal kapat

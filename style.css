@@ -2335,7 +2335,108 @@ body.modal-open {
   color: #FCA5A5;
 }
 
-/* ── 31. Ziyaret Takip Sistemi ────────────────────────────────────── */
+/* ── 31. Autocomplete Dropdown ────────────────────────────────────── */
+
+.search-wrap {
+  position: relative;
+}
+
+.ac-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(28,20,9,0.12), 0 2px 8px rgba(28,20,9,0.05);
+  overflow: hidden;
+  z-index: 60;
+  animation: fadeSlideUp 0.15s ease both;
+}
+
+.ac-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--trans);
+  outline: none;
+}
+
+.ac-item:last-child { border-bottom: none; }
+
+.ac-item:hover,
+.ac-item-focused {
+  background: var(--bg-hover);
+}
+
+.ac-item-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  color: var(--ink-3);
+}
+
+.ac-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ac-item-name {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ac-item-city {
+  display: block;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  margin-top: 1px;
+}
+
+.ac-badge {
+  flex-shrink: 0;
+  font-size: 10.5px;
+  padding: 0.12rem 0.45rem;
+  border-radius: 20px;
+}
+
+/* Geçmiş öğesi */
+.ac-hist-item {
+  color: var(--ink-2);
+  font-size: 13px;
+}
+
+.ac-item-text {
+  flex: 1;
+  font-weight: 500;
+}
+
+.ac-hist-rm {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0.2rem;
+  cursor: pointer;
+  color: var(--ink-4);
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  transition: color var(--trans);
+  line-height: 1;
+}
+
+.ac-hist-rm:hover { color: var(--ink-1); }
+
+/* ── 32. Ziyaret Takip Sistemi ────────────────────────────────────── */
 
 /* Place card — ziyaret rozeti */
 .place-card {
