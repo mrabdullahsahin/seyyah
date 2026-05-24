@@ -404,10 +404,17 @@ function filterCities() {
   var q = state.search.toLowerCase().trim();
   return state.cities.filter(function(city) {
     var matchR = state.region === 'all' || city.region === state.region;
-    var matchS = !q
-      || city.city.toLowerCase().indexOf(q) !== -1
+    if (!q) return matchR;
+    var matchCity = city.city.toLowerCase().indexOf(q) !== -1
       || city.description.toLowerCase().indexOf(q) !== -1;
-    return matchR && matchS;
+    // allPlaces yüklüyse o şehirdeki mekanlarda da ara
+    var matchPlace = !matchCity && state.allPlacesLoaded
+      && state.allPlaces.some(function(p) {
+           return p.citySlug === city.slug
+             && (p.name.toLowerCase().indexOf(q) !== -1
+                || p.tags.some(function(tag) { return tag.toLowerCase().indexOf(q) !== -1; }));
+         });
+    return matchR && (matchCity || matchPlace);
   });
 }
 
@@ -440,19 +447,11 @@ function cityCardHTML(city) {
     + '</div></article>';
 }
 
-function renderCityList() {
-  var main      = document.getElementById('main');
+// Şehir kartları bölümünü oluşturur (hero harici)
+function buildCityContentInner() {
   var filtered  = filterCities();
   var favCities = state.cities.filter(function(c) { return state.favorites.has(c.slug); });
   var showFavs  = favCities.length > 0 && !state.search && state.region === 'all';
-
-  var regionChipsHTML = '<button class="chip ' + (state.region === 'all' ? 'chip-active' : '')
-    + '" data-region="all">' + esc(t('all_regions')) + '</button>'
-    + getRegions().map(function(r) {
-        var label = t('regions.' + r) || r;
-        return '<button class="chip ' + (state.region === r ? 'chip-active' : '')
-          + '" data-region="' + esc(r) + '">' + esc(label) + '</button>';
-      }).join('');
 
   var cityCardsHTML = filtered.length
     ? filtered.map(cityCardHTML).join('')
@@ -468,42 +467,12 @@ function renderCityList() {
       + '</section>'
     : '';
 
-  var heroTitle = state.lang === 'tr'
-    ? 'Türkiye\'yi<br><span>Keşfet</span>'
-    : 'Explore<br><span>Turkey</span>';
-  var heroSub = state.lang === 'tr'
-    ? 'Tarihin, lezzetin ve doğanın iç içe geçtiği şehirleri keşfet. Her köşede seni bekleyen unutulmaz anlar var.'
-    : 'Discover cities where history, flavor, and nature intertwine. Unforgettable moments await around every corner.';
-  var eyebrow = state.lang === 'tr'
-    ? '✶  ' + state.cities.length + ' şehir keşfet'
-    : '✶  ' + state.cities.length + ' cities to explore';
-
-  var heroHTML = '<section class="hero">'
-    + '<div class="container hero-content">'
-    + '<div class="hero-eyebrow">' + eyebrow + '</div>'
-    + '<h1 class="hero-title">' + heroTitle + '</h1>'
-    + '<p class="hero-subtitle">' + esc(heroSub) + '</p>'
-    + '<div class="search-wrap">'
-    + '<span class="search-icon">' + IC.search + '</span>'
-    + '<input id="search-input" class="search-input" type="search" '
-    + 'placeholder="' + esc(t('search_ph')) + '" '
-    + 'value="' + esc(state.search) + '" '
-    + 'aria-label="' + esc(t('search_ph')) + '" '
-    + 'autocomplete="off" spellcheck="false">'
-    + (state.search
-        ? '<button class="search-clear" id="search-clear" aria-label="Arama temizle">' + IC.xMark + '</button>'
-        : '<span class="search-badge">⌘K</span>')
-    + '</div>'
-    + '<div class="region-chips" role="group" aria-label="Bölge filtresi">' + regionChipsHTML + '</div>'
-    + '</div></section>';
-
-  var resultLabel = state.lang === 'tr'
+  var resultLabel  = state.lang === 'tr'
     ? (filtered.length + ' sonuç')
     : (filtered.length + ' result' + (filtered.length !== 1 ? 's' : ''));
   var sectionLabel = state.lang === 'tr' ? 'Şehirler' : 'Cities';
 
-  var contentHTML = '<div class="container section-wrap">'
-    + favsHTML
+  return favsHTML
     + '<section aria-label="' + esc(sectionLabel) + '">'
     + '<div class="section-label">'
     + '<span class="section-label-text">' + esc(sectionLabel) + '</span>'
@@ -511,27 +480,110 @@ function renderCityList() {
     + '<span class="section-label-count">' + esc(resultLabel) + '</span>'
     + '</div>'
     + '<div class="city-grid">' + cityCardsHTML + '</div>'
-    + '</section></div>';
-
-  main.innerHTML = heroHTML + contentHTML;
-  bindCityListEvents();
-
-  if (state.search) {
-    var inp = document.getElementById('search-input');
-    if (inp) {
-      inp.focus();
-      inp.setSelectionRange(inp.value.length, inp.value.length);
-      refreshAutocomplete(inp);
-    }
-  }
+    + '</section>';
 }
 
-function bindCityListEvents() {
+// Sadece kartlar bölümünü günceller — hero & input\'a dokunmaz
+function updateCityContent() {
+  var container = document.getElementById('city-content');
+  if (!container) { renderCityList(); return; }
+  container.innerHTML = buildCityContentInner();
+  bindCityCardEvents();
+}
+
+// Bölge chip görünümünü senkronize eder (re-render olmadan)
+function updateChipActiveStates() {
+  document.querySelectorAll('.chip[data-region]').forEach(function(chip) {
+    chip.classList.toggle('chip-active', chip.dataset.region === state.region);
+  });
+}
+
+// Kart & favori event\'lerini yalnızca #city-content içinde bağlar
+function bindCityCardEvents() {
+  var container = document.getElementById('city-content');
+  if (!container) return;
+
+  container.querySelectorAll('.city-card[data-slug]').forEach(function(card) {
+    card.addEventListener('click', function(e) {
+      if (e.target.closest('.btn-fav')) return;
+      if (!card.classList.contains('skeleton')) location.hash = card.dataset.slug;
+    });
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (!card.classList.contains('skeleton')) location.hash = card.dataset.slug;
+      }
+    });
+  });
+
+  container.querySelectorAll('.btn-fav[data-slug]').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var slug = btn.dataset.slug;
+      if (state.favorites.has(slug)) state.favorites.delete(slug);
+      else                           state.favorites.add(slug);
+      saveFavs();
+      updateCityContent();
+    });
+  });
+
+  var shareBtn = container.querySelector('#btn-share-favs');
+  if (shareBtn) shareBtn.addEventListener('click', shareFavorites);
+}
+
+function renderCityList() {
   var main = document.getElementById('main');
 
-  var inp = main.querySelector('#search-input');
+  var regionChipsHTML = '<button class="chip ' + (state.region === 'all' ? 'chip-active' : '')
+    + '" data-region="all">' + esc(t('all_regions')) + '</button>'
+    + getRegions().map(function(r) {
+        var label = t('regions.' + r) || r;
+        return '<button class="chip ' + (state.region === r ? 'chip-active' : '')
+          + '" data-region="' + esc(r) + '">' + esc(label) + '</button>';
+      }).join('');
+
+  var heroTitle = state.lang === 'tr'
+    ? 'Türkiye\'yi<br><span>Keşfet</span>'
+    : 'Explore<br><span>Turkey</span>';
+  var heroSub = state.lang === 'tr'
+    ? 'Tarihin, lezzetin ve doğanın iç içe geçtiği şehirleri keşfet. Her köşede seni bekleyen unutulmaz anlar var.'
+    : 'Discover cities where history, flavor, and nature intertwine. Unforgettable moments await around every corner.';
+  var eyebrow = state.lang === 'tr'
+    ? '✶  ' + state.cities.length + ' şehir keşfet'
+    : '✶  ' + state.cities.length + ' cities to explore';
+
+  // search-clear ve search-badge her zaman DOM\'da; has-search class ile göster/gizle
+  var heroHTML = '<section class="hero">'
+    + '<div class="container hero-content">'
+    + '<div class="hero-eyebrow">' + eyebrow + '</div>'
+    + '<h1 class="hero-title">' + heroTitle + '</h1>'
+    + '<p class="hero-subtitle">' + esc(heroSub) + '</p>'
+    + '<div class="search-wrap' + (state.search ? ' has-search' : '') + '">'
+    + '<span class="search-icon">' + IC.search + '</span>'
+    + '<input id="search-input" class="search-input" type="search" '
+    + 'placeholder="' + esc(t('search_ph')) + '" '
+    + 'value="' + esc(state.search) + '" '
+    + 'aria-label="' + esc(t('search_ph')) + '" '
+    + 'autocomplete="off" spellcheck="false">'
+    + '<button class="search-clear" id="search-clear" aria-label="Arama temizle">' + IC.xMark + '</button>'
+    + '<span class="search-badge">⌘K</span>'
+    + '</div>'
+    + '<div class="region-chips" role="group" aria-label="Bölge filtresi">' + regionChipsHTML + '</div>'
+    + '</div></section>';
+
+  main.innerHTML = heroHTML
+    + '<div id="city-content" class="container section-wrap">'
+    + buildCityContentInner()
+    + '</div>';
+
+  bindCityListEvents();
+}
+function bindCityListEvents() {
+  var main = document.getElementById('main');
+  var inp  = main.querySelector('#search-input');
+
   if (inp) {
-    // Odaklanınca: tüm mekanları arka planda yükle + geçmişi göster
+    // İlk odakta: mekanları arka planda yükle + geçmişi göster
     inp.addEventListener('focus', function() {
       loadAllPlaces();
       if (!inp.value.trim()) {
@@ -540,13 +592,14 @@ function bindCityListEvents() {
       }
     });
 
-    inp.addEventListener('input', function(e) {
-      state.search = e.target.value;
-      var q = (e.target.value || '').trim();
-      renderCityList(); // şehir listesini filtrele (mevcut davranış)
-      // renderCityList DOM'u yeniden oluşturur, taze referans al
-      var freshInp = document.getElementById('search-input');
-      refreshAutocomplete(freshInp);
+    // Her tuş vuruşunda: sadece kartları güncelle, input'a dokunma
+    inp.addEventListener('input', function() {
+      state.search = inp.value;
+      // has-search class ile × / ⌘K görünümünü toggle et
+      var wrap = inp.closest('.search-wrap');
+      if (wrap) wrap.classList.toggle('has-search', !!state.search);
+      updateCityContent();
+      refreshAutocomplete(inp);
     });
 
     inp.addEventListener('blur', function() {
@@ -556,8 +609,8 @@ function bindCityListEvents() {
     inp.addEventListener('keydown', function(e) {
       var ac = document.getElementById('ac-dropdown');
       if (!ac) return;
-      var items   = Array.from(ac.querySelectorAll('.ac-item'));
-      var focIdx  = items.findIndex(function(i) { return i.classList.contains('ac-item-focused'); });
+      var items  = Array.from(ac.querySelectorAll('.ac-item'));
+      var focIdx = items.findIndex(function(i) { return i.classList.contains('ac-item-focused'); });
       if (e.key === 'ArrowDown') {
         e.preventDefault();
         if (focIdx >= 0) items[focIdx].classList.remove('ac-item-focused');
@@ -579,47 +632,25 @@ function bindCityListEvents() {
   if (clrBtn) {
     clrBtn.addEventListener('click', function() {
       state.search = '';
+      var wrap = inp && inp.closest('.search-wrap');
+      if (wrap) wrap.classList.remove('has-search');
       closeAutocomplete();
-      renderCityList();
-      var i = document.getElementById('search-input');
-      if (i) i.focus();
+      updateCityContent();
+      if (inp) inp.focus();
     });
   }
 
   main.querySelectorAll('.chip[data-region]').forEach(function(chip) {
     chip.addEventListener('click', function(e) {
       state.region = e.currentTarget.dataset.region;
-      renderCityList();
+      updateChipActiveStates();
+      updateCityContent();
     });
   });
 
-  main.querySelectorAll('.city-card[data-slug]').forEach(function(card) {
-    card.addEventListener('click', function(e) {
-      if (e.target.closest('.btn-fav')) return;
-      if (!card.classList.contains('skeleton')) location.hash = card.dataset.slug;
-    });
-    card.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        if (!card.classList.contains('skeleton')) location.hash = card.dataset.slug;
-      }
-    });
-  });
-
-  main.querySelectorAll('.btn-fav[data-slug]').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var slug = btn.dataset.slug;
-      if (state.favorites.has(slug)) state.favorites.delete(slug);
-      else                           state.favorites.add(slug);
-      saveFavs();
-      renderCityList();
-    });
-  });
-
-  var shareBtn = main.querySelector('#btn-share-favs');
-  if (shareBtn) shareBtn.addEventListener('click', shareFavorites);
+  bindCityCardEvents();
 }
+
 
 // ── 10. Şehir Detayı ──────────────────────────────────────────────────
 
@@ -1803,14 +1834,26 @@ function removeFromSearchHist(query) {
 
 function closeAutocomplete() {
   var ac = document.getElementById('ac-dropdown');
-  if (ac) ac.remove();
+  if (!ac) return;
+  if (ac._cleanupPos) ac._cleanupPos();
+  ac.remove();
+}
+
+// Dropdown'ı viewport koordinatlarıyla body'ye append eder.
+// .hero { overflow: hidden } ile kırpılmasını önler.
+function positionAutocomplete(inp) {
+  var ac = document.getElementById('ac-dropdown');
+  if (!ac || !inp) return;
+  var r = inp.getBoundingClientRect();
+  ac.style.top   = (r.bottom + 6 + window.scrollY) + 'px';
+  ac.style.left  = (r.left   + window.scrollX) + 'px';
+  ac.style.width = r.width + 'px';
 }
 
 function openAutocomplete(inp, items, isHist) {
   closeAutocomplete();
   if (!items || !items.length) return;
-  var wrap = inp && inp.closest('.search-wrap');
-  if (!wrap) return;
+  if (!inp) return;
 
   var itemsHTML = items.map(function(item) {
     if (isHist) {
@@ -1839,7 +1882,18 @@ function openAutocomplete(inp, items, isHist) {
 
   var frag = document.createRange().createContextualFragment(itemsHTML);
   ac.appendChild(frag);
-  wrap.appendChild(ac);
+  // body'ye append et — .hero overflow:hidden kırpmasından kaçınmak için
+  document.body.appendChild(ac);
+  positionAutocomplete(inp);
+
+  // Scroll / resize sırasında konumu güncelle
+  var _rePos = function() { positionAutocomplete(inp); };
+  window.addEventListener('scroll', _rePos, { passive: true });
+  window.addEventListener('resize', _rePos, { passive: true });
+  ac._cleanupPos = function() {
+    window.removeEventListener('scroll', _rePos);
+    window.removeEventListener('resize', _rePos);
+  };
 
   // Mekan sonuçlarına tıklama
   ac.querySelectorAll('.ac-item[data-city]').forEach(function(el) {

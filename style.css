@@ -389,6 +389,7 @@ svg {
   box-shadow: 0 0 0 3px rgba(200, 67, 42, 0.12), var(--shadow);
 }
 
+/* × butonu: varsayılan gizli; has-search ile görünür */
 .search-clear {
   position: absolute;
   right: 10px;
@@ -398,10 +399,14 @@ svg {
   height: 30px;
   border-radius: 8px;
   color: var(--ink-3);
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   transition: color var(--trans), background var(--trans);
+}
+
+.search-wrap.has-search .search-clear {
+  display: flex;
 }
 
 .search-clear:hover {
@@ -409,6 +414,7 @@ svg {
   background: var(--bg-hover);
 }
 
+/* ⌘K rozeti: varsayılan görünür; has-search ile gizli */
 .search-badge {
   position: absolute;
   right: 13px;
@@ -423,6 +429,10 @@ svg {
   border-radius: 7px;
   transition: background var(--trans), color var(--trans);
   pointer-events: none;
+}
+
+.search-wrap.has-search .search-badge {
+  display: none;
 }
 
 /* ── 9. Region Chips ──────────────────────────────────────────────── */
@@ -2341,17 +2351,22 @@ body.modal-open {
   position: relative;
 }
 
+/* Tarayıcının native × butonunu gizle — kendi butonumuzu kullanıyoruz */
+.search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+/* body'ye append edilir (JS), .hero overflow:hidden'dan kaçınır */
 .ac-dropdown {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
+  position: absolute; /* JS top/left/width ile override edilir */
   background: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: 14px;
-  box-shadow: 0 8px 32px rgba(28,20,9,0.12), 0 2px 8px rgba(28,20,9,0.05);
+  box-shadow: 0 8px 32px rgba(28,20,9,0.13), 0 2px 8px rgba(28,20,9,0.06);
   overflow: hidden;
-  z-index: 60;
+  z-index: 9999;
   animation: fadeSlideUp 0.15s ease both;
 }
 
