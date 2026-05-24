@@ -22,6 +22,16 @@ const LS_VISITS      = 'seyyah-visits';
 const LS_SEARCH_HIST = 'seyyah-search-hist';
 const MAX_HIST       = 5;
 
+// Şehir merkezleri — yakın şehir hesabı için (slug → [lat, lng])
+const CITY_CENTERS = {
+  istanbul:  [41.0082, 28.9784],
+  ankara:    [39.9334, 32.8597],
+  izmir:     [38.4192, 27.1287],
+  konya:     [37.8667, 32.4833],
+  trabzon:   [41.0027, 39.7168],
+  gaziantep: [37.0594, 37.3825],
+};
+
 // ── 2. Durum ──────────────────────────────────────────────────────────
 const state = {
   cities:      [],
@@ -43,6 +53,8 @@ const state = {
   visits:       JSON.parse(localStorage.getItem(LS_VISITS) || '{}'),
   sortBy:       'default',
   openOnly:     false,
+  userLat:      null,
+  userLng:      null,
   allPlaces:    [],
   allPlacesLoaded: false,
 };
@@ -112,6 +124,14 @@ const STRINGS = {
     sort_name:      'A → Z',
     sort_price:     'Fiyat ↑',
     sort_open:      'Şu an açık',
+    sort_nearby:    'Yakınlar',
+    nearby_btn:     'Konumu Al',
+    nearby_got:     'Konum alındı ✓',
+    nearby_getting: 'Konum alınıyor…',
+    nearby_denied:  'Konum izni reddedildi.',
+    nearby_unsup:   'Tarayıcın konum desteği yok.',
+    nearby_label:   'En yakın:',
+    nearby_city:    function(c, km) { return c + ' · ' + km + ' km uzakta'; },
     open_now:       'Açık',
     closed_now:     'Kapalı',
     open_unknown:   '',
@@ -180,6 +200,14 @@ const STRINGS = {
     sort_name:      'A → Z',
     sort_price:     'Price ↑',
     sort_open:      'Open now',
+    sort_nearby:    'Nearby',
+    nearby_btn:     'Use My Location',
+    nearby_got:     'Location set ✓',
+    nearby_getting: 'Getting location…',
+    nearby_denied:  'Location permission denied.',
+    nearby_unsup:   'Geolocation not supported.',
+    nearby_label:   'Nearest:',
+    nearby_city:    function(c, km) { return c + ' · ' + km + ' km away'; },
     open_now:       'Open',
     closed_now:     'Closed',
     open_unknown:   '',
@@ -223,6 +251,7 @@ const IC = {
   link:      svg('<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>'),
   plan:      svg('<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="16" x2="15" y2="16"/><line x1="12" y1="13" x2="12" y2="19"/>'),
   check:     svg('<polyline points="20 6 9 17 4 12"/>'),
+  locate:    svg('<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>'),
 };
 
 const CAT_IC  = { yemek: IC.utensils, cami: IC.mosque, muze: IC.landmark, gezi: IC.bino };
@@ -472,7 +501,19 @@ function buildCityContentInner() {
     : (filtered.length + ' result' + (filtered.length !== 1 ? 's' : ''));
   var sectionLabel = state.lang === 'tr' ? 'Şehirler' : 'Cities';
 
-  return favsHTML
+  var nearestCityHTML = '';
+  var _nc = getNearestCity();
+  if (_nc) {
+    var _ncDist = Math.round(_nc.d);
+    nearestCityHTML = '<div class="nearest-city-strip">'
+      + IC.locate + ' '
+      + esc(t('nearby_city', _nc.city.city, _ncDist))
+      + '<button class="nearest-city-btn" data-slug="' + esc(_nc.city.slug) + '">'
+      + esc(state.lang === 'tr' ? 'Keşfet →' : 'Explore →')
+      + '</button></div>';
+  }
+
+  return nearestCityHTML + favsHTML
     + '<section aria-label="' + esc(sectionLabel) + '">'
     + '<div class="section-label">'
     + '<span class="section-label-text">' + esc(sectionLabel) + '</span>'
@@ -529,6 +570,13 @@ function bindCityCardEvents() {
 
   var shareBtn = container.querySelector('#btn-share-favs');
   if (shareBtn) shareBtn.addEventListener('click', shareFavorites);
+
+  var nearestBtn = container.querySelector('.nearest-city-btn[data-slug]');
+  if (nearestBtn) {
+    nearestBtn.addEventListener('click', function() {
+      location.hash = nearestBtn.dataset.slug;
+    });
+  }
 }
 
 function renderCityList() {
@@ -701,6 +749,16 @@ function sortPlaces(places) {
       var vb = ob === true ? 0 : (ob === false ? 1 : 2);
       return va - vb;
     });
+  } else if (state.sortBy === 'nearby' && state.userLat !== null) {
+    sorted.sort(function(a, b) {
+      var da = (a.location && a.location.lat)
+        ? haversineKm(state.userLat, state.userLng, a.location.lat, a.location.lng)
+        : 99999;
+      var db = (b.location && b.location.lat)
+        ? haversineKm(state.userLat, state.userLng, b.location.lat, b.location.lng)
+        : 99999;
+      return da - db;
+    });
   }
   // 'default' → JSON sırası, hiçbir şey yapma
   return sorted;
@@ -763,6 +821,12 @@ function placeCardHTML(place) {
       + ' ' + openBadgeHTML(place.openHours) + '</span>'
     : '';
 
+  var distHTML = '';
+  if (state.userLat !== null && place.location && place.location.lat) {
+    var _d = haversineKm(state.userLat, state.userLng, place.location.lat, place.location.lng);
+    distHTML = '<span class="dist-badge">' + IC.locate + ' ' + esc(fmtDist(_d)) + '</span>';
+  }
+
   var priceHTML = place.priceLevel
     ? '<span class="place-price">' + esc(t('price', place.priceLevel)) + '</span>'
     : '';
@@ -773,8 +837,8 @@ function placeCardHTML(place) {
       + esc(t('directions')) + ' ' + IC.extLink + '</a>'
     : '';
 
-  var footerHTML = (hoursHTML || priceHTML || dirHTML)
-    ? '<footer class="place-card-footer">' + hoursHTML + priceHTML + dirHTML + '</footer>'
+  var footerHTML = (hoursHTML || priceHTML || dirHTML || distHTML)
+    ? '<footer class="place-card-footer">' + distHTML + hoursHTML + priceHTML + dirHTML + '</footer>'
     : '';
 
   var visitedKey = (state.slug || '') + '__' + slugify(place.name);
@@ -868,11 +932,21 @@ async function renderCityDetail() {
     : '';
 
   // Sıralama dropdown
-  var sortOpts = ['default', 'name', 'price', 'open'];
+  var sortOpts = ['default', 'name', 'price', 'open', 'nearby'];
   var sortOptsHTML = sortOpts.map(function(v) {
-    return '<option value="' + v + '"' + (state.sortBy === v ? ' selected' : '') + '>'
-      + esc(t('sort_' + v)) + '</option>';
+    var disabled = (v === 'nearby' && state.userLat === null) ? ' disabled' : '';
+    return '<option value="' + v + '"' + (state.sortBy === v ? ' selected' : '') + disabled + '>'
+      + esc(t('sort_' + v)) + (v === 'nearby' && state.userLat === null ? ' …' : '')
+      + '</option>';
   }).join('');
+  var hasLoc  = state.userLat !== null;
+  var nearbyWidgetHTML = '<div class="nearby-widget" id="nearby-widget">'
+    + '<button class="nearby-loc-btn' + (hasLoc ? ' has-location' : '') + '" id="nearby-loc-btn">'
+    + IC.locate + ' <span class="nearby-loc-text">' + esc(hasLoc ? t('nearby_got') : t('nearby_btn')) + '</span>'
+    + '</button>'
+    + (hasLoc ? buildNearestPlaceInfo() : '')
+    + '</div>';
+
   var sortBarHTML = '<div class="sort-bar">'
     + '<button class="open-filter-btn' + (state.openOnly ? ' open-filter-active' : '') + '" id="open-filter-btn">'
     + '<span class="open-filter-dot" aria-hidden="true"></span>'
@@ -911,6 +985,7 @@ async function renderCityDetail() {
     + '<nav class="tabs" role="tablist" aria-label="Kategori filtresi">' + tabsHTML + '</nav>'
     + tagFilterHTML
     + sortBarHTML
+    + nearbyWidgetHTML
     + '<div class="place-grid" id="place-grid">' + placesHTML + '</div>'
     + '<div class="map-section">'
     + '<div class="map-section-header">'
@@ -946,6 +1021,39 @@ function bindDetailEvents() {
   });
 
   bindTagChipEvents();
+
+  var nearbyLocBtn = document.getElementById('nearby-loc-btn');
+  if (nearbyLocBtn) {
+    nearbyLocBtn.addEventListener('click', function() {
+      if (state.userLat !== null) return; // zaten alındı
+      getUserLocation(function() {
+        // Butonu güncelle
+        nearbyLocBtn.classList.add('has-location');
+        var txt = nearbyLocBtn.querySelector('.nearby-loc-text');
+        if (txt) txt.textContent = t('nearby_got');
+        // En yakın bilgisini ekle
+        var widget = document.getElementById('nearby-widget');
+        if (widget && !widget.querySelector('.nearby-info')) {
+          var infoHTML = buildNearestPlaceInfo();
+          if (infoHTML) {
+            var frag = document.createRange().createContextualFragment(infoHTML);
+            widget.appendChild(frag);
+          }
+        }
+        // Sort dropdown'da nearby'ı aktif et
+        var sortSel = document.getElementById('sort-select');
+        if (sortSel) {
+          var opt = sortSel.querySelector('option[value="nearby"]');
+          if (opt) { opt.disabled = false; opt.textContent = t('sort_nearby'); }
+          sortSel.value = 'nearby';
+          state.sortBy = 'nearby';
+        }
+        // Grid + haritayı yenile
+        updatePlaceGrid();
+        updateMapMarkers();
+      });
+    });
+  }
 
   var openFilterBtn = document.getElementById('open-filter-btn');
   if (openFilterBtn) {
@@ -1771,6 +1879,66 @@ function createPlanFab() {
   fab.addEventListener('click', openPlanDrawer);
   document.body.appendChild(fab);
   updatePlanBtn();
+}
+
+// ── 13b. Yakınlar (Geolocation) ──────────────────────────────────────
+
+function haversineKm(lat1, lng1, lat2, lng2) {
+  var R    = 6371;
+  var dLat = (lat2 - lat1) * Math.PI / 180;
+  var dLng = (lng2 - lng1) * Math.PI / 180;
+  var a    = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+           + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180)
+           * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function fmtDist(km) {
+  return km < 1 ? Math.round(km * 1000) + ' m' : km.toFixed(1) + ' km';
+}
+
+function getUserLocation(onSuccess) {
+  if (!navigator.geolocation) { showToast(t('nearby_unsup')); return; }
+  showToast(t('nearby_getting'));
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      state.userLat = pos.coords.latitude;
+      state.userLng = pos.coords.longitude;
+      showToast(t('nearby_got'));
+      if (onSuccess) onSuccess();
+    },
+    function() { showToast(t('nearby_denied')); },
+    { enableHighAccuracy: false, timeout: 8000 }
+  );
+}
+
+// Mevcut şehirdeki en yakın mekanı döner
+function buildNearestPlaceInfo() {
+  if (!state.cityData || state.userLat === null) return '';
+  var places = state.cityData.places.filter(function(p) { return p.location && p.location.lat; });
+  if (!places.length) return '';
+  var best = null;
+  places.forEach(function(p) {
+    var d = haversineKm(state.userLat, state.userLng, p.location.lat, p.location.lng);
+    if (!best || d < best.d) best = { p: p, d: d };
+  });
+  if (!best) return '';
+  return '<span class="nearby-info">' + IC.mapPin + ' '
+    + esc(t('nearby_label')) + ' <strong>' + esc(best.p.name) + '</strong>'
+    + ' <span class="nearby-dist">' + esc(fmtDist(best.d)) + '</span></span>';
+}
+
+// Home için en yakın şehri döner
+function getNearestCity() {
+  if (state.userLat === null || !state.cities.length) return null;
+  var best = null;
+  state.cities.forEach(function(city) {
+    var center = CITY_CENTERS[city.slug];
+    if (!center) return;
+    var d = haversineKm(state.userLat, state.userLng, center[0], center[1]);
+    if (!best || d < best.d) best = { city: city, d: d };
+  });
+  return best;
 }
 
 // ── 14. Gelişmiş Arama & Autocomplete ────────────────────────────────

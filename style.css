@@ -2650,3 +2650,132 @@ body.modal-open {
   border-color: var(--border);
   color: var(--ink-1);
 }
+
+/* ── 33. Yakınlar (Geolocation) ───────────────────────────────────── */
+
+/* Konum al butonu — şehir detay sayfası */
+.nearby-widget {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.875rem;
+  padding: 0.625rem 0.875rem;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+}
+
+.nearby-loc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: 30px;
+  padding: 0 0.75rem;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg);
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color var(--trans), color var(--trans), background var(--trans);
+}
+
+.nearby-loc-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.nearby-loc-btn.has-location {
+  background: var(--green-bg);
+  border-color: var(--green);
+  color: var(--green-text);
+  cursor: default;
+}
+
+.nearby-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+.nearby-info strong {
+  color: var(--ink-1);
+  font-weight: 600;
+}
+
+.nearby-dist {
+  background: var(--bg-hover);
+  color: var(--ink-2);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 20px;
+}
+
+/* Mesafe rozeti — place card footer */
+.dist-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary);
+  padding: 0.1rem 0.4rem;
+  background: var(--red-light);
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.dist-badge svg {
+  stroke: var(--primary);
+}
+
+/* Home — en yakın şehir şeridi */
+.nearest-city-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 1rem;
+  margin-bottom: 1.25rem;
+  background: linear-gradient(90deg, var(--red-light) 0%, var(--surface) 100%);
+  border: 1.5px solid rgba(200,67,42,0.18);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--ink-2);
+  flex-wrap: wrap;
+}
+
+.nearest-city-strip svg {
+  stroke: var(--primary);
+  flex-shrink: 0;
+}
+
+.nearest-city-btn {
+  margin-left: auto;
+  height: 28px;
+  padding: 0 0.75rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background var(--trans);
+}
+
+.nearest-city-btn:hover {
+  background: var(--red-dark);
+}
+
+[data-theme="dark"] .nearest-city-strip {
+  background: linear-gradient(90deg, rgba(200,67,42,0.1) 0%, transparent 100%);
+  border-color: rgba(200,67,42,0.2);
+}
