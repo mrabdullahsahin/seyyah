@@ -39,6 +39,7 @@ const state = {
   placeFavs:    new Set(JSON.parse(localStorage.getItem(LS_PLACE_FAVS) || '[]')),
   plan:         JSON.parse(localStorage.getItem(LS_PLAN) || '[]'),
   visits:       JSON.parse(localStorage.getItem(LS_VISITS) || '{}'),
+  sortBy:       'default',
 };
 
 // ── 3. Çeviriler ──────────────────────────────────────────────────────
@@ -101,6 +102,11 @@ const STRINGS = {
     visit_note_ph:  'Notun… (isteğe bağlı)',
     visit_progress: function(v, tot) { return v + ' / ' + tot + ' ziyaret edildi'; },
     visit_none:     'Henüz ziyaret yok',
+    sort_label:     'Sırala',
+    sort_default:   'Varsayılan',
+    sort_name:      'A → Z',
+    sort_price:     'Fiyat ↑',
+    sort_open:      'Şu an açık',
   },
   en: {
     tagline:      "Discover Turkey's cities",
@@ -160,6 +166,11 @@ const STRINGS = {
     visit_note_ph:  'Your notes… (optional)',
     visit_progress: function(v, tot) { return v + ' of ' + tot + ' visited'; },
     visit_none:     'Not visited yet',
+    sort_label:     'Sort',
+    sort_default:   'Default',
+    sort_name:      'A → Z',
+    sort_price:     'Price ↑',
+    sort_open:      'Open now',
   },
 };
 
@@ -568,6 +579,50 @@ function filterPlaces() {
   });
 }
 
+// "08:30 – 18:00 (...)" formatını parse eder, şu an açık mı döner.
+// null → bilgi yok; true/false → açık/kapalı
+function isOpenNow(openHours) {
+  if (!openHours) return null;
+  var m = openHours.match(/(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})/);
+  if (!m) return null;
+  var now   = new Date();
+  var cur   = now.getHours() * 60 + now.getMinutes();
+  var open  = parseInt(m[1], 10) * 60 + parseInt(m[2], 10);
+  var close = parseInt(m[3], 10) * 60 + parseInt(m[4], 10);
+  if (close === 0) close = 24 * 60;          // 00:00 → gece yarısı
+  if (close < open) close += 24 * 60;        // gece geçen vardiya
+  return cur >= open && cur < close;
+}
+
+function sortPlaces(places) {
+  var sorted = places.slice();
+  if (state.sortBy === 'name') {
+    sorted.sort(function(a, b) { return a.name.localeCompare(b.name, 'tr'); });
+  } else if (state.sortBy === 'price') {
+    sorted.sort(function(a, b) {
+      var pa = a.priceLevel || 99;
+      var pb = b.priceLevel || 99;
+      return pa - pb;
+    });
+  } else if (state.sortBy === 'open') {
+    sorted.sort(function(a, b) {
+      var oa = isOpenNow(a.openHours);
+      var ob = isOpenNow(b.openHours);
+      // true → 0, false/null → 1
+      var va = oa === true ? 0 : (oa === false ? 1 : 2);
+      var vb = ob === true ? 0 : (ob === false ? 1 : 2);
+      return va - vb;
+    });
+  }
+  // 'default' → JSON sırası, hiçbir şey yapma
+  return sorted;
+}
+
+// Filtrelenmiş + sıralanmış mekan listesi
+function getPlaces() {
+  return sortPlaces(filterPlaces());
+}
+
 function getAllTags() {
   if (!state.cityData) return [];
   var tags = {};
@@ -712,8 +767,19 @@ async function renderCityDetail() {
       + '</div>'
     : '';
 
+  // Sıralama dropdown
+  var sortOpts = ['default', 'name', 'price', 'open'];
+  var sortOptsHTML = sortOpts.map(function(v) {
+    return '<option value="' + v + '"' + (state.sortBy === v ? ' selected' : '') + '>'
+      + esc(t('sort_' + v)) + '</option>';
+  }).join('');
+  var sortBarHTML = '<div class="sort-bar">'
+    + '<label class="sort-label" for="sort-select">' + esc(t('sort_label')) + '</label>'
+    + '<select class="sort-select" id="sort-select">' + sortOptsHTML + '</select>'
+    + '</div>';
+
   // Mekanlar
-  var filtered   = filterPlaces();
+  var filtered   = getPlaces();
   var placesHTML = filtered.length
     ? filtered.map(placeCardHTML).join('')
     : '<p class="empty-state col-span">' + esc(t('no_places')) + '</p>';
@@ -740,6 +806,7 @@ async function renderCityDetail() {
     + progressHTML
     + '<nav class="tabs" role="tablist" aria-label="Kategori filtresi">' + tabsHTML + '</nav>'
     + tagFilterHTML
+    + sortBarHTML
     + '<div class="place-grid" id="place-grid">' + placesHTML + '</div>'
     + '<div class="map-section">'
     + '<div class="map-section-header">'
@@ -775,6 +842,14 @@ function bindDetailEvents() {
   });
 
   bindTagChipEvents();
+
+  var sortSel = document.getElementById('sort-select');
+  if (sortSel) {
+    sortSel.addEventListener('change', function() {
+      state.sortBy = sortSel.value;
+      updatePlaceGrid();
+    });
+  }
 
   var grid = document.getElementById('place-grid');
   if (grid) bindPlaceCardClicks(grid);
@@ -814,7 +889,7 @@ function refreshTagFilter() {
 function updatePlaceGrid() {
   var grid = document.getElementById('place-grid');
   if (!grid) return;
-  var filtered = filterPlaces();
+  var filtered = getPlaces();
   grid.innerHTML = filtered.length
     ? filtered.map(placeCardHTML).join('')
     : '<p class="empty-state col-span">' + esc(t('no_places')) + '</p>';
@@ -1675,6 +1750,7 @@ async function router() {
         state.slug       = citySlug;
         state.category   = 'all';
         state.activeTags = new Set();
+        state.sortBy     = 'default';
         await renderCityDetail();
       }
       // Yeri bul ve modalı aç
@@ -1704,6 +1780,7 @@ async function router() {
     state.slug       = hash;
     state.category   = 'all';
     state.activeTags = new Set();
+    state.sortBy     = 'default';
     await renderCityDetail();
   } else {
     state.slug       = null;
