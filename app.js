@@ -136,6 +136,15 @@ const STRINGS = {
     closed_now:     'Kapalı',
     open_unknown:   '',
     open_only_btn:  'Sadece açıklar',
+    season_title:   'En İyi Dönem',
+    season_good:    'İdeal',
+    season_ok:      'Uygun',
+    season_avoid:   'Kaçın',
+    season_hint: {
+      good:  'Ziyaret için ideal ay',
+      ok:    'Ziyaret için uygun ay',
+      avoid: 'Daha iyi zamanlar var',
+    },
   },
   en: {
     tagline:      "Discover Turkey's cities",
@@ -212,6 +221,15 @@ const STRINGS = {
     closed_now:     'Closed',
     open_unknown:   '',
     open_only_btn:  'Open now only',
+    season_title:   'Best Time to Visit',
+    season_good:    'Ideal',
+    season_ok:      'Fair',
+    season_avoid:   'Avoid',
+    season_hint: {
+      good:  'Ideal month to visit',
+      ok:    'Fair time to visit',
+      avoid: 'Consider another time',
+    },
   },
 };
 
@@ -355,6 +373,61 @@ function updateCityProgress() {
   if (fill) fill.style.width = prog.pct + '%';
   if (text) text.textContent = t('visit_progress', prog.visited, prog.total);
   if (pct)  pct.textContent  = prog.pct + '%';
+}
+
+// ── 5b. Mevsim Takvimi ───────────────────────────────────────────────
+
+var MONTH_KEYS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+var MONTHS_TR  = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+var MONTHS_EN  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// Tam 12-aylık takvim (şehir detay sayfası)
+function buildSeasonCalendar(seasons) {
+  if (!seasons) return '';
+  var now    = new Date();
+  var curMo  = now.getMonth(); // 0-based
+  var months = state.lang === 'tr' ? MONTHS_TR : MONTHS_EN;
+
+  var cells = MONTH_KEYS.map(function(key, i) {
+    var val   = seasons[key] || 'ok';
+    var isCur = (i === curMo);
+    return '<div class="season-cell season-' + esc(val) + (isCur ? ' season-current' : '') + '"'
+      + ' title="' + esc(months[i]) + '">'
+      + '<span class="season-month-label">' + esc(months[i]) + '</span>'
+      + '<span class="season-dot" aria-hidden="true"></span>'
+      + '</div>';
+  }).join('');
+
+  var noteHTML = seasons.note
+    ? '<p class="season-note">' + esc(seasons.note) + '</p>'
+    : '';
+
+  return '<section class="season-calendar" aria-label="' + esc(t('season_title')) + '">'
+    + '<div class="season-header">'
+    + '<span class="season-title">' + IC.compass + ' ' + esc(t('season_title')) + '</span>'
+    + '<div class="season-legend">'
+    + '<span class="season-legend-item"><span class="season-dot season-good"></span>' + esc(t('season_good')) + '</span>'
+    + '<span class="season-legend-item"><span class="season-dot season-ok"></span>'   + esc(t('season_ok'))   + '</span>'
+    + '<span class="season-legend-item"><span class="season-dot season-avoid"></span>'+ esc(t('season_avoid'))+ '</span>'
+    + '</div></div>'
+    + '<div class="season-grid">' + cells + '</div>'
+    + noteHTML
+    + '</section>';
+}
+
+// Kompakt ay şeridi (yer modali)
+function buildSeasonCompact(seasons) {
+  if (!seasons) return '';
+  var now    = new Date();
+  var curMo  = now.getMonth();
+  var key    = MONTH_KEYS[curMo];
+  var val    = seasons[key] || 'ok';
+  var months = state.lang === 'tr' ? MONTHS_TR : MONTHS_EN;
+  var hint   = t('season_hint.' + val);
+  return '<div class="season-compact season-compact-' + esc(val) + '">'
+    + '<span class="season-compact-dot" aria-hidden="true"></span>'
+    + '<span>' + esc(months[curMo]) + ' — ' + esc(hint) + '</span>'
+    + '</div>';
 }
 
 // ── 6. Tema & Dil ─────────────────────────────────────────────────────
@@ -962,6 +1035,9 @@ async function renderCityDetail() {
     ? filtered.map(placeCardHTML).join('')
     : '<p class="empty-state col-span">' + esc(t('no_places')) + '</p>';
 
+  // Sezon takvimi
+  var seasonHTML = buildSeasonCalendar(state.cityData.seasons);
+
   var prog = getVisitProgress();
   var progressHTML = prog.total > 0
     ? '<div class="city-progress" id="city-progress">'
@@ -981,6 +1057,7 @@ async function renderCityDetail() {
     + '<h1 class="detail-city-name">' + esc(state.cityData.city) + '</h1>'
     + '<p class="detail-city-desc">' + esc(state.cityData.description) + '</p>'
     + '</div>'
+    + seasonHTML
     + progressHTML
     + '<nav class="tabs" role="tablist" aria-label="Kategori filtresi">' + tabsHTML + '</nav>'
     + tagFilterHTML
@@ -1318,6 +1395,11 @@ function modalInnerHTML(place) {
       + '<span class="modal-info-val">' + esc(t('price', place.priceLevel)) + '</span></div>';
   }
 
+  // Şehir sezon verisi varsa kompakt şerit
+  var seasonCompactHTML = (state.cityData && state.cityData.seasons)
+    ? buildSeasonCompact(state.cityData.seasons)
+    : '';
+
   var mapHTML = hasLoc ? '<div id="modal-map" class="modal-map-mini"></div>' : '';
   var dirBtn  = hasLoc
     ? '<a class="modal-btn modal-btn-primary" href="' + esc(mapsUrl(place.location.lat, place.location.lng))
@@ -1353,6 +1435,7 @@ function modalInnerHTML(place) {
     + tagsHTML
     + '<p class="modal-desc">' + esc(place.description) + '</p>'
     + (infoItems ? '<div class="modal-info-grid">' + infoItems + '</div>' : '')
+    + seasonCompactHTML
     + mustEatHTML + mapHTML
     + '<div class="modal-actions">' + dirBtn
     + '<button class="modal-btn modal-btn-plan ' + (inPlan ? 'is-planned' : '') + '" id="modal-plan-btn">'

@@ -3,6 +3,13 @@
   "slug": "konya",
   "region": "İç Anadolu",
   "description": "Mevlana'nın şehri, Anadolu'nun ruh merkezi.",
+  "seasons": {
+    "jan": "avoid", "feb": "avoid", "mar": "ok",
+    "apr": "good",  "may": "good",  "jun": "ok",
+    "jul": "avoid", "aug": "avoid", "sep": "ok",
+    "oct": "good",  "nov": "ok",    "dec": "avoid",
+    "note": "Mevlana törenleri için Aralık'ı hedefleyin; şehir bu dönemde özel bir atmosfer kazanır."
+  },
   "places": [
     {
       "name": "Mevlana Müzesi ve Türbesi",

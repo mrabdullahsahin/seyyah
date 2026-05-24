@@ -3,6 +3,13 @@
   "slug": "ankara",
   "region": "İç Anadolu",
   "description": "Cumhuriyetin kalbi, modern Türkiye'nin başkenti.",
+  "seasons": {
+    "jan": "avoid", "feb": "avoid", "mar": "ok",
+    "apr": "good",  "may": "good",  "jun": "ok",
+    "jul": "avoid", "aug": "avoid", "sep": "ok",
+    "oct": "good",  "nov": "ok",    "dec": "avoid",
+    "note": "Kıta iklimi — yaz aşırı sıcak, kış sert. Nisan-Mayıs ve Ekim en konforlu dönemler."
+  },
   "places": [
     {
       "name": "Anıtkabir",

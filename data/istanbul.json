@@ -3,6 +3,13 @@
   "slug": "istanbul",
   "region": "Marmara",
   "description": "İki kıtayı birleştiren, 2700 yıllık tarih başkenti.",
+  "seasons": {
+    "jan": "avoid", "feb": "avoid", "mar": "ok",
+    "apr": "good",  "may": "good",  "jun": "good",
+    "jul": "ok",    "aug": "ok",    "sep": "good",
+    "oct": "good",  "nov": "ok",    "dec": "avoid",
+    "note": "İlkbahar (Nisan–Mayıs) ve erken sonbahar (Eylül–Ekim) altın dönem; kalabalık az, hava ılıman."
+  },
   "places": [
     {
       "name": "Sultanahmet Camii",

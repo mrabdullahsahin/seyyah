@@ -3,6 +3,13 @@
   "slug": "trabzon",
   "region": "Karadeniz",
   "description": "Yeşilin bin tonu, Karadeniz'in efsanevi şehri.",
+  "seasons": {
+    "jan": "avoid", "feb": "avoid", "mar": "ok",
+    "apr": "ok",    "may": "good",  "jun": "good",
+    "jul": "good",  "aug": "good",  "sep": "good",
+    "oct": "ok",    "nov": "avoid", "dec": "avoid",
+    "note": "Karadeniz'in nemli iklimi yüzünden yaz en net dönem; yaylalar Temmuz-Ağustos'ta görülmeli."
+  },
   "places": [
     {
       "name": "Sümela Manastırı",

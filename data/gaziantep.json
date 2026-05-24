@@ -3,6 +3,13 @@
   "slug": "gaziantep",
   "region": "Güneydoğu Anadolu",
   "description": "Türkiye'nin gastronomi başkenti, baklavanın şehri.",
+  "seasons": {
+    "jan": "avoid", "feb": "avoid", "mar": "good",
+    "apr": "good",  "may": "good",  "jun": "ok",
+    "jul": "avoid", "aug": "avoid", "sep": "ok",
+    "oct": "good",  "nov": "ok",    "dec": "avoid",
+    "note": "Mart-Nisan güneşli ve ılıman; yaz mevsimi 40°C'yi geçebilir."
+  },
   "places": [
     {
       "name": "Zeugma Mozaik Müzesi",

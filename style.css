@@ -2779,3 +2779,167 @@ body.modal-open {
   background: linear-gradient(90deg, rgba(200,67,42,0.1) 0%, transparent 100%);
   border-color: rgba(200,67,42,0.2);
 }
+
+/* ── 34. Mevsim Takvimi ─────────────────────────────────────────────── */
+
+.season-calendar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem 1rem;
+  margin: 0 0 1.5rem;
+}
+
+.season-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.season-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+
+.season-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.season-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+
+.season-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 4px;
+}
+
+@media (max-width: 520px) {
+  .season-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.season-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 2px;
+  border-radius: 10px;
+  cursor: default;
+  transition: transform var(--trans), box-shadow var(--trans);
+  border: 2px solid transparent;
+}
+
+.season-cell:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.season-current {
+  border-color: var(--ink) !important;
+  box-shadow: 0 0 0 1px var(--ink);
+}
+
+.season-month-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.season-current .season-month-label {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+/* Standalone dot (inside cells) */
+.season-cell .season-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Legend dots */
+.season-legend-item .season-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Cell backgrounds */
+.season-good  { background: rgba(34,197,94,0.10); }
+.season-ok    { background: rgba(245,158,11,0.10); }
+.season-avoid { background: rgba(148,163,184,0.10); }
+
+/* Dot colors — both cell dots and legend dots */
+.season-good  .season-dot,
+.season-dot.season-good   { background: #22c55e; }
+.season-ok    .season-dot,
+.season-dot.season-ok     { background: #f59e0b; }
+.season-avoid .season-dot,
+.season-dot.season-avoid  { background: #94a3b8; }
+
+.season-note {
+  font-size: 0.78rem;
+  color: var(--ink-2);
+  margin: 0.875rem 0 0;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* Compact modal strip */
+.season-compact {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin: 0 0 1rem;
+  line-height: 1.4;
+}
+
+.season-compact-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.season-compact-good  { background: rgba(34,197,94,0.12);  color: #15803d; }
+.season-compact-ok    { background: rgba(245,158,11,0.12); color: #a16207; }
+.season-compact-avoid { background: rgba(148,163,184,0.15); color: var(--ink-2); }
+
+.season-compact-good  .season-compact-dot { background: #22c55e; }
+.season-compact-ok    .season-compact-dot { background: #f59e0b; }
+.season-compact-avoid .season-compact-dot { background: #94a3b8; }
+
+/* Dark mode */
+[data-theme="dark"] .season-good  { background: rgba(34,197,94,0.07); }
+[data-theme="dark"] .season-ok    { background: rgba(245,158,11,0.07); }
+[data-theme="dark"] .season-avoid { background: rgba(100,116,139,0.10); }
+[data-theme="dark"] .season-compact-good  { background: rgba(34,197,94,0.10); color: #4ade80; }
+[data-theme="dark"] .season-compact-ok    { background: rgba(245,158,11,0.10); color: #fbbf24; }
+[data-theme="dark"] .season-compact-avoid { background: rgba(100,116,139,0.12); }

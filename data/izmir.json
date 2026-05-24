@@ -3,6 +3,13 @@
   "slug": "izmir",
   "region": "Ege",
   "description": "Ege'nin incisi, Türkiye'nin en canlı kıyı kenti.",
+  "seasons": {
+    "jan": "ok",   "feb": "ok",   "mar": "good",
+    "apr": "good", "may": "good", "jun": "good",
+    "jul": "avoid","aug": "avoid","sep": "good",
+    "oct": "good", "nov": "ok",   "dec": "ok",
+    "note": "Ege iklimi — kış ılıman, yaz aşırı sıcak. İlkbahar ve erken sonbahar mükemmel."
+  },
   "places": [
     {
       "name": "Kadifekale",
