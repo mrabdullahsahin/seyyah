@@ -1,0 +1,1079 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Seyyah — Design System
+   Tüm stiller CSS değişkenleri üzerinden yönetilir.
+   Karanlık tema: html[data-theme="dark"]
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Değişkenler (Açık Tema) ──────────────────────────────────── */
+:root {
+  /* Zeminler */
+  --bg-primary:   #FFFFFF;
+  --bg-secondary: #F1EFE8;
+  --bg-hover:     #ECEAE3;
+
+  /* Metinler */
+  --text-primary:   #1A1A18;
+  --text-secondary: #5F5E5A;
+  --text-muted:     #8B8A82;
+
+  /* Kenarlıklar */
+  --border:        rgba(0, 0, 0, 0.12);
+  --border-strong: rgba(0, 0, 0, 0.28);
+
+  /* Kategori — Yemek (mercan) */
+  --cat-yemek-bg:   #FAECE7;
+  --cat-yemek-text: #4A1B0C;
+
+  /* Kategori — Cami (yeşil-mavi) */
+  --cat-cami-bg:   #E1F5EE;
+  --cat-cami-text: #04342C;
+
+  /* Kategori — Müze (mor) */
+  --cat-muze-bg:   #EEEDFE;
+  --cat-muze-text: #26215C;
+
+  /* Kategori — Gezilecek (kehribar) */
+  --cat-gezi-bg:   #FAEEDA;
+  --cat-gezi-text: #412402;
+
+  /* Harita işaretçi renkleri */
+  --map-yemek: #c0392b;
+  --map-cami:  #27ae60;
+  --map-muze:  #8e44ad;
+  --map-gezi:  #e67e22;
+
+  /* Düzen */
+  --container-max: 1100px;
+  --radius-card:   12px;
+  --radius-sm:     8px;
+  --radius-chip:   999px;
+  --border-width:  0.5px;
+
+  /* Geçiş */
+  --transition: 0.15s ease;
+
+  /* Gölge (minimal) */
+  --shadow-card: none;
+}
+
+/* ── 2. Karanlık Tema ────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --bg-primary:   #1A1A18;
+  --bg-secondary: #242420;
+  --bg-hover:     #2E2E2A;
+
+  --text-primary:   #F1EFE8;
+  --text-secondary: #A8A79F;
+  --text-muted:     #6B6A62;
+
+  --border:        rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(255, 255, 255, 0.26);
+
+  --cat-yemek-bg:   #3A1A10;
+  --cat-yemek-text: #F5C4B0;
+
+  --cat-cami-bg:   #0A2820;
+  --cat-cami-text: #8FD5BC;
+
+  --cat-muze-bg:   #1A1840;
+  --cat-muze-text: #C4C0F5;
+
+  --cat-gezi-bg:   #2A1A08;
+  --cat-gezi-text: #F5D4A0;
+}
+
+/* ── 3. Reset & Temel ────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  transition: background var(--transition), color var(--transition);
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+svg {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* ── 4. Konteyner ────────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* ── 5. Üst Başlık ───────────────────────────────────────────────── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-primary);
+  border-bottom: var(--border-width) solid var(--border);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  gap: 1rem;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex-shrink: 0;
+}
+
+.logo:focus-visible {
+  outline: 2px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  outline-offset: 2px;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--bg-secondary);
+  border: var(--border-width) solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.logo-name {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.logo-tagline {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+/* Başlık Eylemleri */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.btn-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  border: var(--border-width) solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 500;
+  transition: border-color var(--transition), background var(--transition), color var(--transition);
+  gap: 0.25rem;
+}
+
+.btn-icon:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+
+.btn-icon:focus-visible {
+  outline: 2px solid var(--border-strong);
+  outline-offset: 2px;
+}
+
+/* ── 6. Ana İçerik Boşluğu ──────────────────────────────────────── */
+#main {
+  padding-top: 1.75rem;
+  padding-bottom: 3rem;
+}
+
+/* ── 7. Arama & Filtreler ────────────────────────────────────────── */
+.list-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  margin-bottom: 2rem;
+}
+
+/* Arama Kutusu */
+.search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  height: 38px;
+  padding: 0 2.25rem 0 2.25rem;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color var(--transition), background var(--transition);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-input:focus {
+  border-color: var(--border-strong);
+}
+
+.search-clear {
+  position: absolute;
+  right: 6px;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition), background var(--transition);
+}
+
+.search-clear:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+/* Bölge Çipleri */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.chip {
+  height: 30px;
+  padding: 0 0.75rem;
+  border-radius: var(--radius-chip);
+  border: var(--border-width) solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 400;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.chip:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.chip-active {
+  background: var(--text-primary);
+  border-color: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+.chip-active:hover {
+  background: var(--text-primary);
+  border-color: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--border-strong);
+  outline-offset: 2px;
+}
+
+/* ── 8. Favoriler Bölümü ─────────────────────────────────────────── */
+.favs-section {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: var(--border-width) solid var(--border);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.section-title svg {
+  color: #c0392b;
+}
+
+.btn-text {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-sm);
+  border: var(--border-width) solid var(--border);
+  transition: all var(--transition);
+}
+
+.btn-text:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+/* ── 9. Şehir Izgarası ───────────────────────────────────────────── */
+.city-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+/* ── 10. Şehir Kartı ─────────────────────────────────────────────── */
+.city-card {
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--bg-primary);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--transition), border-color var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.city-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+}
+
+.city-card:focus-visible {
+  outline: 2px solid var(--border-strong);
+  outline-offset: 2px;
+}
+
+/* Kapak Alanı */
+.city-card-cover {
+  height: 84px;
+  background: var(--bg-secondary);
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.5rem 0.625rem;
+  flex-shrink: 0;
+}
+
+.city-card-region {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+/* Favori Butonu */
+.btn-fav {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: var(--bg-primary);
+  border: var(--border-width) solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all var(--transition);
+}
+
+.btn-fav:hover {
+  border-color: var(--border-strong);
+  color: #c0392b;
+}
+
+.btn-fav.is-fav {
+  color: #c0392b;
+}
+
+.city-fav {
+  /* override absolute in cover */
+}
+
+/* Kart Gövdesi */
+.city-card-body {
+  padding: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.city-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.city-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.city-count {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+/* ── 11. Skeleton Yükleme ────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skel-block,
+.skel-line {
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 25%,
+    var(--bg-hover)     50%,
+    var(--bg-secondary) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skeleton .city-card-cover {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 25%,
+    var(--bg-hover)     50%,
+    var(--bg-secondary) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skel-title  { height: 16px; width: 70%; margin-bottom: 0.5rem; }
+.skel-desc   { height: 13px; width: 90%; margin-bottom: 0.375rem; }
+.skel-short  { height: 13px; width: 50%; }
+.skel-city-name { height: 28px; width: 40%; margin-bottom: 0.625rem; }
+
+.skeleton .city-card-body {
+  gap: 0.5rem;
+}
+
+/* Mekan kartı skeleton */
+.place-card.skeleton {
+  padding: 1rem;
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── 12. Detay Görünümü ──────────────────────────────────────────── */
+.detail-header {
+  margin-bottom: 1.25rem;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 14px;
+  color: var(--text-secondary);
+  padding: 0.375rem 0.625rem;
+  border-radius: var(--radius-sm);
+  border: var(--border-width) solid var(--border);
+  transition: all var(--transition);
+}
+
+.btn-back:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.btn-back:focus-visible {
+  outline: 2px solid var(--border-strong);
+  outline-offset: 2px;
+}
+
+.detail-meta {
+  margin-bottom: 1.5rem;
+}
+
+.detail-city-name {
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 0.375rem;
+}
+
+.detail-city-desc {
+  font-size: 15px;
+  color: var(--text-secondary);
+  max-width: 600px;
+}
+
+/* ── 13. Kategori Sekmeleri ──────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: var(--border-width) solid var(--border);
+  margin-bottom: 1.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.625rem 0.875rem;
+  font-size: 14px;
+  color: var(--text-secondary);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px; /* overlap the border */
+  white-space: nowrap;
+  transition: color var(--transition), border-color var(--transition);
+  flex-shrink: 0;
+}
+
+.tab:hover {
+  color: var(--text-primary);
+}
+
+.tab-active {
+  color: var(--text-primary);
+  border-bottom-color: var(--text-primary);
+  font-weight: 500;
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--border-strong);
+  outline-offset: -2px;
+}
+
+.tab-count {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-chip);
+  padding: 1px 6px;
+  min-width: 18px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ── 14. Etiket Filtresi ─────────────────────────────────────────── */
+.tag-filter {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.tag-filter-label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 12px;
+  color: var(--text-muted);
+  padding-top: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tag-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.chip-tag {
+  height: 28px;
+  padding: 0 0.625rem;
+  border-radius: var(--radius-chip);
+  border: var(--border-width) solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.chip-tag:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.chip-tag-active {
+  background: var(--bg-secondary);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.chip-clear {
+  height: 28px;
+  padding: 0 0.625rem;
+  border-radius: var(--radius-chip);
+  border: var(--border-width) solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  transition: all var(--transition);
+}
+
+.chip-clear:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+/* ── 15. Mekan Izgarası ──────────────────────────────────────────── */
+.place-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.col-span {
+  grid-column: 1 / -1;
+}
+
+/* ── 16. Mekan Kartı ─────────────────────────────────────────────── */
+.place-card {
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--bg-primary);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  transition: border-color var(--transition);
+}
+
+.place-card:hover {
+  border-color: var(--border-strong);
+}
+
+/* Kategori bazlı sol kenarlık aksanı */
+.place-yemek { border-left: 2px solid var(--cat-yemek-text); }
+.place-cami  { border-left: 2px solid var(--cat-cami-text); }
+.place-muze  { border-left: 2px solid var(--cat-muze-text); }
+.place-gezi  { border-left: 2px solid var(--cat-gezi-text); }
+
+.place-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.625rem;
+}
+
+.place-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.35;
+  flex: 1;
+}
+
+.place-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Etiket Çipleri (kart içi) */
+.place-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+/* MustEat */
+.must-eat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.must-eat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.must-eat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.chip-small {
+  height: 24px;
+  padding: 0 0.5rem;
+  border-radius: var(--radius-chip);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Kart Alt Kısmı */
+.place-card-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 0.375rem;
+  border-top: var(--border-width) solid var(--border);
+}
+
+.place-hours {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.place-price {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.place-dir {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-left: auto;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  border: var(--border-width) solid var(--border);
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.place-dir:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.place-dir:focus-visible {
+  outline: 2px solid var(--border-strong);
+  outline-offset: 2px;
+}
+
+/* ── 17. Rozet (Badge) ───────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 3px 9px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1.5;
+}
+
+.badge-yemek { background: var(--cat-yemek-bg); color: var(--cat-yemek-text); }
+.badge-cami  { background: var(--cat-cami-bg);  color: var(--cat-cami-text); }
+.badge-muze  { background: var(--cat-muze-bg);  color: var(--cat-muze-text); }
+.badge-gezi  { background: var(--cat-gezi-bg);  color: var(--cat-gezi-text); }
+
+/* ── 18. Harita ──────────────────────────────────────────────────── */
+.map-section {
+  margin-top: 2rem;
+  border-top: var(--border-width) solid var(--border);
+  padding-top: 1.5rem;
+}
+
+.city-map {
+  width: 100%;
+  height: 350px;
+  border-radius: var(--radius-card);
+  border: var(--border-width) solid var(--border);
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+
+/* Leaflet temalama */
+.leaflet-container {
+  font-family: inherit !important;
+  background: var(--bg-secondary) !important;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: var(--radius-sm) !important;
+  border: var(--border-width) solid var(--border) !important;
+  box-shadow: none !important;
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--bg-primary) !important;
+}
+
+.leaflet-popup-content {
+  font-size: 13px !important;
+  color: var(--text-primary) !important;
+  margin: 10px 14px !important;
+}
+
+.leaflet-popup-content a {
+  color: var(--text-secondary) !important;
+  font-size: 12px;
+}
+
+.leaflet-popup-content a:hover {
+  color: var(--text-primary) !important;
+}
+
+/* Özel harita işaretçisi */
+.map-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.map-marker-inner {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.map-marker-inner:hover {
+  transform: scale(1.4);
+}
+
+/* Leaflet yokken fallback */
+.map-unavail-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-unavail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 1rem;
+}
+
+/* ── 19. Toast Bildirimi ─────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  font-size: 13px;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-chip);
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 999;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.toast-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── 20. Boş Durum ───────────────────────────────────────────────── */
+.empty-state {
+  font-size: 14px;
+  color: var(--text-muted);
+  padding: 2rem 0;
+  text-align: center;
+}
+
+/* ── 21. Leaflet Attribution (küçültülmüş) ───────────────────────── */
+.leaflet-control-attribution {
+  font-size: 10px !important;
+  opacity: 0.7;
+}
+
+/* ── 22. Responsive ──────────────────────────────────────────────── */
+
+/* Tablet (600px–1000px): 2 sütun */
+@media (max-width: 1000px) {
+  .city-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+/* Mobil (≤ 600px): tek sütun */
+@media (max-width: 600px) {
+  .header-inner {
+    height: 54px;
+  }
+
+  .logo-tagline {
+    display: none;
+  }
+
+  .logo-name {
+    font-size: 16px;
+  }
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  #main {
+    padding-top: 1.25rem;
+  }
+
+  .city-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .place-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-city-name {
+    font-size: 22px;
+  }
+
+  .tabs {
+    gap: 0;
+  }
+
+  .tab {
+    padding: 0.5rem 0.75rem;
+    font-size: 13px;
+  }
+
+  .city-map {
+    height: 260px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Dokunma hedefleri — en az 44px */
+@media (pointer: coarse) {
+  .chip, .tab, .btn-icon {
+    min-height: 44px;
+  }
+
+  .chip {
+    padding: 0 1rem;
+  }
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Türkiye'nin şehirlerini keşfetmek için sade, hızlı gezi rehberi.">
+  <meta name="theme-color" content="#FFFFFF">
+  <title>Seyyah — Türkiye'nin şehirlerini keşfet</title>
+
+  <!--
+    Leaflet harita kütüphanesi — yerel dosyalar gereklidir.
+    İndirme: https://leafletjs.com/download.html
+    → ZIP'i aç, şu dosyaları vendor/leaflet/ klasörüne koy:
+        leaflet.js
+        leaflet.css
+        images/ (klasörün tamamı)
+  -->
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ─── Üst Başlık ─────────────────────────────────── -->
+    <header class="site-header" role="banner">
+      <div class="container header-inner">
+        <a href="#" class="logo" aria-label="Seyyah — Ana sayfa">
+          <div class="logo-icon" id="logo-icon" aria-hidden="true"></div>
+          <div class="logo-text">
+            <span class="logo-name">Seyyah</span>
+            <span class="logo-tagline" id="logo-tagline"></span>
+          </div>
+        </a>
+        <div class="header-actions">
+          <button class="btn-icon" id="btn-lang" aria-label="Dil değiştir / Switch language">
+            <span id="lang-label">EN</span>
+          </button>
+          <button class="btn-icon" id="btn-theme" aria-label="Temayı değiştir">
+            <span id="theme-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ─── Ana İçerik ─────────────────────────────────── -->
+    <main id="main" class="container" role="main">
+      <!-- JavaScript tarafından dinamik olarak doldurulur -->
+    </main>
+
+  </div><!-- #app -->
+
+  <!-- Leaflet JS — vendor/leaflet/leaflet.js dosyası gereklidir -->
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

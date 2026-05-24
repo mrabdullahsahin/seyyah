@@ -1,0 +1,62 @@
+{
+  "city": "Gaziantep",
+  "slug": "gaziantep",
+  "region": "Güneydoğu Anadolu",
+  "description": "Türkiye'nin gastronomi başkenti, baklavanın şehri.",
+  "places": [
+    {
+      "name": "Zeugma Mozaik Müzesi",
+      "category": "muze",
+      "description": "Dünya'nın en büyük mozaik koleksiyonuna ev sahipliği yapan eşsiz müze. Çingene Kızı mozaiği burada.",
+      "tags": ["antik", "Roma", "mozaik", "UNESCO"],
+      "openHours": "09:00 – 17:00 (Pazartesi kapalı)",
+      "location": { "lat": 37.0631, "lng": 37.3698 }
+    },
+    {
+      "name": "Gaziantep Kalesi",
+      "category": "gezi",
+      "description": "Roma ve Bizans döneminden kalma, şehrin merkezinde yükselen tarihi kale. Kentin panoramik manzarası.",
+      "tags": ["tarihi", "manzara", "ücretsiz"],
+      "openHours": "08:30 – 17:30",
+      "location": { "lat": 37.0617, "lng": 37.3777 }
+    },
+    {
+      "name": "Bakırcılar Çarşısı",
+      "category": "gezi",
+      "description": "Yüzyıllık geleneği yaşatan, bakır işlemeciliği ustalarının dükkanlarıyla tarihi çarşı.",
+      "tags": ["geleneksel", "alışveriş", "el sanatları"],
+      "openHours": "08:00 – 18:00",
+      "location": { "lat": 37.0627, "lng": 37.3769 }
+    },
+    {
+      "name": "İmam Çakır",
+      "category": "yemek",
+      "description": "Gaziantep'in en köklü baklava ve tatlı ustası. Her lokma, nesiller boyu aktarılan bir reçetenin ürünü.",
+      "mustEat": ["Fıstıklı baklava", "Katmer", "Künefe"],
+      "priceLevel": 2,
+      "tags": ["tatlı", "baklava", "efsane"],
+      "openHours": "08:00 – 22:00",
+      "location": { "lat": 37.0647, "lng": 37.3724 }
+    },
+    {
+      "name": "Tahmis Kahvesi",
+      "category": "yemek",
+      "description": "1635'ten beri hizmet veren, Türkiye'nin en eski kahvehanelerinden biri. Tarihi atmosferde gerçek Türk kahvesi.",
+      "mustEat": ["Türk kahvesi", "Menengiç kahvesi", "Dibek kahvesi"],
+      "priceLevel": 1,
+      "tags": ["tarihi", "kahve", "efsane"],
+      "openHours": "07:00 – 21:00",
+      "location": { "lat": 37.0631, "lng": 37.3771 }
+    },
+    {
+      "name": "Halil Usta",
+      "category": "yemek",
+      "description": "Gaziantep usulü lahmacun ve pide'yi odun ateşinde pişiren, şehrin en sevilen fırın lokantası.",
+      "mustEat": ["Lahmacun", "Antep pide", "Fıstıklı kebap"],
+      "priceLevel": 1,
+      "tags": ["geleneksel", "fırın", "yerel"],
+      "openHours": "11:00 – 21:00",
+      "location": { "lat": 37.0619, "lng": 37.3756 }
+    }
+  ]
+}

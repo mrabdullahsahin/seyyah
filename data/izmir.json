@@ -1,0 +1,68 @@
+{
+  "city": "İzmir",
+  "slug": "izmir",
+  "region": "Ege",
+  "description": "Ege'nin incisi, Türkiye'nin en canlı kıyı kenti.",
+  "places": [
+    {
+      "name": "Kadifekale",
+      "category": "gezi",
+      "description": "Kentin tepesinden İzmir Körfezi'ni kuşbakışı gören antik kale. Gün batımında eşsiz bir panorama.",
+      "tags": ["tarihi", "manzara", "ücretsiz"],
+      "openHours": "Gün boyu açık",
+      "location": { "lat": 38.4173, "lng": 27.1353 }
+    },
+    {
+      "name": "Kemeraltı Çarşısı",
+      "category": "gezi",
+      "description": "17. yüzyıldan beri çarşı geleneğini sürdüren, labirenti andıran sokakları ve tarihi hanlarıyla İzmir'in ruhu.",
+      "tags": ["tarihi", "alışveriş", "kültür"],
+      "openHours": "08:00 – 20:00",
+      "location": { "lat": 38.4237, "lng": 27.1359 }
+    },
+    {
+      "name": "Efes Antik Kenti",
+      "category": "gezi",
+      "description": "Dünyanın en iyi korunmuş antik kentlerinden biri. Celsus Kütüphanesi ve tiyatrosuyla inanılmaz bir tarih yolculuğu. (İzmir'e ~80 km)",
+      "tags": ["antik", "Roma", "tarihi", "UNESCO"],
+      "openHours": "08:00 – 18:30 (mevsime göre değişir)",
+      "location": { "lat": 37.9399, "lng": 27.3414 }
+    },
+    {
+      "name": "İzmir Arkeoloji Müzesi",
+      "category": "muze",
+      "description": "Ege ve çevresinden derlenen antik Yunan ve Roma dönemine ait zengin bir koleksiyon.",
+      "tags": ["antik", "tarihi"],
+      "openHours": "09:00 – 17:00 (Pazartesi kapalı)",
+      "location": { "lat": 38.4226, "lng": 27.1443 }
+    },
+    {
+      "name": "Hisar Camii",
+      "category": "cami",
+      "description": "İzmir'in en eski ve en büyük camisi. 16. yüzyıldan kalma, Kemeraltı'nın kalbinde.",
+      "tags": ["tarihi", "Osmanlı"],
+      "openHours": "Gün boyu açık (namaz vakitleri)",
+      "location": { "lat": 38.4237, "lng": 27.1381 }
+    },
+    {
+      "name": "Veli Usta Midye",
+      "category": "yemek",
+      "description": "İzmir'in en sevilen sokak lezzeti midye dolmayı en taze haliyle sunan efsane tezgah.",
+      "mustEat": ["Midye dolma", "Midye tava", "Limonlu midye"],
+      "priceLevel": 1,
+      "tags": ["deniz ürünleri", "sokak", "taze"],
+      "openHours": "10:00 – 22:00",
+      "location": { "lat": 38.4240, "lng": 27.1362 }
+    },
+    {
+      "name": "Kumrucu Selanik",
+      "category": "yemek",
+      "description": "İzmir'in sembolü kumruyu mükemmel yapan mekan. Gevrek ekmek, özel sucuk ve taze malzemeler.",
+      "mustEat": ["İzmir kumrusu", "Boyoz", "Gevrek"],
+      "priceLevel": 1,
+      "tags": ["yerel", "efsane", "kahvaltı"],
+      "openHours": "07:00 – 20:00",
+      "location": { "lat": 38.4250, "lng": 27.1380 }
+    }
+  ]
+}

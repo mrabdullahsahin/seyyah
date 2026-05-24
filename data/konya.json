@@ -1,0 +1,60 @@
+{
+  "city": "Konya",
+  "slug": "konya",
+  "region": "İç Anadolu",
+  "description": "Mevlana'nın şehri, Anadolu'nun ruh merkezi.",
+  "places": [
+    {
+      "name": "Mevlana Müzesi ve Türbesi",
+      "category": "muze",
+      "description": "Celaleddin Rumi'nin türbesi ve dergahı. Konya'ya gelen herkesin mutlaka ziyaret ettiği huzurlu ve görkemli yer.",
+      "tags": ["tarihi", "kültür", "dini", "ücretsiz"],
+      "openHours": "09:00 – 17:30 (Pazartesi öğleden sonra açık)",
+      "location": { "lat": 37.8713, "lng": 32.4946 }
+    },
+    {
+      "name": "Selimiye Camii",
+      "category": "cami",
+      "description": "Selim I döneminden kalma, Mevlana Müzesi'nin hemen yanındaki zarif Osmanlı camisi.",
+      "tags": ["tarihi", "Osmanlı"],
+      "openHours": "Gün boyu açık (namaz vakitleri)",
+      "location": { "lat": 37.8710, "lng": 32.4938 }
+    },
+    {
+      "name": "Alaeddin Tepesi ve Camii",
+      "category": "gezi",
+      "description": "Kentin merkezindeki tarihi tepe; Selçuklu döneminden kalma cami ve etrafını saran parkıyla huzurlu bir durak.",
+      "tags": ["tarihi", "park", "manzara", "ücretsiz"],
+      "openHours": "Gün boyu açık",
+      "location": { "lat": 37.8741, "lng": 32.4903 }
+    },
+    {
+      "name": "Konya Kapalı Çarşısı",
+      "category": "gezi",
+      "description": "Yüzyıllık ticaret geleneğini yaşatan, yerel el dokumalarından baharata her şeyi bulabileceğiniz tarihi çarşı.",
+      "tags": ["tarihi", "alışveriş", "kültür"],
+      "openHours": "09:00 – 19:00 (Pazar kapalı)",
+      "location": { "lat": 37.8716, "lng": 32.4918 }
+    },
+    {
+      "name": "Şeyh Dürrani",
+      "category": "yemek",
+      "description": "Konya'nın simgesi etli ekmeği yüzyıllık reçeteyle pişiren, şehrin en köklü lokantalarından biri.",
+      "mustEat": ["Etli ekmek", "Fırın kebabı", "Tirit"],
+      "priceLevel": 2,
+      "tags": ["geleneksel", "efsane", "Konya mutfağı"],
+      "openHours": "11:00 – 22:00",
+      "location": { "lat": 37.8741, "lng": 32.4890 }
+    },
+    {
+      "name": "Köşk Restaurant",
+      "category": "yemek",
+      "description": "Konya'nın geleneksel tatlarını, tarihi bir konakta modern bir sunumla buluşturan zarif restoran.",
+      "mustEat": ["Höşmerim", "Bamya çorbası", "Sac kavurma"],
+      "priceLevel": 2,
+      "tags": ["yerel", "geleneksel", "konak"],
+      "openHours": "12:00 – 22:00",
+      "location": { "lat": 37.8720, "lng": 32.4905 }
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "city": "Trabzon",
+  "slug": "trabzon",
+  "region": "Karadeniz",
+  "description": "Yeşilin bin tonu, Karadeniz'in efsanevi şehri.",
+  "places": [
+    {
+      "name": "Sümela Manastırı",
+      "category": "gezi",
+      "description": "Kayalıklara oyulmuş Bizans dönemi manastırı. MS 4. yüzyıldan kalma, eşi bulunmaz doğa ile tarihin buluştuğu yer.",
+      "tags": ["tarihi", "Bizans", "doğa", "manzara"],
+      "openHours": "09:00 – 17:00 (mevsime göre değişir)",
+      "location": { "lat": 40.6932, "lng": 39.6630 }
+    },
+    {
+      "name": "Trabzon Ayasofyası",
+      "category": "muze",
+      "description": "13. yüzyıldan kalma Bizans freskolarıyla ünlü kilise-müze. Karadeniz'deki Bizans mimarisinin incisi.",
+      "tags": ["tarihi", "Bizans", "fresk"],
+      "openHours": "09:00 – 18:00",
+      "location": { "lat": 41.0028, "lng": 39.7156 }
+    },
+    {
+      "name": "Boztepe",
+      "category": "gezi",
+      "description": "Trabzon'un tepesinden Karadeniz ve şehir manzarasını izlemek için en güzel seyir noktası.",
+      "tags": ["manzara", "piknik", "doğa", "ücretsiz"],
+      "openHours": "Gün boyu açık",
+      "location": { "lat": 41.0013, "lng": 39.7281 }
+    },
+    {
+      "name": "Uzungöl",
+      "category": "gezi",
+      "description": "Karadeniz'in simgesi; dağlarla çevrili, sislerin arasında saklı efsanevi göl ve köy. Trabzon'a ~1 saat.",
+      "tags": ["doğa", "göl", "manzara", "köy"],
+      "openHours": "Gün boyu açık",
+      "location": { "lat": 40.6189, "lng": 40.2800 }
+    },
+    {
+      "name": "Horon Restaurant",
+      "category": "yemek",
+      "description": "Karadeniz mutfağının bütün lezzetlerini bir arada bulabileceğiniz, samimi atmosferi ile bilinen restoran.",
+      "mustEat": ["Hamsi tava", "Karalahana çorbası", "Mısır ekmeği"],
+      "priceLevel": 2,
+      "tags": ["yerel", "Karadeniz", "balık"],
+      "openHours": "12:00 – 22:00",
+      "location": { "lat": 41.0016, "lng": 39.7186 }
+    },
+    {
+      "name": "Vakfıkebir Fırını",
+      "category": "yemek",
+      "description": "Türkiye'nin dört bir yanına ulaşan Vakfıkebir ekmeğinin anakaynağı. Yeni çıkmış ekmekle laz böreği burada farklı.",
+      "mustEat": ["Vakfıkebir ekmeği", "Laz böreği", "Peynirli pide"],
+      "priceLevel": 1,
+      "tags": ["fırın", "geleneksel", "ekmek"],
+      "openHours": "06:00 – 20:00",
+      "location": { "lat": 41.0360, "lng": 39.2795 }
+    }
+  ]
+}

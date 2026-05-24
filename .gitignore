@@ -1,0 +1,44 @@
+# ─── İşletim Sistemi ─────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ─── Editör & IDE ─────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+*~
+
+# ─── Node (yerel geliştirme araçları için) ────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json
+
+# ─── Vendor dosyaları (repoya dahil edilir) ───────────────────────────
+# Leaflet dosyaları vendor/leaflet/ klasöründe takip edilmektedir.
+
+# ─── Ortam & Sırlar ──────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ─── Geçici & Cache ───────────────────────────────────────────────────
+*.log
+*.tmp
+*.temp
+.cache/
+dist/
+build/

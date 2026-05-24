@@ -1,0 +1,14 @@
+# Bu klasör Leaflet harita kütüphanesi için ayrılmıştır.
+#
+# İndirme adresi: https://leafletjs.com/download.html
+#
+# Adımlar:
+# 1. Sayfadan "Download" → ZIP dosyasını indir.
+# 2. ZIP'i aç.
+# 3. Şu dosyaları bu klasöre (vendor/leaflet/) kopyala:
+#      leaflet.js
+#      leaflet.css
+#      images/   ← klasörün tamamı (marker ikonları)
+#
+# Harita, bu dosyalar olmadan da çalışır;
+# sadece harita alanında açıklama mesajı gösterilir.
