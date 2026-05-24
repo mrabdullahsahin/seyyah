@@ -31,6 +31,7 @@ const state = {
   lang:        localStorage.getItem(LS_LANG)  || 'tr',
   theme:       localStorage.getItem(LS_THEME) || 'light',
   mapInstance:  null,
+  mapMarkers:   {},
   modalPlace:   null,
   modalMapInst: null,
   placeFavs:    new Set(JSON.parse(localStorage.getItem(LS_PLACE_FAVS) || '[]')),
@@ -71,6 +72,8 @@ const STRINGS = {
     share_label:  'Paylaş',
     load_err:     'Veri yüklenemedi: ',
     no_coord:       'Koordinat bilgisi olan mekan bulunamadı.',
+    map_route:      'Rotayı Göster',
+    map_route_n:    (n) => n + ' mekan',
     modal_close:    'Kapat',
     modal_share:    'Linki Kopyala',
     modal_share_ok: 'Mekan linki kopyalandı!',
@@ -111,6 +114,8 @@ const STRINGS = {
     share_label:  'Share',
     load_err:     'Failed to load data: ',
     no_coord:       'No places with coordinates found.',
+    map_route:      'Show Route',
+    map_route_n:    (n) => n + ' place' + (n !== 1 ? 's' : ''),
     modal_close:    'Close',
     modal_share:    'Copy Link',
     modal_share_ok: 'Place link copied!',
@@ -606,7 +611,12 @@ async function renderCityDetail() {
     + tagFilterHTML
     + '<div class="place-grid" id="place-grid">' + placesHTML + '</div>'
     + '<div class="map-section">'
-    + '<p class="map-section-label">' + esc(t('map_legend')) + '</p>'
+    + '<div class="map-section-header">'
+    + '<p class="map-section-label">' + IC.mapPin + ' ' + esc(t('map_legend')) + '</p>'
+    + '<a class="map-route-btn" id="map-route-btn" href="#" target="_blank" rel="noopener noreferrer" style="display:none">'
+    + IC.mapPin + ' ' + esc(t('map_route')) + ' <span class="map-route-count"></span>'
+    + '</a>'
+    + '</div>'
     + '<div id="city-map" class="city-map" role="img" aria-label="' + esc(t('map_legend')) + '"></div>'
     + '</div>'
     + '</div>';
@@ -629,6 +639,7 @@ function bindDetailEvents() {
         tb.setAttribute('aria-selected', tb.dataset.cat === state.category);
       });
       updatePlaceGrid();
+      updateMapMarkers();
     });
   });
 
@@ -690,9 +701,66 @@ function updatePlaceGrid() {
   });
 
   bindPlaceCardClicks(grid);
+  updateMapMarkers();
 }
 
 // ── 11. Leaflet Harita ────────────────────────────────────────────────
+
+function buildRouteUrl(places) {
+  var located = places.filter(function(p) { return p.location && p.location.lat; });
+  if (!located.length) return '';
+  if (located.length === 1) return mapsUrl(located[0].location.lat, located[0].location.lng);
+  var origin = located[0].location.lat + ',' + located[0].location.lng;
+  var dest   = located[located.length - 1].location.lat + ',' + located[located.length - 1].location.lng;
+  var wps    = located.slice(1, -1).map(function(p) {
+    return p.location.lat + ',' + p.location.lng;
+  }).join('|');
+  var url = 'https://www.google.com/maps/dir/?api=1'
+    + '&origin=' + encodeURIComponent(origin)
+    + '&destination=' + encodeURIComponent(dest);
+  if (wps) url += '&waypoints=' + encodeURIComponent(wps);
+  return url;
+}
+
+function updateRouteBtn(places) {
+  var btn = document.getElementById('map-route-btn');
+  if (!btn) return;
+  var located = (places || filterPlaces()).filter(function(p) { return p.location && p.location.lat; });
+  if (!located.length) { btn.style.display = 'none'; return; }
+  btn.href = buildRouteUrl(located);
+  btn.dataset.count = located.length;
+  btn.querySelector('.map-route-count').textContent = t('map_route_n', located.length);
+  btn.style.display = 'inline-flex';
+}
+
+function updateMapMarkers() {
+  if (!state.mapInstance || typeof window.L === 'undefined') return;
+  var filtered     = filterPlaces();
+  var filteredKeys = new Set(filtered.map(function(p) { return slugify(p.name); }));
+
+  Object.keys(state.mapMarkers).forEach(function(key) {
+    var md = state.mapMarkers[key];
+    var onMap = state.mapInstance.hasLayer(md.marker);
+    if (filteredKeys.has(key) && !onMap) {
+      md.marker.addTo(state.mapInstance);
+    } else if (!filteredKeys.has(key) && onMap) {
+      state.mapInstance.removeLayer(md.marker);
+    }
+  });
+
+  // Görünür markerlara fit et
+  var visibleMarkers = filtered
+    .filter(function(p) { return p.location && p.location.lat && state.mapMarkers[slugify(p.name)]; })
+    .map(function(p) { return state.mapMarkers[slugify(p.name)].marker; });
+
+  if (visibleMarkers.length > 1) {
+    try { state.mapInstance.fitBounds(L.featureGroup(visibleMarkers).getBounds().pad(0.15)); } catch(_) {}
+  } else if (visibleMarkers.length === 1) {
+    state.mapInstance.panTo(visibleMarkers[0].getLatLng(), { animate: true, duration: 0.4 });
+  }
+
+  updateRouteBtn(filtered);
+}
 
 function initMap() {
   var mapEl = document.getElementById('city-map');
@@ -704,16 +772,14 @@ function initMap() {
     return;
   }
 
-  if (state.mapInstance) {
-    state.mapInstance.remove();
-    state.mapInstance = null;
-  }
+  if (state.mapInstance) { state.mapInstance.remove(); state.mapInstance = null; }
+  state.mapMarkers = {};
 
-  var places = (state.cityData && state.cityData.places || []).filter(function(p) {
+  var allPlaces = (state.cityData && state.cityData.places || []).filter(function(p) {
     return p.location && p.location.lat && p.location.lng;
   });
 
-  if (!places.length) {
+  if (!allPlaces.length) {
     mapEl.innerHTML = '<div class="map-unavail">' + IC.mapPin + ' ' + esc(t('no_coord')) + '</div>';
     mapEl.classList.add('map-unavail-wrap');
     return;
@@ -727,10 +793,7 @@ function initMap() {
     });
   } catch (_) {}
 
-  var map = L.map('city-map', {
-    zoomControl: true,
-    scrollWheelZoom: false,
-  });
+  var map = L.map('city-map', { zoomControl: true, scrollWheelZoom: false });
   state.mapInstance = map;
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -740,7 +803,7 @@ function initMap() {
 
   var markerGroup = L.featureGroup();
 
-  places.forEach(function(place) {
+  allPlaces.forEach(function(place) {
     var color    = MAP_COL[place.category] || '#555';
     var catLabel = t('cats.' + place.category);
     var dirLink  = '<br><a href="' + mapsUrl(place.location.lat, place.location.lng)
@@ -749,11 +812,8 @@ function initMap() {
     var marker = L.marker([place.location.lat, place.location.lng], {
       icon: L.divIcon({
         className: 'map-marker',
-        html: '<div class="map-marker-inner" style="background:' + color + '" title="'
-              + esc(place.name) + '"></div>',
-        iconSize:    [14, 14],
-        iconAnchor:  [7, 7],
-        popupAnchor: [0, -8],
+        html: '<div class="map-marker-inner" style="background:' + color + '" title="' + esc(place.name) + '"></div>',
+        iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -8],
       }),
       alt: place.name,
     });
@@ -764,16 +824,29 @@ function initMap() {
       + dirLink,
       { closeButton: false }
     );
+
+    // Pin tıklanınca → ilgili karta scroll et + vurgula
+    marker.on('click', function() {
+      var pName = place.name;
+      var cards = document.querySelectorAll('.place-card-clickable[data-place-name]');
+      var found = null;
+      cards.forEach(function(c) { if (c.dataset.placeName === pName) found = c; });
+      if (found) {
+        found.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        found.classList.add('card-map-active');
+        setTimeout(function() { found.classList.remove('card-map-active'); }, 1600);
+      }
+    });
+
     markerGroup.addLayer(marker);
+    state.mapMarkers[slugify(place.name)] = { marker: marker, place: place };
   });
 
   markerGroup.addTo(map);
+  try { map.fitBounds(markerGroup.getBounds().pad(0.15)); }
+  catch (_) { map.setView([allPlaces[0].location.lat, allPlaces[0].location.lng], 13); }
 
-  try {
-    map.fitBounds(markerGroup.getBounds().pad(0.15));
-  } catch (_) {
-    map.setView([places[0].location.lat, places[0].location.lng], 13);
-  }
+  updateRouteBtn(state.cityData.places);
 }
 
 // ── 12. Yer Detay Modalı ──────────────────────────────────────────────
@@ -979,6 +1052,24 @@ function bindPlaceCardClicks(container) {
         if (place) openPlaceModal(place);
       }
     });
+
+    // Hover → harita pini vurgula
+    card.addEventListener('mouseenter', function() {
+      if (!state.mapInstance) return;
+      var md = state.mapMarkers[slugify(card.dataset.placeName)];
+      if (!md) return;
+      state.mapInstance.panTo(md.marker.getLatLng(), { animate: true, duration: 0.3 });
+      md.marker.openPopup();
+      var el = md.marker.getElement();
+      if (el) { var inner = el.querySelector('.map-marker-inner'); if (inner) inner.classList.add('map-pin-active'); }
+    });
+    card.addEventListener('mouseleave', function() {
+      var md = state.mapMarkers[slugify(card.dataset.placeName)];
+      if (!md) return;
+      md.marker.closePopup();
+      var el = md.marker.getElement();
+      if (el) { var inner = el.querySelector('.map-marker-inner'); if (inner) inner.classList.remove('map-pin-active'); }
+    });
   });
 }
 
@@ -1098,8 +1189,9 @@ async function router() {
     state.activeTags = new Set();
     await renderCityDetail();
   } else {
-    state.slug     = null;
-    state.cityData = null;
+    state.slug       = null;
+    state.cityData   = null;
+    state.mapMarkers = {};
     if (state.mapInstance) {
       state.mapInstance.remove();
       state.mapInstance = null;

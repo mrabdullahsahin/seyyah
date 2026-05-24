@@ -1164,14 +1164,59 @@ svg {
   padding-top: 1.5rem;
 }
 
+.map-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.875rem;
+  flex-wrap: wrap;
+}
+
 .map-section-label {
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-3);
-  margin-bottom: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   transition: color var(--trans);
+}
+
+/* Rotayı Göster butonu */
+.map-route-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: 32px;
+  padding: 0 0.875rem;
+  border-radius: var(--r-pill);
+  background: var(--red);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background var(--trans), transform var(--trans), box-shadow var(--trans);
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(200, 67, 42, 0.35);
+}
+
+.map-route-btn:hover {
+  background: var(--red-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(200, 67, 42, 0.4);
+}
+
+.map-route-btn:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+.map-route-count {
+  opacity: 0.85;
+  font-size: 11px;
 }
 
 .city-map {
@@ -1233,6 +1278,21 @@ svg {
 }
 
 .map-marker-inner:hover { transform: scale(1.5); }
+
+/* Kart hover → harita pin vurgusu */
+.map-pin-active {
+  transform: scale(1.9) !important;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.9), 0 3px 10px rgba(0,0,0,0.35) !important;
+  z-index: 10;
+}
+
+/* Harita pin tıkla → kart vurgusu */
+.card-map-active {
+  outline: 2.5px solid var(--red) !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(200, 67, 42, 0.14), var(--shadow-lg) !important;
+  transform: translateY(-4px) !important;
+}
 
 .map-unavail-wrap {
   display: flex;
