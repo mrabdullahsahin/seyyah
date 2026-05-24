@@ -18,6 +18,7 @@ const LS_THEME   = 'seyyah-theme';
 const LS_FAVS        = 'seyyah-favs';
 const LS_PLACE_FAVS  = 'seyyah-place-favs';
 const LS_PLAN        = 'seyyah-plan';
+const LS_VISITS      = 'seyyah-visits';
 
 // ── 2. Durum ──────────────────────────────────────────────────────────
 const state = {
@@ -37,6 +38,7 @@ const state = {
   modalMapInst: null,
   placeFavs:    new Set(JSON.parse(localStorage.getItem(LS_PLACE_FAVS) || '[]')),
   plan:         JSON.parse(localStorage.getItem(LS_PLAN) || '[]'),
+  visits:       JSON.parse(localStorage.getItem(LS_VISITS) || '{}'),
 };
 
 // ── 3. Çeviriler ──────────────────────────────────────────────────────
@@ -92,6 +94,13 @@ const STRINGS = {
     modal_plan:     'Gezi Planına Ekle',
     place_fav_add:  'Mekanı favorile',
     place_fav_rm:   'Favoriden çıkar',
+    visit_mark:     'Ziyaret Ettim',
+    visit_unmark:   'Ziyareti Sil',
+    visit_done:     'Ziyaret Edildi ✓',
+    visit_date:     'Tarih:',
+    visit_note_ph:  'Notun… (isteğe bağlı)',
+    visit_progress: function(v, tot) { return v + ' / ' + tot + ' ziyaret edildi'; },
+    visit_none:     'Henüz ziyaret yok',
   },
   en: {
     tagline:      "Discover Turkey's cities",
@@ -144,6 +153,13 @@ const STRINGS = {
     modal_plan:     'Add to Plan',
     place_fav_add:  'Save place',
     place_fav_rm:   'Unsave place',
+    visit_mark:     'Mark as Visited',
+    visit_unmark:   'Remove Visit',
+    visit_done:     'Visited ✓',
+    visit_date:     'Date:',
+    visit_note_ph:  'Your notes… (optional)',
+    visit_progress: function(v, tot) { return v + ' of ' + tot + ' visited'; },
+    visit_none:     'Not visited yet',
   },
 };
 
@@ -182,6 +198,7 @@ const IC = {
   tag:       svg('<path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><path d="M7 7h.01"/>'),
   link:      svg('<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>'),
   plan:      svg('<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="16" x2="15" y2="16"/><line x1="12" y1="13" x2="12" y2="19"/>'),
+  check:     svg('<polyline points="20 6 9 17 4 12"/>'),
 };
 
 const CAT_IC  = { yemek: IC.utensils, cami: IC.mosque, muze: IC.landmark, gezi: IC.bino };
@@ -214,6 +231,77 @@ function saveFavs() {
 
 function savePlaceFavs() {
   localStorage.setItem(LS_PLACE_FAVS, JSON.stringify(Array.from(state.placeFavs)));
+}
+
+function saveVisits() {
+  localStorage.setItem(LS_VISITS, JSON.stringify(state.visits));
+}
+
+function isVisited(key) {
+  return !!state.visits[key];
+}
+
+function markVisited(key, date, note) {
+  state.visits[key] = {
+    date: date || new Date().toISOString().slice(0, 10),
+    note: (note !== undefined) ? note : '',
+  };
+  saveVisits();
+}
+
+function unmarkVisited(key) {
+  delete state.visits[key];
+  saveVisits();
+}
+
+function getVisitProgress() {
+  if (!state.cityData) return { visited: 0, total: 0, pct: 0 };
+  var total = state.cityData.places.length;
+  var slug  = state.slug || '';
+  var visited = state.cityData.places.filter(function(p) {
+    return isVisited(slug + '__' + slugify(p.name));
+  }).length;
+  return { visited: visited, total: total, pct: total ? Math.round(visited / total * 100) : 0 };
+}
+
+// Mevcut place card'larında ziyaret rozetini güncelle (modal kapanmadan re-render olmadan)
+function updateVisitedCards() {
+  if (!state.cityData) return;
+  var slug = state.slug || '';
+  state.cityData.places.forEach(function(p) {
+    var key = slug + '__' + slugify(p.name);
+    var visited = isVisited(key);
+    document.querySelectorAll('.place-card[data-place-name]').forEach(function(card) {
+      if (card.dataset.placeName !== p.name) return;
+      card.classList.toggle('place-visited', visited);
+      var existing = card.querySelector('.visited-badge');
+      if (visited && !existing) {
+        var badge = document.createElement('span');
+        badge.className = 'visited-badge';
+        badge.setAttribute('aria-label', t('visit_done'));
+        badge.textContent = '✓';
+        card.style.position = card.style.position || '';
+        var body = card.querySelector('.place-card-body');
+        if (body) body.insertBefore(badge, body.firstChild);
+      } else if (!visited && existing) {
+        existing.remove();
+      }
+    });
+  });
+  updateCityProgress();
+}
+
+// Şehir detayındaki progress bar'ı güncelle
+function updateCityProgress() {
+  var bar = document.getElementById('city-progress');
+  if (!bar) return;
+  var prog = getVisitProgress();
+  var fill = bar.querySelector('.progress-fill');
+  var text = bar.querySelector('.progress-text');
+  var pct  = bar.querySelector('.progress-pct');
+  if (fill) fill.style.width = prog.pct + '%';
+  if (text) text.textContent = t('visit_progress', prog.visited, prog.total);
+  if (pct)  pct.textContent  = prog.pct + '%';
 }
 
 // ── 6. Tema & Dil ─────────────────────────────────────────────────────
@@ -303,6 +391,9 @@ function cityCardHTML(city) {
   var isFav = state.favorites.has(city.slug);
   var count = city.placeCount != null ? city.placeCount : '…';
   var imgUrl = 'https://picsum.photos/seed/' + encodeURIComponent(city.slug) + '/600/400';
+  var cityVisited = Object.keys(state.visits).filter(function(k) {
+    return k.indexOf(city.slug + '__') === 0;
+  }).length;
   return '<article class="city-card" data-slug="' + esc(city.slug) + '" role="button" tabindex="0" '
     + 'aria-label="' + esc(city.city) + '">'
     + '<div class="city-card-img">'
@@ -318,7 +409,9 @@ function cityCardHTML(city) {
     + '<p class="city-desc">' + esc(city.description) + '</p>'
     + '<div class="city-footer">'
     + '<span class="city-count">' + IC.mapPin + ' ' + esc(t('places_count', count)) + '</span>'
-    + '<span class="city-arrow">→</span>'
+    + (cityVisited > 0
+        ? '<span class="city-visited-count">' + IC.check + ' ' + cityVisited + '</span>'
+        : '<span class="city-arrow">→</span>')
     + '</div>'
     + '</div></article>';
 }
@@ -529,11 +622,15 @@ function placeCardHTML(place) {
     ? '<footer class="place-card-footer">' + hoursHTML + priceHTML + dirHTML + '</footer>'
     : '';
 
-  return '<article class="place-card place-card-clickable" '
+  var visitedKey = (state.slug || '') + '__' + slugify(place.name);
+  var isVis = isVisited(visitedKey);
+
+  return '<article class="place-card place-card-clickable' + (isVis ? ' place-visited' : '') + '" '
     + 'data-place-name="' + esc(place.name) + '" '
     + 'role="button" tabindex="0" aria-label="' + esc(place.name) + ' – detayları gör">'
     + '<div class="place-card-accent place-accent-' + esc(place.category) + '"></div>'
     + '<div class="place-card-body">'
+    + (isVis ? '<span class="visited-badge" aria-label="' + esc(t('visit_done')) + '">✓</span>' : '')
     + '<div class="place-card-header">'
     + '<h3 class="place-name">' + esc(place.name) + '</h3>'
     + badgeHTML(place.category)
@@ -621,6 +718,17 @@ async function renderCityDetail() {
     ? filtered.map(placeCardHTML).join('')
     : '<p class="empty-state col-span">' + esc(t('no_places')) + '</p>';
 
+  var prog = getVisitProgress();
+  var progressHTML = prog.total > 0
+    ? '<div class="city-progress" id="city-progress">'
+      + '<div class="progress-header">'
+      + '<span class="progress-text">' + esc(t('visit_progress', prog.visited, prog.total)) + '</span>'
+      + '<span class="progress-pct">' + prog.pct + '%</span>'
+      + '</div>'
+      + '<div class="progress-bar"><div class="progress-fill" style="width:' + prog.pct + '%"></div></div>'
+      + '</div>'
+    : '';
+
   main.innerHTML = '<div class="container detail-view">'
     + '<div class="detail-header">'
     + '<button class="btn-back" id="btn-back">' + IC.arrowLeft + ' ' + esc(t('back')) + '</button>'
@@ -629,6 +737,7 @@ async function renderCityDetail() {
     + '<h1 class="detail-city-name">' + esc(state.cityData.city) + '</h1>'
     + '<p class="detail-city-desc">' + esc(state.cityData.description) + '</p>'
     + '</div>'
+    + progressHTML
     + '<nav class="tabs" role="tablist" aria-label="Kategori filtresi">' + tabsHTML + '</nav>'
     + tagFilterHTML
     + '<div class="place-grid" id="place-grid">' + placesHTML + '</div>'
@@ -917,6 +1026,24 @@ function modalInnerHTML(place) {
       + '" target="_blank" rel="noopener noreferrer">' + IC.mapPin + ' ' + esc(t('directions')) + '</a>'
     : '';
 
+  var visitKey  = (state.slug || '') + '__' + slugify(place.name);
+  var visited   = isVisited(visitKey);
+  var visitObj  = state.visits[visitKey] || {};
+  var visitDate = visitObj.date || new Date().toISOString().slice(0, 10);
+  var visitNote = visitObj.note || '';
+  var today     = new Date().toISOString().slice(0, 10);
+
+  var visitHTML = '<div class="visit-section" id="visit-section">'
+    + '<button class="modal-btn modal-btn-visit' + (visited ? ' is-visited' : '') + '" id="modal-visit-btn">'
+    + IC.check + ' ' + esc(visited ? t('visit_done') : t('visit_mark'))
+    + '</button>'
+    + '<div class="visit-meta" id="visit-meta"' + (visited ? '' : ' style="display:none"') + '>'
+    + '<label class="visit-date-label">' + IC.clock + ' ' + esc(t('visit_date'))
+    + '<input type="date" id="visit-date" class="visit-date-input" value="' + esc(visitDate) + '" max="' + esc(today) + '"></label>'
+    + '<textarea id="visit-note" class="visit-note-input" placeholder="' + esc(t('visit_note_ph')) + '" rows="2">' + esc(visitNote) + '</textarea>'
+    + '</div>'
+    + '</div>';
+
   return '<div class="modal" role="document">'
     + '<div class="modal-banner">'
     + '<img class="modal-banner-img" src="' + imgUrl + '" alt="' + esc(place.name) + '" loading="eager">'
@@ -937,7 +1064,9 @@ function modalInnerHTML(place) {
     + '<button class="modal-btn modal-btn-fav ' + (isFav ? 'is-fav' : '') + '" id="modal-fav-btn" '
     + 'aria-label="' + esc(isFav ? t('place_fav_rm') : t('place_fav_add')) + '">'
     + (isFav ? IC.heartFill : IC.heart) + '</button>'
-    + '</div></div></div>';
+    + '</div>'
+    + visitHTML
+    + '</div></div>';
 }
 
 function openPlaceModal(place, updateUrl) {
@@ -1077,6 +1206,58 @@ function bindModalEvents(overlay, place) {
         favBtn.setAttribute('aria-label', t('place_fav_rm'));
       }
       savePlaceFavs();
+    });
+  }
+
+  // ── Ziyaret Takip Sistemi ──────────────────────────────────────────
+  var visitBtn  = overlay.querySelector('#modal-visit-btn');
+  var visitMeta = overlay.querySelector('#visit-meta');
+  var dateInput = overlay.querySelector('#visit-date');
+  var noteInput = overlay.querySelector('#visit-note');
+  var visitKey  = (state.slug || '') + '__' + slugify(place.name);
+
+  if (visitBtn) {
+    visitBtn.addEventListener('click', function() {
+      if (isVisited(visitKey)) {
+        // Ziyareti kaldır
+        unmarkVisited(visitKey);
+        visitBtn.classList.remove('is-visited');
+        var frag = document.createRange().createContextualFragment(IC.check + ' ' + esc(t('visit_mark')));
+        visitBtn.textContent = '';
+        visitBtn.appendChild(frag);
+        if (visitMeta) visitMeta.style.display = 'none';
+      } else {
+        // Bugünün tarihiyle ziyaret olarak işaretle
+        var todayStr = new Date().toISOString().slice(0, 10);
+        markVisited(visitKey, todayStr, '');
+        visitBtn.classList.add('is-visited');
+        var frag2 = document.createRange().createContextualFragment(IC.check + ' ' + esc(t('visit_done')));
+        visitBtn.textContent = '';
+        visitBtn.appendChild(frag2);
+        if (visitMeta) { visitMeta.style.display = 'flex'; }
+        if (dateInput)  { dateInput.value = todayStr; }
+      }
+      updateVisitedCards();
+    });
+  }
+
+  // Tarih değiştiğinde güncelle
+  if (dateInput) {
+    dateInput.addEventListener('change', function() {
+      if (isVisited(visitKey)) {
+        state.visits[visitKey].date = dateInput.value;
+        saveVisits();
+      }
+    });
+  }
+
+  // Not kaydedildiğinde (blur) güncelle
+  if (noteInput) {
+    noteInput.addEventListener('blur', function() {
+      if (isVisited(visitKey)) {
+        state.visits[visitKey].note = noteInput.value;
+        saveVisits();
+      }
     });
   }
 }

@@ -2187,3 +2187,203 @@ body.modal-open {
   .plan-drawer { max-width: 100%; }
   .plan-fab    { bottom: 1.25rem; right: 1.25rem; height: 44px; font-size: 13px; }
 }
+
+/* ── 30. Ziyaret Takip Sistemi ────────────────────────────────────── */
+
+/* Place card — ziyaret rozeti */
+.place-card {
+  position: relative;
+}
+
+.visited-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  background: var(--green);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+  position: absolute;
+  top: 0.625rem;
+  right: 0.625rem;
+  box-shadow: 0 1px 4px rgba(5, 150, 105, 0.35);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.place-visited {
+  border-color: var(--green) !important;
+}
+
+.place-visited .place-card-accent {
+  opacity: 0.5;
+}
+
+/* Şehir kartı — ziyaret sayacı */
+.city-visited-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.city-visited-count svg {
+  stroke: var(--green);
+}
+
+/* Şehir detayı — progress bar */
+.city-progress {
+  margin-bottom: 1.25rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.progress-text {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+.progress-pct {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.progress-bar {
+  height: 5px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  min-width: 0;
+}
+
+/* Modal — ziyaret bölümü */
+.visit-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.modal-btn-visit {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--trans), border-color var(--trans), color var(--trans);
+  font-family: inherit;
+}
+
+.modal-btn-visit:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.modal-btn-visit.is-visited {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+
+.modal-btn-visit.is-visited:hover {
+  background: #047857;
+  border-color: #047857;
+}
+
+.visit-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  animation: fadeSlideUp 0.2s ease both;
+}
+
+.visit-date-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+.visit-date-input {
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-size: 12.5px;
+  background: var(--bg);
+  color: var(--ink-1);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color var(--trans);
+}
+
+.visit-date-input:focus {
+  outline: none;
+  border-color: var(--green);
+}
+
+.visit-note-input {
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 13px;
+  background: var(--bg);
+  color: var(--ink-1);
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.5;
+  min-height: 58px;
+  transition: border-color var(--trans);
+}
+
+.visit-note-input:focus {
+  outline: none;
+  border-color: var(--green);
+}
+
+.visit-note-input::placeholder {
+  color: var(--ink-4);
+}
+
+/* Dark mode uyumu */
+[data-theme="dark"] .visit-date-input,
+[data-theme="dark"] .visit-note-input {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--ink-1);
+}
