@@ -2239,6 +2239,102 @@ body.modal-open {
   color: var(--ink-1);
 }
 
+/* Açık / Kapalı rozeti — place cards ve modal */
+.open-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.1rem 0.45rem;
+  border-radius: 20px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.open-badge-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.open-badge-open {
+  background: var(--green-bg);
+  color: var(--green-text);
+}
+
+.open-badge-open .open-badge-dot {
+  background: var(--green);
+  box-shadow: 0 0 0 2px rgba(5,150,105,0.25);
+  animation: pulse-green 2s ease-in-out infinite;
+}
+
+.open-badge-closed {
+  background: #FEF2F2;
+  color: #991B1B;
+}
+
+.open-badge-closed .open-badge-dot {
+  background: #EF4444;
+}
+
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(5,150,105,0.25); }
+  50%       { box-shadow: 0 0 0 4px rgba(5,150,105,0.10); }
+}
+
+/* "Sadece açıklar" toggle butonu */
+.open-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 32px;
+  padding: 0 0.75rem;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background var(--trans), border-color var(--trans), color var(--trans);
+  margin-right: auto; /* sola yasla, sort sağda kalsın */
+}
+
+.open-filter-btn:hover {
+  border-color: var(--green);
+  color: var(--green-text);
+}
+
+.open-filter-active {
+  background: var(--green-bg);
+  border-color: var(--green);
+  color: var(--green-text);
+}
+
+.open-filter-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink-4);
+  transition: background var(--trans);
+}
+
+.open-filter-active .open-filter-dot {
+  background: var(--green);
+  animation: pulse-green 2s ease-in-out infinite;
+}
+
+[data-theme="dark"] .open-badge-closed {
+  background: rgba(239,68,68,0.12);
+  color: #FCA5A5;
+}
+
 /* ── 31. Ziyaret Takip Sistemi ────────────────────────────────────── */
 
 /* Place card — ziyaret rozeti */

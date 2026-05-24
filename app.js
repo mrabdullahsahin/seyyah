@@ -40,6 +40,7 @@ const state = {
   plan:         JSON.parse(localStorage.getItem(LS_PLAN) || '[]'),
   visits:       JSON.parse(localStorage.getItem(LS_VISITS) || '{}'),
   sortBy:       'default',
+  openOnly:     false,
 };
 
 // ── 3. Çeviriler ──────────────────────────────────────────────────────
@@ -107,6 +108,10 @@ const STRINGS = {
     sort_name:      'A → Z',
     sort_price:     'Fiyat ↑',
     sort_open:      'Şu an açık',
+    open_now:       'Açık',
+    closed_now:     'Kapalı',
+    open_unknown:   '',
+    open_only_btn:  'Sadece açıklar',
   },
   en: {
     tagline:      "Discover Turkey's cities",
@@ -171,6 +176,10 @@ const STRINGS = {
     sort_name:      'A → Z',
     sort_price:     'Price ↑',
     sort_open:      'Open now',
+    open_now:       'Open',
+    closed_now:     'Closed',
+    open_unknown:   '',
+    open_only_btn:  'Open now only',
   },
 };
 
@@ -575,7 +584,8 @@ function filterPlaces() {
       || Array.from(state.activeTags).every(function(tag) {
            return p.tags && p.tags.indexOf(tag) !== -1;
          });
-    return matchCat && matchTags;
+    var matchOpen = !state.openOnly || isOpenNow(p.openHours) === true;
+    return matchCat && matchTags && matchOpen;
   });
 }
 
@@ -632,6 +642,17 @@ function getAllTags() {
   return Object.keys(tags).sort(function(a, b) { return a.localeCompare(b, 'tr'); });
 }
 
+// Açık / kapalı rozeti HTML'i döner (saat bilgisi yoksa boş string)
+function openBadgeHTML(openHours) {
+  var status = isOpenNow(openHours);
+  if (status === null) return '';
+  var label = status ? t('open_now') : t('closed_now');
+  var cls   = status ? 'open-badge-open' : 'open-badge-closed';
+  return '<span class="open-badge ' + cls + '" aria-label="' + esc(label) + '">'
+    + '<span class="open-badge-dot" aria-hidden="true"></span>'
+    + esc(label) + '</span>';
+}
+
 function badgeHTML(category) {
   return '<span class="badge badge-' + esc(category) + '">'
     + (CAT_IC[category] || '') + esc(t('cats.' + category)) + '</span>';
@@ -660,7 +681,8 @@ function placeCardHTML(place) {
   }
 
   var hoursHTML = place.openHours
-    ? '<span class="place-hours">' + IC.clock + ' ' + esc(place.openHours) + '</span>'
+    ? '<span class="place-hours">' + IC.clock + ' ' + esc(place.openHours)
+      + ' ' + openBadgeHTML(place.openHours) + '</span>'
     : '';
 
   var priceHTML = place.priceLevel
@@ -774,6 +796,10 @@ async function renderCityDetail() {
       + esc(t('sort_' + v)) + '</option>';
   }).join('');
   var sortBarHTML = '<div class="sort-bar">'
+    + '<button class="open-filter-btn' + (state.openOnly ? ' open-filter-active' : '') + '" id="open-filter-btn">'
+    + '<span class="open-filter-dot" aria-hidden="true"></span>'
+    + esc(t('open_only_btn'))
+    + '</button>'
     + '<label class="sort-label" for="sort-select">' + esc(t('sort_label')) + '</label>'
     + '<select class="sort-select" id="sort-select">' + sortOptsHTML + '</select>'
     + '</div>';
@@ -842,6 +868,16 @@ function bindDetailEvents() {
   });
 
   bindTagChipEvents();
+
+  var openFilterBtn = document.getElementById('open-filter-btn');
+  if (openFilterBtn) {
+    openFilterBtn.addEventListener('click', function() {
+      state.openOnly = !state.openOnly;
+      openFilterBtn.classList.toggle('open-filter-active', state.openOnly);
+      updatePlaceGrid();
+      updateMapMarkers();
+    });
+  }
 
   var sortSel = document.getElementById('sort-select');
   if (sortSel) {
@@ -1087,7 +1123,8 @@ function modalInnerHTML(place) {
   if (place.openHours) {
     infoItems += '<div class="modal-info-item"><span class="modal-info-label">'
       + IC.clock + ' ' + esc(t('open_hours')) + '</span>'
-      + '<span class="modal-info-val">' + esc(place.openHours) + '</span></div>';
+      + '<span class="modal-info-val">' + esc(place.openHours)
+      + ' ' + openBadgeHTML(place.openHours) + '</span></div>';
   }
   if (place.priceLevel) {
     var priceLabel = state.lang === 'tr' ? 'Fiyat' : 'Price';
@@ -1751,6 +1788,7 @@ async function router() {
         state.category   = 'all';
         state.activeTags = new Set();
         state.sortBy     = 'default';
+        state.openOnly   = false;
         await renderCityDetail();
       }
       // Yeri bul ve modalı aç
@@ -1781,6 +1819,7 @@ async function router() {
     state.category   = 'all';
     state.activeTags = new Set();
     state.sortBy     = 'default';
+    state.openOnly   = false;
     await renderCityDetail();
   } else {
     state.slug       = null;
