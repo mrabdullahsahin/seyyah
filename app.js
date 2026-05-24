@@ -205,7 +205,7 @@ function fetchJSON(url) {
 
 function skeletonCityCard() {
   return '<div class="city-card skeleton" aria-hidden="true">'
-    + '<div class="city-card-cover"></div>'
+    + '<div class="city-card-img"></div>'
     + '<div class="city-card-body">'
     + '<div class="skel-line skel-title"></div>'
     + '<div class="skel-line skel-desc"></div>'
@@ -245,9 +245,12 @@ function filterCities() {
 function cityCardHTML(city) {
   var isFav = state.favorites.has(city.slug);
   var count = city.placeCount != null ? city.placeCount : '…';
+  var imgUrl = 'https://picsum.photos/seed/' + encodeURIComponent(city.slug) + '/600/400';
   return '<article class="city-card" data-slug="' + esc(city.slug) + '" role="button" tabindex="0" '
     + 'aria-label="' + esc(city.city) + '">'
-    + '<div class="city-card-cover">'
+    + '<div class="city-card-img">'
+    + '<img src="' + imgUrl + '" alt="' + esc(city.city) + '" loading="lazy">'
+    + '<div class="city-card-img-overlay"></div>'
     + '<span class="city-card-region">' + esc(city.region) + '</span>'
     + '<button class="btn-fav city-fav ' + (isFav ? 'is-fav' : '') + '" data-slug="' + esc(city.slug) + '" '
     + 'aria-label="' + esc(isFav ? t('fav_remove') : t('fav_add')) + '">'
@@ -256,7 +259,10 @@ function cityCardHTML(city) {
     + '<div class="city-card-body">'
     + '<h2 class="city-name">' + esc(city.city) + '</h2>'
     + '<p class="city-desc">' + esc(city.description) + '</p>'
+    + '<div class="city-footer">'
     + '<span class="city-count">' + IC.mapPin + ' ' + esc(t('places_count', count)) + '</span>'
+    + '<span class="city-arrow">→</span>'
+    + '</div>'
     + '</div></article>';
 }
 
@@ -288,7 +294,21 @@ function renderCityList() {
       + '</section>'
     : '';
 
-  var html = '<div class="list-controls">'
+  var heroTitle = state.lang === 'tr'
+    ? 'Türkiye\'yi<br><span>Keşfet</span>'
+    : 'Explore<br><span>Turkey</span>';
+  var heroSub = state.lang === 'tr'
+    ? 'Tarihin, lezzetin ve doğanın iç içe geçtiği şehirleri keşfet. Her köşede seni bekleyen unutulmaz anlar var.'
+    : 'Discover cities where history, flavor, and nature intertwine. Unforgettable moments await around every corner.';
+  var eyebrow = state.lang === 'tr'
+    ? '✶  ' + state.cities.length + ' şehir keşfet'
+    : '✶  ' + state.cities.length + ' cities to explore';
+
+  var heroHTML = '<section class="hero">'
+    + '<div class="container hero-content">'
+    + '<div class="hero-eyebrow">' + eyebrow + '</div>'
+    + '<h1 class="hero-title">' + heroTitle + '</h1>'
+    + '<p class="hero-subtitle">' + esc(heroSub) + '</p>'
     + '<div class="search-wrap">'
     + '<span class="search-icon">' + IC.search + '</span>'
     + '<input id="search-input" class="search-input" type="search" '
@@ -296,16 +316,30 @@ function renderCityList() {
     + 'value="' + esc(state.search) + '" '
     + 'aria-label="' + esc(t('search_ph')) + '" '
     + 'autocomplete="off" spellcheck="false">'
-    + (state.search ? '<button class="search-clear" id="search-clear" aria-label="Aramayı temizle">' + IC.xMark + '</button>' : '')
+    + (state.search
+        ? '<button class="search-clear" id="search-clear" aria-label="Arama temizle">' + IC.xMark + '</button>'
+        : '<span class="search-badge">⌘K</span>')
     + '</div>'
-    + '<div class="chips" role="group" aria-label="Bölge filtresi">' + regionChipsHTML + '</div>'
-    + '</div>'
-    + favsHTML
-    + '<section class="cities-section" aria-label="Şehirler">'
-    + '<div class="city-grid">' + cityCardsHTML + '</div>'
-    + '</section>';
+    + '<div class="region-chips" role="group" aria-label="Bölge filtresi">' + regionChipsHTML + '</div>'
+    + '</div></section>';
 
-  main.innerHTML = html;
+  var resultLabel = state.lang === 'tr'
+    ? (filtered.length + ' sonuç')
+    : (filtered.length + ' result' + (filtered.length !== 1 ? 's' : ''));
+  var sectionLabel = state.lang === 'tr' ? 'Şehirler' : 'Cities';
+
+  var contentHTML = '<div class="container section-wrap">'
+    + favsHTML
+    + '<section aria-label="' + esc(sectionLabel) + '">'
+    + '<div class="section-label">'
+    + '<span class="section-label-text">' + esc(sectionLabel) + '</span>'
+    + '<span class="section-label-line"></span>'
+    + '<span class="section-label-count">' + esc(resultLabel) + '</span>'
+    + '</div>'
+    + '<div class="city-grid">' + cityCardsHTML + '</div>'
+    + '</section></div>';
+
+  main.innerHTML = heroHTML + contentHTML;
   bindCityListEvents();
 
   if (state.search) {
@@ -406,7 +440,7 @@ function placeCardHTML(place) {
     mustEatHTML = '<div class="must-eat">'
       + '<span class="must-eat-label">' + esc(t('must_eat')) + '</span>'
       + '<div class="must-eat-chips">'
-      + place.mustEat.map(function(item) { return '<span class="chip-small">' + esc(item) + '</span>'; }).join('')
+      + place.mustEat.map(function(item) { return '<span class="must-chip">' + esc(item) + '</span>'; }).join('')
       + '</div></div>';
   }
 
@@ -421,7 +455,7 @@ function placeCardHTML(place) {
   }
 
   var hoursHTML = place.openHours
-    ? '<span class="place-hours">' + IC.clock + ' ' + esc(t('open_hours')) + ' ' + esc(place.openHours) + '</span>'
+    ? '<span class="place-hours">' + IC.clock + ' ' + esc(place.openHours) + '</span>'
     : '';
 
   var priceHTML = place.priceLevel
@@ -431,14 +465,16 @@ function placeCardHTML(place) {
   var dirHTML = hasLoc
     ? '<a class="place-dir" href="' + mapsUrl(place.location.lat, place.location.lng)
       + '" target="_blank" rel="noopener noreferrer">'
-      + IC.mapPin + ' ' + esc(t('directions')) + ' ' + IC.extLink + '</a>'
+      + esc(t('directions')) + ' ' + IC.extLink + '</a>'
     : '';
 
   var footerHTML = (hoursHTML || priceHTML || dirHTML)
     ? '<footer class="place-card-footer">' + hoursHTML + priceHTML + dirHTML + '</footer>'
     : '';
 
-  return '<article class="place-card place-' + esc(place.category) + '">'
+  return '<article class="place-card">'
+    + '<div class="place-card-accent place-accent-' + esc(place.category) + '"></div>'
+    + '<div class="place-card-body">'
     + '<div class="place-card-header">'
     + '<h3 class="place-name">' + esc(place.name) + '</h3>'
     + badgeHTML(place.category)
@@ -447,7 +483,7 @@ function placeCardHTML(place) {
     + tagsHTML
     + mustEatHTML
     + footerHTML
-    + '</article>';
+    + '</div></article>';
 }
 
 function tagChipsHTML(tags) {
@@ -464,7 +500,8 @@ async function renderCityDetail() {
   var main = document.getElementById('main');
 
   // Skeleton göster
-  main.innerHTML = '<div class="detail-header">'
+  main.innerHTML = '<div class="container detail-view">'
+    + '<div class="detail-header">'
     + '<button class="btn-back" id="btn-back-skel">' + IC.arrowLeft + ' ' + esc(t('back')) + '</button>'
     + '</div>'
     + '<div class="detail-meta">'
@@ -473,6 +510,7 @@ async function renderCityDetail() {
     + '</div>'
     + '<div class="place-grid">'
     + [0,1,2,3,4,5].map(skeletonPlaceCard).join('')
+    + '</div>'
     + '</div>';
 
   document.getElementById('btn-back-skel') &&
@@ -485,10 +523,12 @@ async function renderCityDetail() {
     state.cityData = await fetchJSON(cityMeta.data);
     cityMeta.placeCount = state.cityData.places.length;
   } catch (err) {
-    main.innerHTML = '<div class="detail-header">'
+    main.innerHTML = '<div class="container detail-view">'
+      + '<div class="detail-header">'
       + '<button class="btn-back" id="btn-back-err">' + IC.arrowLeft + ' ' + esc(t('back')) + '</button>'
       + '</div>'
-      + '<p class="empty-state">' + esc(t('load_err')) + esc(err.message) + '</p>';
+      + '<p class="empty-state">' + esc(t('load_err')) + esc(err.message) + '</p>'
+      + '</div>';
     document.getElementById('btn-back-err') &&
       document.getElementById('btn-back-err').addEventListener('click', function() { location.hash = ''; });
     return;
@@ -522,7 +562,8 @@ async function renderCityDetail() {
     ? filtered.map(placeCardHTML).join('')
     : '<p class="empty-state col-span">' + esc(t('no_places')) + '</p>';
 
-  main.innerHTML = '<div class="detail-header">'
+  main.innerHTML = '<div class="container detail-view">'
+    + '<div class="detail-header">'
     + '<button class="btn-back" id="btn-back">' + IC.arrowLeft + ' ' + esc(t('back')) + '</button>'
     + '</div>'
     + '<div class="detail-meta">'
@@ -533,7 +574,9 @@ async function renderCityDetail() {
     + tagFilterHTML
     + '<div class="place-grid" id="place-grid">' + placesHTML + '</div>'
     + '<div class="map-section">'
+    + '<p class="map-section-label">' + esc(t('map_legend')) + '</p>'
     + '<div id="city-map" class="city-map" role="img" aria-label="' + esc(t('map_legend')) + '"></div>'
+    + '</div>'
     + '</div>';
 
   bindDetailEvents();
@@ -792,6 +835,15 @@ async function init() {
 
   var langBtn = document.getElementById('btn-lang');
   if (langBtn) langBtn.addEventListener('click', toggleLang);
+
+  // ⌘K / Ctrl+K → search odağı
+  document.addEventListener('keydown', function(e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      var inp = document.getElementById('search-input');
+      if (inp) { inp.focus(); inp.select(); }
+    }
+  });
 
   // Paylaşılan favori URL'si var mı?
   if (location.hash.indexOf('#?favs=') === 0) {

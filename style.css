@@ -1,88 +1,103 @@
 /* ═══════════════════════════════════════════════════════════════════
-   Seyyah — Design System
-   Tüm stiller CSS değişkenleri üzerinden yönetilir.
-   Karanlık tema: html[data-theme="dark"]
+   Seyyah — Ottoman Modernism Design System
+   Cinzel (display) · DM Sans (body)
+   Terracotta #C8432A · Parchment #FAF8F4 · Ink #1C1409
    ═══════════════════════════════════════════════════════════════════ */
 
-/* ── 1. Değişkenler (Açık Tema) ──────────────────────────────────── */
+/* ── 1. Custom Properties ─────────────────────────────────────────── */
 :root {
-  /* Zeminler */
-  --bg-primary:   #FFFFFF;
-  --bg-secondary: #F1EFE8;
-  --bg-hover:     #ECEAE3;
+  /* Brand */
+  --red:         #C8432A;
+  --red-light:   #FEF0ED;
+  --red-dark:    #9E3420;
 
-  /* Metinler */
-  --text-primary:   #1A1A18;
-  --text-secondary: #5F5E5A;
-  --text-muted:     #8B8A82;
+  /* Category accents */
+  --green:       #059669;
+  --green-bg:    #ECFDF5;
+  --green-text:  #065F46;
+  --purple:      #7C3AED;
+  --purple-bg:   #F5F3FF;
+  --purple-text: #4C1D95;
+  --amber:       #D97706;
+  --amber-bg:    #FFFBEB;
+  --amber-text:  #92400E;
 
-  /* Kenarlıklar */
-  --border:        rgba(0, 0, 0, 0.12);
-  --border-strong: rgba(0, 0, 0, 0.28);
+  /* Surfaces */
+  --bg:         #FAF8F4;
+  --surface:    #FFFFFF;
+  --bg-hover:   #F0ECE5;
 
-  /* Kategori — Yemek (mercan) */
-  --cat-yemek-bg:   #FAECE7;
-  --cat-yemek-text: #4A1B0C;
+  /* Text */
+  --ink:   #1C1409;
+  --ink-2: #4A4237;
+  --ink-3: #8C8174;
 
-  /* Kategori — Cami (yeşil-mavi) */
-  --cat-cami-bg:   #E1F5EE;
-  --cat-cami-text: #04342C;
+  /* Borders */
+  --border:    rgba(28, 20, 9, 0.10);
+  --border-md: rgba(28, 20, 9, 0.22);
 
-  /* Kategori — Müze (mor) */
-  --cat-muze-bg:   #EEEDFE;
-  --cat-muze-text: #26215C;
+  /* Shadows */
+  --shadow:    0 2px 12px rgba(28, 20, 9, 0.07);
+  --shadow-lg: 0 8px 32px rgba(28, 20, 9, 0.14);
 
-  /* Kategori — Gezilecek (kehribar) */
-  --cat-gezi-bg:   #FAEEDA;
-  --cat-gezi-text: #412402;
+  /* Category — legacy vars (map & badge fallback) */
+  --cat-yemek-bg:   var(--red-light);
+  --cat-yemek-text: var(--red-dark);
+  --cat-cami-bg:    var(--green-bg);
+  --cat-cami-text:  var(--green-text);
+  --cat-muze-bg:    var(--purple-bg);
+  --cat-muze-text:  var(--purple-text);
+  --cat-gezi-bg:    var(--amber-bg);
+  --cat-gezi-text:  var(--amber-text);
 
-  /* Harita işaretçi renkleri */
+  /* Map markers */
   --map-yemek: #c0392b;
   --map-cami:  #27ae60;
   --map-muze:  #8e44ad;
   --map-gezi:  #e67e22;
 
-  /* Düzen */
-  --container-max: 1100px;
-  --radius-card:   12px;
-  --radius-sm:     8px;
-  --radius-chip:   999px;
-  --border-width:  0.5px;
+  /* Layout */
+  --max-w:    1140px;
+  --r-card:   16px;
+  --r-sm:     10px;
+  --r-pill:   999px;
 
-  /* Geçiş */
-  --transition: 0.15s ease;
+  /* Motion */
+  --trans: 0.18s ease;
 
-  /* Gölge (minimal) */
-  --shadow-card: none;
+  /* Header */
+  --header-bg: rgba(250, 248, 244, 0.92);
 }
 
-/* ── 2. Karanlık Tema ────────────────────────────────────────────── */
+/* ── 2. Dark Theme ────────────────────────────────────────────────── */
 [data-theme="dark"] {
-  --bg-primary:   #1A1A18;
-  --bg-secondary: #242420;
-  --bg-hover:     #2E2E2A;
+  --bg:         #18160F;
+  --surface:    #231F16;
+  --bg-hover:   #2C2920;
 
-  --text-primary:   #F1EFE8;
-  --text-secondary: #A8A79F;
-  --text-muted:     #6B6A62;
+  --ink:   #F0EBE0;
+  --ink-2: #B5AFA3;
+  --ink-3: #6B6560;
 
-  --border:        rgba(255, 255, 255, 0.10);
-  --border-strong: rgba(255, 255, 255, 0.26);
+  --border:    rgba(255, 255, 255, 0.09);
+  --border-md: rgba(255, 255, 255, 0.18);
+
+  --shadow:    0 2px 12px rgba(0, 0, 0, 0.30);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.48);
 
   --cat-yemek-bg:   #3A1A10;
-  --cat-yemek-text: #F5C4B0;
+  --cat-yemek-text: #F5A896;
+  --cat-cami-bg:    #0A2820;
+  --cat-cami-text:  #7DCDAF;
+  --cat-muze-bg:    #1A1840;
+  --cat-muze-text:  #BAB6F5;
+  --cat-gezi-bg:    #2A1A08;
+  --cat-gezi-text:  #F5CC88;
 
-  --cat-cami-bg:   #0A2820;
-  --cat-cami-text: #8FD5BC;
-
-  --cat-muze-bg:   #1A1840;
-  --cat-muze-text: #C4C0F5;
-
-  --cat-gezi-bg:   #2A1A08;
-  --cat-gezi-text: #F5D4A0;
+  --header-bg: rgba(24, 22, 15, 0.92);
 }
 
-/* ── 3. Reset & Temel ────────────────────────────────────────────── */
+/* ── 3. Reset & Base ──────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -95,20 +110,17 @@ html {
 }
 
 body {
-  font-family: system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
   font-size: 15px;
   font-weight: 400;
   line-height: 1.6;
-  color: var(--text-primary);
-  background: var(--bg-primary);
-  transition: background var(--transition), color var(--transition);
+  color: var(--ink);
+  background: var(--bg);
+  transition: background var(--trans), color var(--trans);
   min-height: 100vh;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+a { color: inherit; text-decoration: none; }
 
 button {
   font-family: inherit;
@@ -118,14 +130,9 @@ button {
   color: inherit;
 }
 
-button:active {
-  transform: scale(0.97);
-}
+button:active { transform: scale(0.97); }
 
-img {
-  display: block;
-  max-width: 100%;
-}
+img { display: block; max-width: 100%; }
 
 svg {
   display: inline-block;
@@ -133,29 +140,31 @@ svg {
   flex-shrink: 0;
 }
 
-/* ── 4. Konteyner ────────────────────────────────────────────────── */
+/* ── 4. Container ─────────────────────────────────────────────────── */
 .container {
   width: 100%;
-  max-width: var(--container-max);
+  max-width: var(--max-w);
   margin: 0 auto;
-  padding: 0 1.25rem;
+  padding: 0 1.5rem;
 }
 
-/* ── 5. Üst Başlık ───────────────────────────────────────────────── */
+/* ── 5. Header ────────────────────────────────────────────────────── */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--bg-primary);
-  border-bottom: var(--border-width) solid var(--border);
-  transition: background var(--transition), border-color var(--transition);
+  background: var(--header-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--trans), border-color var(--trans);
 }
 
 .header-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 60px;
+  height: 64px;
   gap: 1rem;
 }
 
@@ -168,348 +177,543 @@ svg {
 }
 
 .logo:focus-visible {
-  outline: 2px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  outline-offset: 2px;
+  outline: 2px solid var(--border-md);
+  border-radius: var(--r-sm);
+  outline-offset: 3px;
 }
 
 .logo-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: var(--bg-secondary);
-  border: var(--border-width) solid var(--border);
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: var(--ink);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-secondary);
+  color: var(--bg);
   flex-shrink: 0;
+  transition: background var(--trans);
 }
 
 .logo-text {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  line-height: 1.2;
 }
 
 .logo-name {
-  font-size: 17px;
-  font-weight: 500;
-  color: var(--text-primary);
-  line-height: 1.2;
+  font-family: 'Cinzel', serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+  transition: color var(--trans);
 }
 
 .logo-tagline {
   font-size: 11px;
-  color: var(--text-muted);
-  line-height: 1.3;
+  color: var(--ink-3);
+  letter-spacing: 0.01em;
+  transition: color var(--trans);
 }
 
-/* Başlık Eylemleri */
+/* Header buttons */
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 0.375rem;
+  gap: 0.5rem;
 }
 
-.btn-icon {
-  width: 34px;
+.btn-pill {
   height: 34px;
-  border-radius: var(--radius-sm);
-  border: var(--border-width) solid var(--border);
+  padding: 0 0.875rem;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border-md);
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--ink-2);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: all var(--trans);
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 500;
-  transition: border-color var(--transition), background var(--transition), color var(--transition);
-  gap: 0.25rem;
+  gap: 0.3rem;
 }
 
-.btn-icon:hover {
-  border-color: var(--border-strong);
-  color: var(--text-primary);
-  background: var(--bg-secondary);
+.btn-pill:hover {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
 }
 
-.btn-icon:focus-visible {
-  outline: 2px solid var(--border-strong);
+.btn-pill:focus-visible {
+  outline: 2px solid var(--border-md);
   outline-offset: 2px;
 }
 
-/* ── 6. Ana İçerik Boşluğu ──────────────────────────────────────── */
+/* ── 6. Main wrapper ──────────────────────────────────────────────── */
 #main {
-  padding-top: 1.75rem;
-  padding-bottom: 3rem;
+  padding-bottom: 4rem;
 }
 
-/* ── 7. Arama & Filtreler ────────────────────────────────────────── */
-.list-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 0.875rem;
+/* ── 7. Hero Section ──────────────────────────────────────────────── */
+.hero {
+  padding: 3.5rem 0 2.75rem;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, #FFF5F2 0%, #FFF8F4 35%, var(--bg) 100%);
+  transition: background var(--trans);
+}
+
+[data-theme="dark"] .hero {
+  background: linear-gradient(160deg, #28150E 0%, #211A10 35%, var(--bg) 100%);
+}
+
+/* subtle dot-grid texture */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(200, 67, 42, 0.07) 1px, transparent 0);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* soft glow blobs */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -60px;
+  width: 440px;
+  height: 440px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200, 67, 42, 0.08) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--red);
+  background: var(--red-light);
+  padding: 4px 12px;
+  border-radius: var(--r-pill);
+  margin-bottom: 1rem;
+  transition: background var(--trans), color var(--trans);
+}
+
+[data-theme="dark"] .hero-eyebrow {
+  background: rgba(200, 67, 42, 0.18);
+  color: #F5A896;
+}
+
+.hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.75rem;
+  transition: color var(--trans);
+}
+
+.hero-title span {
+  color: var(--red);
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  color: var(--ink-2);
+  max-width: 520px;
   margin-bottom: 2rem;
+  line-height: 1.65;
+  transition: color var(--trans);
 }
 
-/* Arama Kutusu */
+/* ── 8. Search ────────────────────────────────────────────────────── */
 .search-wrap {
   position: relative;
-  display: flex;
-  align-items: center;
+  max-width: 680px;
+  margin-bottom: 1.25rem;
 }
 
 .search-icon {
   position: absolute;
-  left: 10px;
-  color: var(--text-muted);
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-3);
   display: flex;
   align-items: center;
   pointer-events: none;
+  transition: color var(--trans);
 }
 
 .search-input {
   width: 100%;
-  height: 38px;
-  padding: 0 2.25rem 0 2.25rem;
-  border: var(--border-width) solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-size: 14px;
+  height: 52px;
+  padding: 0 3.25rem 0 2.875rem;
+  border: 1.5px solid var(--border-md);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 15px;
   font-family: inherit;
-  transition: border-color var(--transition), background var(--transition);
+  box-shadow: var(--shadow);
   outline: none;
+  transition: border-color var(--trans), box-shadow var(--trans), background var(--trans);
   -webkit-appearance: none;
   appearance: none;
 }
 
 .search-input::placeholder {
-  color: var(--text-muted);
+  color: var(--ink-3);
 }
 
 .search-input:focus {
-  border-color: var(--border-strong);
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(200, 67, 42, 0.12), var(--shadow);
 }
 
 .search-clear {
   position: absolute;
-  right: 6px;
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  color: var(--text-muted);
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  color: var(--ink-3);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color var(--transition), background var(--transition);
+  transition: color var(--trans), background var(--trans);
 }
 
 .search-clear:hover {
-  color: var(--text-primary);
+  color: var(--ink);
   background: var(--bg-hover);
 }
 
-/* Bölge Çipleri */
-.chips {
+.search-badge {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 3px 9px;
+  border-radius: 7px;
+  transition: background var(--trans), color var(--trans);
+  pointer-events: none;
+}
+
+/* ── 9. Region Chips ──────────────────────────────────────────────── */
+.region-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.375rem;
+  gap: 0.4rem;
 }
 
 .chip {
-  height: 30px;
-  padding: 0 0.75rem;
-  border-radius: var(--radius-chip);
-  border: var(--border-width) solid var(--border);
-  background: transparent;
-  color: var(--text-secondary);
+  height: 32px;
+  padding: 0 0.875rem;
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--border-md);
+  background: var(--surface);
+  color: var(--ink-2);
   font-size: 13px;
-  font-weight: 400;
-  transition: all var(--transition);
+  font-weight: 500;
+  transition: all var(--trans);
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .chip:hover {
-  border-color: var(--border-strong);
-  color: var(--text-primary);
+  border-color: var(--ink);
+  color: var(--ink);
 }
 
 .chip-active {
-  background: var(--text-primary);
-  border-color: var(--text-primary);
-  color: var(--bg-primary);
+  background: var(--red);
+  border-color: var(--red);
+  color: #FFFFFF;
 }
 
 .chip-active:hover {
-  background: var(--text-primary);
-  border-color: var(--text-primary);
-  color: var(--bg-primary);
+  background: var(--red-dark);
+  border-color: var(--red-dark);
+  color: #FFFFFF;
 }
 
 .chip:focus-visible {
-  outline: 2px solid var(--border-strong);
+  outline: 2px solid var(--border-md);
   outline-offset: 2px;
 }
 
-/* ── 8. Favoriler Bölümü ─────────────────────────────────────────── */
+/* ── 10. Section label ────────────────────────────────────────────── */
+.section-wrap {
+  padding-top: 2.5rem;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-label-text {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
+  transition: color var(--trans);
+}
+
+.section-label-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-label-count {
+  font-size: 12px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  transition: color var(--trans);
+}
+
+/* ── 11. Favorites Section ────────────────────────────────────────── */
 .favs-section {
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: var(--border-width) solid var(--border);
+  margin-bottom: 2.5rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--border);
 }
 
 .section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   gap: 1rem;
 }
 
 .section-title {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
   display: flex;
   align-items: center;
   gap: 0.375rem;
+  transition: color var(--trans);
 }
 
-.section-title svg {
-  color: #c0392b;
-}
+.section-title svg { color: var(--red); }
 
 .btn-text {
   display: flex;
   align-items: center;
   gap: 0.375rem;
   font-size: 13px;
-  color: var(--text-secondary);
-  padding: 0.25rem 0.625rem;
-  border-radius: var(--radius-sm);
-  border: var(--border-width) solid var(--border);
-  transition: all var(--transition);
+  color: var(--ink-2);
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-md);
+  transition: all var(--trans);
 }
 
 .btn-text:hover {
-  border-color: var(--border-strong);
-  color: var(--text-primary);
+  border-color: var(--ink);
+  color: var(--ink);
 }
 
-/* ── 9. Şehir Izgarası ───────────────────────────────────────────── */
+/* ── 12. City Grid ────────────────────────────────────────────────── */
 .city-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
 }
 
-/* ── 10. Şehir Kartı ─────────────────────────────────────────────── */
+/* ── 13. City Card ────────────────────────────────────────────────── */
 .city-card {
-  border: var(--border-width) solid var(--border);
-  border-radius: var(--radius-card);
-  background: var(--bg-primary);
+  background: var(--surface);
+  border-radius: var(--r-card);
   overflow: hidden;
   cursor: pointer;
-  transition: transform var(--transition), border-color var(--transition);
+  transition: transform var(--trans), box-shadow var(--trans);
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(28, 20, 9, 0.06);
+}
+
+[data-theme="dark"] .city-card {
+  border-color: var(--border);
 }
 
 .city-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--border-strong);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
 }
 
 .city-card:focus-visible {
-  outline: 2px solid var(--border-strong);
-  outline-offset: 2px;
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
 }
 
-/* Kapak Alanı */
-.city-card-cover {
-  height: 84px;
-  background: var(--bg-secondary);
+/* Card image */
+.city-card-img {
   position: relative;
-  display: flex;
-  align-items: flex-end;
-  padding: 0.5rem 0.625rem;
+  height: 175px;
+  overflow: hidden;
   flex-shrink: 0;
+  background: var(--bg-hover);
+}
+
+.city-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  display: block;
+}
+
+.city-card:hover .city-card-img img {
+  transform: scale(1.06);
+}
+
+.city-card-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(28, 20, 9, 0.55) 0%, transparent 55%);
 }
 
 .city-card-region {
-  font-size: 11px;
-  color: var(--text-muted);
-  line-height: 1;
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-/* Favori Butonu */
+/* Fav button */
 .btn-fav {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
-  background: var(--bg-primary);
-  border: var(--border-width) solid var(--border);
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-muted);
-  transition: all var(--transition);
+  color: var(--ink-3);
+  transition: transform var(--trans), color var(--trans), background var(--trans);
 }
 
 .btn-fav:hover {
-  border-color: var(--border-strong);
-  color: #c0392b;
+  transform: scale(1.15);
+  background: #FFFFFF;
+  color: var(--red);
 }
 
-.btn-fav.is-fav {
-  color: #c0392b;
-}
+.btn-fav.is-fav { color: var(--red); }
 
-.city-fav {
-  /* override absolute in cover */
-}
+.btn-fav:active { transform: scale(0.95); }
 
-/* Kart Gövdesi */
+/* Card body */
 .city-card-body {
-  padding: 0.875rem;
+  padding: 1rem 1.125rem 1.125rem;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.3rem;
   flex: 1;
 }
 
 .city-name {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--text-primary);
-  line-height: 1.3;
+  font-family: 'Cinzel', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+  transition: color var(--trans);
 }
 
 .city-desc {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.5;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  line-height: 1.55;
   flex: 1;
+  transition: color var(--trans);
+}
+
+.city-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.625rem;
 }
 
 .city-count {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.3rem;
   font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 0.5rem;
+  color: var(--ink-3);
+  font-weight: 500;
+  transition: color var(--trans);
 }
 
-/* ── 11. Skeleton Yükleme ────────────────────────────────────────── */
+.city-arrow {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--ink-3);
+  transition: all var(--trans);
+}
+
+.city-card:hover .city-arrow {
+  background: var(--red);
+  border-color: var(--red);
+  color: #FFFFFF;
+}
+
+/* ── 14. Skeleton ─────────────────────────────────────────────────── */
 @keyframes shimmer {
-  0%   { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
 }
 
 .skel-block,
@@ -517,35 +721,33 @@ svg {
   border-radius: 6px;
   background: linear-gradient(
     90deg,
-    var(--bg-secondary) 25%,
-    var(--bg-hover)     50%,
-    var(--bg-secondary) 75%
+    var(--bg-hover) 25%,
+    var(--border)   50%,
+    var(--bg-hover) 75%
   );
-  background-size: 800px 100%;
-  animation: shimmer 1.4s ease-in-out infinite;
+  background-size: 1200px 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
 }
 
-.skeleton .city-card-cover {
+.skeleton .city-card-img {
   background: linear-gradient(
     90deg,
-    var(--bg-secondary) 25%,
-    var(--bg-hover)     50%,
-    var(--bg-secondary) 75%
+    var(--bg-hover) 25%,
+    var(--border)   50%,
+    var(--bg-hover) 75%
   );
-  background-size: 800px 100%;
-  animation: shimmer 1.4s ease-in-out infinite;
+  background-size: 1200px 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
 }
 
-.skel-title  { height: 16px; width: 70%; margin-bottom: 0.5rem; }
-.skel-desc   { height: 13px; width: 90%; margin-bottom: 0.375rem; }
-.skel-short  { height: 13px; width: 50%; }
-.skel-city-name { height: 28px; width: 40%; margin-bottom: 0.625rem; }
+.skel-title  { height: 16px; width: 68%; margin-bottom: 0.5rem; }
+.skel-desc   { height: 13px; width: 88%; margin-bottom: 0.4rem; }
+.skel-short  { height: 13px; width: 45%; }
+.skel-city-name { height: 32px; width: 38%; margin-bottom: 0.625rem; }
 
-.skeleton .city-card-body {
-  gap: 0.5rem;
-}
+.skeleton .city-card-body { gap: 0.5rem; }
 
-/* Mekan kartı skeleton */
+/* Place card skeleton */
 .place-card.skeleton {
   padding: 1rem;
   gap: 0.5rem;
@@ -553,113 +755,133 @@ svg {
   flex-direction: column;
 }
 
-/* ── 12. Detay Görünümü ──────────────────────────────────────────── */
+/* ── 15. Detail View ──────────────────────────────────────────────── */
+.detail-view {
+  padding-top: 2rem;
+}
+
 .detail-header {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.75rem;
 }
 
 .btn-back {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  font-size: 14px;
-  color: var(--text-secondary);
-  padding: 0.375rem 0.625rem;
-  border-radius: var(--radius-sm);
-  border: var(--border-width) solid var(--border);
-  transition: all var(--transition);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink-2);
+  padding: 0.375rem 0.875rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-md);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: all var(--trans);
 }
 
 .btn-back:hover {
-  border-color: var(--border-strong);
-  color: var(--text-primary);
+  border-color: var(--ink);
+  color: var(--ink);
 }
 
 .btn-back:focus-visible {
-  outline: 2px solid var(--border-strong);
+  outline: 2px solid var(--border-md);
   outline-offset: 2px;
 }
 
 .detail-meta {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .detail-city-name {
-  font-size: 26px;
-  font-weight: 500;
-  color: var(--text-primary);
-  line-height: 1.2;
-  margin-bottom: 0.375rem;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+  transition: color var(--trans);
 }
 
 .detail-city-desc {
-  font-size: 15px;
-  color: var(--text-secondary);
-  max-width: 600px;
+  font-size: 15.5px;
+  color: var(--ink-2);
+  max-width: 580px;
+  transition: color var(--trans);
 }
 
-/* ── 13. Kategori Sekmeleri ──────────────────────────────────────── */
+/* ── 16. Tabs ─────────────────────────────────────────────────────── */
 .tabs {
   display: flex;
   gap: 0;
-  border-bottom: var(--border-width) solid var(--border);
-  margin-bottom: 1.25rem;
+  border-bottom: 1.5px solid var(--border);
+  margin-bottom: 1.5rem;
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-.tabs::-webkit-scrollbar {
-  display: none;
-}
+.tabs::-webkit-scrollbar { display: none; }
 
 .tab {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.625rem 0.875rem;
+  padding: 0.75rem 1rem;
   font-size: 14px;
-  color: var(--text-secondary);
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px; /* overlap the border */
+  font-weight: 500;
+  color: var(--ink-3);
+  border-bottom: 2.5px solid transparent;
+  margin-bottom: -1.5px;
   white-space: nowrap;
-  transition: color var(--transition), border-color var(--transition);
+  cursor: pointer;
+  transition: color var(--trans), border-color var(--trans);
   flex-shrink: 0;
 }
 
-.tab:hover {
-  color: var(--text-primary);
-}
+.tab:hover { color: var(--ink); }
 
 .tab-active {
-  color: var(--text-primary);
-  border-bottom-color: var(--text-primary);
-  font-weight: 500;
+  color: var(--red);
+  border-bottom-color: var(--red);
 }
 
 .tab:focus-visible {
-  outline: 2px solid var(--border-strong);
+  outline: 2px solid var(--border-md);
   outline-offset: -2px;
 }
 
 .tab-count {
   font-size: 11px;
-  font-weight: 400;
-  color: var(--text-muted);
-  background: var(--bg-secondary);
-  border-radius: var(--radius-chip);
-  padding: 1px 6px;
-  min-width: 18px;
-  text-align: center;
-  line-height: 1.6;
+  font-weight: 600;
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  padding: 1px 7px;
+  color: var(--ink-3);
+  line-height: 1.7;
+  transition: all var(--trans);
 }
 
-/* ── 14. Etiket Filtresi ─────────────────────────────────────────── */
+.tab-active .tab-count {
+  background: var(--red-light);
+  border-color: rgba(200, 67, 42, 0.2);
+  color: var(--red);
+}
+
+[data-theme="dark"] .tab-active .tab-count {
+  background: rgba(200, 67, 42, 0.18);
+  border-color: rgba(200, 67, 42, 0.30);
+  color: #F5A896;
+}
+
+/* ── 17. Tag Filter ───────────────────────────────────────────────── */
 .tag-filter {
   display: flex;
   align-items: flex-start;
   gap: 0.625rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.75rem;
   flex-wrap: wrap;
 }
 
@@ -667,11 +889,15 @@ svg {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  font-size: 12px;
-  color: var(--text-muted);
-  padding-top: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding-top: 5px;
   white-space: nowrap;
   flex-shrink: 0;
+  transition: color var(--trans);
 }
 
 .tag-filter-chips {
@@ -682,77 +908,95 @@ svg {
 
 .chip-tag {
   height: 28px;
-  padding: 0 0.625rem;
-  border-radius: var(--radius-chip);
-  border: var(--border-width) solid var(--border);
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 12px;
-  transition: all var(--transition);
+  padding: 0 0.7rem;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border-md);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 12.5px;
+  transition: all var(--trans);
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .chip-tag:hover {
-  border-color: var(--border-strong);
-  color: var(--text-primary);
+  border-color: var(--ink);
+  color: var(--ink);
 }
 
 .chip-tag-active {
-  background: var(--bg-secondary);
-  border-color: var(--border-strong);
-  color: var(--text-primary);
-  font-weight: 500;
+  background: var(--bg-hover);
+  border-color: var(--border-md);
+  color: var(--ink);
+  font-weight: 600;
 }
 
 .chip-clear {
   height: 28px;
-  padding: 0 0.625rem;
-  border-radius: var(--radius-chip);
-  border: var(--border-width) solid var(--border);
+  padding: 0 0.7rem;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border);
   background: transparent;
-  color: var(--text-muted);
-  font-size: 12px;
-  transition: all var(--transition);
+  color: var(--ink-3);
+  font-size: 12.5px;
+  transition: all var(--trans);
+  cursor: pointer;
 }
 
 .chip-clear:hover {
-  border-color: var(--border-strong);
-  color: var(--text-primary);
+  border-color: var(--red);
+  color: var(--red);
 }
 
-/* ── 15. Mekan Izgarası ──────────────────────────────────────────── */
+/* ── 18. Place Grid ───────────────────────────────────────────────── */
 .place-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
 }
 
-.col-span {
-  grid-column: 1 / -1;
-}
+.col-span { grid-column: 1 / -1; }
 
-/* ── 16. Mekan Kartı ─────────────────────────────────────────────── */
+/* ── 19. Place Card ───────────────────────────────────────────────── */
 .place-card {
-  border: var(--border-width) solid var(--border);
-  border-radius: var(--radius-card);
-  background: var(--bg-primary);
-  padding: 1rem;
+  background: var(--surface);
+  border-radius: var(--r-card);
+  border: 1px solid var(--border);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
-  transition: border-color var(--transition);
+  box-shadow: var(--shadow);
+  transition: transform var(--trans), box-shadow var(--trans);
 }
 
 .place-card:hover {
-  border-color: var(--border-strong);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(28, 20, 9, 0.13);
 }
 
-/* Kategori bazlı sol kenarlık aksanı */
-.place-yemek { border-left: 2px solid var(--cat-yemek-text); }
-.place-cami  { border-left: 2px solid var(--cat-cami-text); }
-.place-muze  { border-left: 2px solid var(--cat-muze-text); }
-.place-gezi  { border-left: 2px solid var(--cat-gezi-text); }
+[data-theme="dark"] .place-card:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Colored top accent band */
+.place-card-accent {
+  height: 4px;
+  flex-shrink: 0;
+}
+
+.place-accent-yemek { background: var(--red);    }
+.place-accent-cami  { background: var(--green);  }
+.place-accent-muze  { background: var(--purple); }
+.place-accent-gezi  { background: var(--amber);  }
+
+.place-card-body {
+  padding: 1.125rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  flex: 1;
+}
 
 .place-card-header {
   display: flex;
@@ -763,38 +1007,41 @@ svg {
 
 .place-name {
   font-size: 15px;
-  font-weight: 500;
-  color: var(--text-primary);
+  font-weight: 600;
+  color: var(--ink);
   line-height: 1.35;
   flex: 1;
+  transition: color var(--trans);
 }
 
 .place-desc {
   font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.55;
+  color: var(--ink-2);
+  line-height: 1.6;
+  transition: color var(--trans);
 }
 
-/* Etiket Çipleri (kart içi) */
+/* Tags inside place card */
 .place-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
 }
 
-/* MustEat */
+/* Must eat */
 .must-eat {
   display: flex;
   flex-direction: column;
-  gap: 0.375rem;
+  gap: 0.35rem;
 }
 
 .must-eat-label {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: 500;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  transition: color var(--trans);
 }
 
 .must-eat-chips {
@@ -803,135 +1050,173 @@ svg {
   gap: 0.25rem;
 }
 
-.chip-small {
+.chip-small,
+.must-chip {
   height: 24px;
-  padding: 0 0.5rem;
-  border-radius: var(--radius-chip);
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
+  padding: 0 0.6rem;
+  border-radius: var(--r-pill);
+  background: var(--red-light);
+  border: 1px solid rgba(200, 67, 42, 0.18);
   font-size: 12px;
+  color: var(--red-dark);
+  font-weight: 500;
   display: inline-flex;
   align-items: center;
+  transition: background var(--trans), color var(--trans);
 }
 
-/* Kart Alt Kısmı */
+[data-theme="dark"] .chip-small,
+[data-theme="dark"] .must-chip {
+  background: var(--cat-yemek-bg);
+  color: var(--cat-yemek-text);
+  border-color: rgba(200, 67, 42, 0.25);
+}
+
+/* Card footer */
 .place-card-footer {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.625rem;
   margin-top: auto;
-  padding-top: 0.375rem;
-  border-top: var(--border-width) solid var(--border);
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
 }
 
 .place-hours {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.3rem;
   font-size: 12px;
-  color: var(--text-muted);
+  color: var(--ink-3);
+  flex: 1;
+  transition: color var(--trans);
 }
 
 .place-price {
   font-size: 12px;
-  color: var(--text-muted);
+  color: var(--ink-3);
   letter-spacing: 0.05em;
+  transition: color var(--trans);
 }
 
 .place-dir {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.3rem;
   font-size: 12px;
-  color: var(--text-secondary);
-  margin-left: auto;
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--radius-sm);
-  border: var(--border-width) solid var(--border);
-  transition: all var(--transition);
+  font-weight: 600;
+  color: var(--red);
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(200, 67, 42, 0.25);
+  background: var(--red-light);
+  transition: all var(--trans);
   white-space: nowrap;
 }
 
 .place-dir:hover {
-  border-color: var(--border-strong);
-  color: var(--text-primary);
+  background: var(--red);
+  color: #FFFFFF;
+  border-color: var(--red);
 }
 
 .place-dir:focus-visible {
-  outline: 2px solid var(--border-strong);
+  outline: 2px solid var(--red);
   outline-offset: 2px;
 }
 
-/* ── 17. Rozet (Badge) ───────────────────────────────────────────── */
+[data-theme="dark"] .place-dir {
+  background: rgba(200, 67, 42, 0.15);
+  border-color: rgba(200, 67, 42, 0.30);
+  color: #F5A896;
+}
+
+[data-theme="dark"] .place-dir:hover {
+  background: var(--red);
+  color: #FFFFFF;
+  border-color: var(--red);
+}
+
+/* ── 20. Badge ────────────────────────────────────────────────────── */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 3px 9px;
-  border-radius: var(--radius-sm);
-  font-size: 11px;
-  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  font-size: 11.5px;
+  font-weight: 600;
   white-space: nowrap;
   flex-shrink: 0;
   line-height: 1.5;
 }
 
 .badge-yemek { background: var(--cat-yemek-bg); color: var(--cat-yemek-text); }
-.badge-cami  { background: var(--cat-cami-bg);  color: var(--cat-cami-text); }
-.badge-muze  { background: var(--cat-muze-bg);  color: var(--cat-muze-text); }
-.badge-gezi  { background: var(--cat-gezi-bg);  color: var(--cat-gezi-text); }
+.badge-cami  { background: var(--cat-cami-bg);  color: var(--cat-cami-text);  }
+.badge-muze  { background: var(--cat-muze-bg);  color: var(--cat-muze-text);  }
+.badge-gezi  { background: var(--cat-gezi-bg);  color: var(--cat-gezi-text);  }
 
-/* ── 18. Harita ──────────────────────────────────────────────────── */
+/* ── 21. Map Section ──────────────────────────────────────────────── */
 .map-section {
-  margin-top: 2rem;
-  border-top: var(--border-width) solid var(--border);
+  margin-top: 1.75rem;
+  border-top: 1px solid var(--border);
   padding-top: 1.5rem;
+}
+
+.map-section-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 0.875rem;
+  transition: color var(--trans);
 }
 
 .city-map {
   width: 100%;
-  height: 350px;
-  border-radius: var(--radius-card);
-  border: var(--border-width) solid var(--border);
+  height: 380px;
+  border-radius: var(--r-card);
+  border: 1px solid var(--border);
   overflow: hidden;
-  background: var(--bg-secondary);
+  background: var(--bg-hover);
+  box-shadow: var(--shadow);
 }
 
-/* Leaflet temalama */
+/* Leaflet theming */
 .leaflet-container {
-  font-family: inherit !important;
-  background: var(--bg-secondary) !important;
+  font-family: 'DM Sans', inherit !important;
+  background: var(--bg-hover) !important;
 }
 
 .leaflet-popup-content-wrapper {
-  border-radius: var(--radius-sm) !important;
-  border: var(--border-width) solid var(--border) !important;
-  box-shadow: none !important;
-  background: var(--bg-primary) !important;
-  color: var(--text-primary) !important;
+  border-radius: var(--r-sm) !important;
+  border: 1px solid var(--border-md) !important;
+  box-shadow: var(--shadow-lg) !important;
+  background: var(--surface) !important;
+  color: var(--ink) !important;
 }
 
-.leaflet-popup-tip {
-  background: var(--bg-primary) !important;
-}
+.leaflet-popup-tip { background: var(--surface) !important; }
 
 .leaflet-popup-content {
   font-size: 13px !important;
-  color: var(--text-primary) !important;
+  color: var(--ink) !important;
   margin: 10px 14px !important;
 }
 
 .leaflet-popup-content a {
-  color: var(--text-secondary) !important;
+  color: var(--red) !important;
   font-size: 12px;
+  font-weight: 500;
 }
 
 .leaflet-popup-content a:hover {
-  color: var(--text-primary) !important;
+  color: var(--red-dark) !important;
 }
 
-/* Özel harita işaretçisi */
+/* Custom map marker */
 .map-marker {
   background: transparent !important;
   border: none !important;
@@ -941,16 +1226,14 @@ svg {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.7);
+  border: 2.5px solid rgba(255, 255, 255, 0.8);
   cursor: pointer;
-  transition: transform 0.1s ease;
+  transition: transform 0.12s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
 
-.map-marker-inner:hover {
-  transform: scale(1.4);
-}
+.map-marker-inner:hover { transform: scale(1.5); }
 
-/* Leaflet yokken fallback */
 .map-unavail-wrap {
   display: flex;
   align-items: center;
@@ -962,27 +1245,29 @@ svg {
   align-items: center;
   gap: 0.5rem;
   font-size: 13px;
-  color: var(--text-muted);
+  color: var(--ink-3);
   text-align: center;
   padding: 1rem;
 }
 
-/* ── 19. Toast Bildirimi ─────────────────────────────────────────── */
+/* ── 22. Toast ────────────────────────────────────────────────────── */
 .toast {
   position: fixed;
   bottom: 1.5rem;
   left: 50%;
-  transform: translateX(-50%) translateY(10px);
-  background: var(--text-primary);
-  color: var(--bg-primary);
+  transform: translateX(-50%) translateY(12px);
+  background: var(--ink);
+  color: var(--bg);
   font-size: 13px;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-chip);
+  font-weight: 500;
+  padding: 0.5rem 1.125rem;
+  border-radius: var(--r-pill);
   opacity: 0;
   transition: opacity 0.2s ease, transform 0.2s ease;
   z-index: 999;
   white-space: nowrap;
   pointer-events: none;
+  box-shadow: var(--shadow-lg);
 }
 
 .toast-show {
@@ -990,33 +1275,80 @@ svg {
   transform: translateX(-50%) translateY(0);
 }
 
-/* ── 20. Boş Durum ───────────────────────────────────────────────── */
+/* ── 23. Empty State ──────────────────────────────────────────────── */
 .empty-state {
   font-size: 14px;
-  color: var(--text-muted);
-  padding: 2rem 0;
+  color: var(--ink-3);
+  padding: 2.5rem 0;
   text-align: center;
+  transition: color var(--trans);
 }
 
-/* ── 21. Leaflet Attribution (küçültülmüş) ───────────────────────── */
+/* ── 24. Leaflet Attribution ──────────────────────────────────────── */
 .leaflet-control-attribution {
   font-size: 10px !important;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
-/* ── 22. Responsive ──────────────────────────────────────────────── */
-
-/* Tablet (600px–1000px): 2 sütun */
-@media (max-width: 1000px) {
-  .city-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+/* ── 25. Animations ───────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Mobil (≤ 600px): tek sütun */
-@media (max-width: 600px) {
+/* Hero stagger */
+.hero-content > * {
+  animation: fadeUp 0.55s ease both;
+}
+.hero-content > *:nth-child(1) { animation-delay: 0.04s; }
+.hero-content > *:nth-child(2) { animation-delay: 0.11s; }
+.hero-content > *:nth-child(3) { animation-delay: 0.18s; }
+.hero-content > *:nth-child(4) { animation-delay: 0.25s; }
+.hero-content > *:nth-child(5) { animation-delay: 0.32s; }
+
+/* City card stagger */
+.city-card:not(.skeleton) {
+  animation: fadeUp 0.45s ease both;
+}
+.city-card:nth-child(1)  { animation-delay: 0.06s; }
+.city-card:nth-child(2)  { animation-delay: 0.12s; }
+.city-card:nth-child(3)  { animation-delay: 0.18s; }
+.city-card:nth-child(4)  { animation-delay: 0.24s; }
+.city-card:nth-child(5)  { animation-delay: 0.30s; }
+.city-card:nth-child(6)  { animation-delay: 0.36s; }
+.city-card:nth-child(7)  { animation-delay: 0.42s; }
+.city-card:nth-child(8)  { animation-delay: 0.48s; }
+
+/* ── 26. Responsive ───────────────────────────────────────────────── */
+
+/* 3 columns: 900–1139px */
+@media (max-width: 1000px) {
+  .city-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 2 columns: 600–900px */
+@media (max-width: 760px) {
+  .city-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .place-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile ≤ 600px */
+@media (max-width: 580px) {
   .header-inner {
-    height: 54px;
+    height: 56px;
   }
 
   .logo-tagline {
@@ -1024,16 +1356,26 @@ svg {
   }
 
   .logo-name {
-    font-size: 16px;
+    font-size: 17px;
   }
 
   .logo-icon {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
   }
 
-  #main {
-    padding-top: 1.25rem;
+  .hero {
+    padding: 2.5rem 0 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 14.5px;
+    margin-bottom: 1.5rem;
+  }
+
+  .search-input {
+    height: 46px;
+    font-size: 14px;
   }
 
   .city-grid {
@@ -1045,7 +1387,7 @@ svg {
   }
 
   .detail-city-name {
-    font-size: 22px;
+    font-size: 1.75rem;
   }
 
   .tabs {
@@ -1053,12 +1395,12 @@ svg {
   }
 
   .tab {
-    padding: 0.5rem 0.75rem;
+    padding: 0.625rem 0.75rem;
     font-size: 13px;
   }
 
   .city-map {
-    height: 260px;
+    height: 280px;
   }
 
   .section-header {
@@ -1067,9 +1409,11 @@ svg {
   }
 }
 
-/* Dokunma hedefleri — en az 44px */
+/* Touch targets */
 @media (pointer: coarse) {
-  .chip, .tab, .btn-icon {
+  .chip,
+  .tab,
+  .btn-pill {
     min-height: 44px;
   }
 
