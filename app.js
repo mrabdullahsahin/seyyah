@@ -17,6 +17,7 @@ const LS_LANG    = 'seyyah-lang';
 const LS_THEME   = 'seyyah-theme';
 const LS_FAVS        = 'seyyah-favs';
 const LS_PLACE_FAVS  = 'seyyah-place-favs';
+const LS_PLAN        = 'seyyah-plan';
 
 // ── 2. Durum ──────────────────────────────────────────────────────────
 const state = {
@@ -35,6 +36,7 @@ const state = {
   modalPlace:   null,
   modalMapInst: null,
   placeFavs:    new Set(JSON.parse(localStorage.getItem(LS_PLACE_FAVS) || '[]')),
+  plan:         JSON.parse(localStorage.getItem(LS_PLAN) || '[]'),
 };
 
 // ── 3. Çeviriler ──────────────────────────────────────────────────────
@@ -74,6 +76,16 @@ const STRINGS = {
     no_coord:       'Koordinat bilgisi olan mekan bulunamadı.',
     map_route:      'Rotayı Göster',
     map_route_n:    (n) => n + ' mekan',
+    plan_add:       'Plana Ekle',
+    plan_remove:    'Plandan Çıkar',
+    plan_added:     'Plana eklendi!',
+    plan_removed:   'Plandan çıkarıldı',
+    plan_share_ok:  'Plan linki kopyalandı!',
+    plan_empty:     'Henüz mekan eklenmedi.',
+    plan_title:     'Gezi Planım',
+    plan_clear:     'Temizle',
+    plan_route:     'Google Maps Rotası',
+    plan_share:     'Planı Paylaş',
     modal_close:    'Kapat',
     modal_share:    'Linki Kopyala',
     modal_share_ok: 'Mekan linki kopyalandı!',
@@ -116,6 +128,16 @@ const STRINGS = {
     no_coord:       'No places with coordinates found.',
     map_route:      'Show Route',
     map_route_n:    (n) => n + ' place' + (n !== 1 ? 's' : ''),
+    plan_add:       'Add to Plan',
+    plan_remove:    'Remove from Plan',
+    plan_added:     'Added to plan!',
+    plan_removed:   'Removed from plan',
+    plan_share_ok:  'Plan link copied!',
+    plan_empty:     'No places added yet.',
+    plan_title:     'My Trip Plan',
+    plan_clear:     'Clear',
+    plan_route:     'Google Maps Route',
+    plan_share:     'Share Plan',
     modal_close:    'Close',
     modal_share:    'Copy Link',
     modal_share_ok: 'Place link copied!',
@@ -857,6 +879,8 @@ function modalInnerHTML(place) {
   var imgUrl  = 'https://picsum.photos/seed/' + encodeURIComponent(imgSeed + '-detail') + '/800/420';
   var favKey  = (state.slug || '') + '__' + slugify(place.name);
   var isFav   = state.placeFavs.has(favKey);
+  var planKey = (state.slug || '') + '__' + slugify(place.name);
+  var inPlan  = isPlanItem(planKey);
 
   var tagsHTML = '';
   if (place.tags && place.tags.length) {
@@ -906,6 +930,8 @@ function modalInnerHTML(place) {
     + (infoItems ? '<div class="modal-info-grid">' + infoItems + '</div>' : '')
     + mustEatHTML + mapHTML
     + '<div class="modal-actions">' + dirBtn
+    + '<button class="modal-btn modal-btn-plan ' + (inPlan ? 'is-planned' : '') + '" id="modal-plan-btn">'
+    + IC.plan + ' <span class="modal-plan-text">' + esc(inPlan ? t('plan_remove') : t('plan_add')) + '</span></button>'
     + '<button class="modal-btn modal-btn-secondary" id="modal-share-btn">'
     + IC.share + ' ' + esc(t('modal_share')) + '</button>'
     + '<button class="modal-btn modal-btn-fav ' + (isFav ? 'is-fav' : '') + '" id="modal-fav-btn" '
@@ -1015,6 +1041,26 @@ function bindModalEvents(overlay, place) {
     });
   }
 
+  var planBtn = overlay.querySelector('#modal-plan-btn');
+  if (planBtn) {
+    planBtn.addEventListener('click', function() {
+      var pk = (state.slug || '') + '__' + slugify(place.name);
+      var txt = planBtn.querySelector('.modal-plan-text');
+      if (isPlanItem(pk)) {
+        removeFromPlan(pk);
+        planBtn.classList.remove('is-planned');
+        if (txt) txt.textContent = t('plan_add');
+        showToast(t('plan_removed'));
+      } else {
+        addToPlan(place);
+        planBtn.classList.add('is-planned');
+        if (txt) txt.textContent = t('plan_remove');
+        showToast(t('plan_added'));
+      }
+      updatePlanBtn();
+    });
+  }
+
   var favBtn = overlay.querySelector('#modal-fav-btn');
   if (favBtn) {
     favBtn.addEventListener('click', function() {
@@ -1073,7 +1119,290 @@ function bindPlaceCardClicks(container) {
   });
 }
 
-// ── 13. Favoriler Paylaş ──────────────────────────────────────────────
+// ── 13. Gezi Planı ────────────────────────────────────────────────────
+
+var DURATION = { muze: 90, gezi: 60, cami: 30, yemek: 45 };
+
+function planItemKey(citySlug, placeName) {
+  return (citySlug || '') + '__' + slugify(placeName);
+}
+
+function isPlanItem(key) {
+  for (var i = 0; i < state.plan.length; i++) { if (state.plan[i].key === key) return true; }
+  return false;
+}
+
+function estimateDuration(item) {
+  return DURATION[item.category] || 45;
+}
+
+function formatDuration(totalMin) {
+  var h = Math.floor(totalMin / 60), m = totalMin % 60;
+  return state.lang === 'tr'
+    ? (h > 0 ? h + ' sa' + (m > 0 ? ' ' + m + ' dk' : '') : m + ' dk')
+    : (h > 0 ? h + 'h' + (m > 0 ? ' ' + m + 'm' : '') : m + 'm');
+}
+
+function savePlan() {
+  localStorage.setItem(LS_PLAN, JSON.stringify(state.plan));
+}
+
+function addToPlan(place) {
+  var key = planItemKey(state.slug, place.name);
+  if (isPlanItem(key)) return;
+  state.plan.push({
+    key:       key,
+    citySlug:  state.slug  || '',
+    cityName:  (state.cityData && state.cityData.city) || '',
+    placeName: place.name,
+    category:  place.category  || '',
+    location:  place.location  || null,
+  });
+  savePlan();
+}
+
+function removeFromPlan(key) {
+  state.plan = state.plan.filter(function(i) { return i.key !== key; });
+  savePlan();
+}
+
+function clearPlan() {
+  state.plan = [];
+  savePlan();
+}
+
+function updatePlanBtn() {
+  var fab = document.getElementById('plan-fab');
+  if (!fab) return;
+  var count  = state.plan.length;
+  var badge  = fab.querySelector('.plan-fab-badge');
+  var label  = fab.querySelector('.plan-fab-label');
+  fab.style.display = count > 0 ? 'flex' : 'none';
+  if (badge) badge.textContent = count;
+  if (label) label.textContent = state.lang === 'tr' ? 'Plan' : 'Plan';
+}
+
+function planDrawerHTML() {
+  var items    = state.plan;
+  var totalMin = items.reduce(function(s, i) { return s + estimateDuration(i); }, 0);
+  var durStr   = formatDuration(totalMin);
+  var isTr     = state.lang === 'tr';
+  var statsStr = '~' + durStr + ' · ' + items.length + (isTr ? ' mekan' : ' place' + (items.length !== 1 ? 's' : ''));
+
+  var itemsHTML = items.length === 0
+    ? '<li class="plan-empty">' + esc(t('plan_empty')) + '</li>'
+    : items.map(function(item, idx) {
+        return '<li class="plan-item" draggable="true" data-key="' + esc(item.key) + '">'
+          + '<span class="plan-drag" aria-hidden="true">&#8286;</span>'
+          + '<span class="plan-item-num">' + (idx + 1) + '</span>'
+          + '<div class="plan-item-info">'
+          + '<span class="plan-item-name">' + esc(item.placeName) + '</span>'
+          + '<span class="plan-item-city">' + esc(item.cityName) + '</span>'
+          + '</div>'
+          + '<span class="plan-item-dur">' + estimateDuration(item) + ' dk</span>'
+          + '<button class="plan-item-rm" data-key="' + esc(item.key) + '" aria-label="' + esc(isTr ? 'Plandan çıkar' : 'Remove') + '">✕</button>'
+          + '</li>';
+      }).join('');
+
+  var located  = items.filter(function(i) { return i.location && i.location.lat; });
+  var routeUrl = located.length > 1 ? buildRouteUrl(located.map(function(i) { return { location: i.location }; })) : '';
+
+  return '<div class="plan-drawer-panel">'
+    + '<div class="plan-drawer-header">'
+    + '<h2 class="plan-drawer-title">' + IC.plan + ' ' + esc(t('plan_title')) + '</h2>'
+    + '<div class="plan-drawer-actions">'
+    + (items.length > 0 ? '<button class="plan-clear-btn" id="plan-clear">' + esc(t('plan_clear')) + '</button>' : '')
+    + '<button class="plan-close-btn" id="plan-drawer-close" aria-label="' + esc(isTr ? 'Kapat' : 'Close') + '">' + IC.xMark + '</button>'
+    + '</div></div>'
+    + '<ol class="plan-list" id="plan-list">' + itemsHTML + '</ol>'
+    + (items.length > 0
+        ? '<div class="plan-footer">'
+          + '<div class="plan-stats">' + esc(statsStr) + '</div>'
+          + (routeUrl ? '<a class="plan-route-btn" href="' + esc(routeUrl) + '" target="_blank" rel="noopener noreferrer">'
+            + IC.mapPin + ' ' + esc(t('plan_route')) + '</a>' : '')
+          + '<button class="plan-share-btn" id="plan-share">' + IC.share + ' ' + esc(t('plan_share')) + '</button>'
+          + '</div>'
+        : '')
+    + '</div>';
+}
+
+function renderPlanDrawer() {
+  var drawer = document.getElementById('plan-drawer');
+  if (!drawer) return;
+  var old = drawer.querySelector('.plan-drawer-panel');
+  if (old) old.remove();
+  var frag = document.createRange().createContextualFragment(planDrawerHTML());
+  drawer.appendChild(frag);
+  bindPlanDrawerEvents(drawer);
+  updatePlanBtn();
+}
+
+function openPlanDrawer() {
+  if (document.getElementById('plan-drawer')) { closePlanDrawer(); return; }
+
+  var overlay = document.createElement('div');
+  overlay.id = 'plan-overlay';
+  overlay.className = 'plan-overlay';
+  overlay.addEventListener('click', closePlanDrawer);
+  document.body.appendChild(overlay);
+
+  var drawer = document.createElement('div');
+  drawer.id = 'plan-drawer';
+  drawer.className = 'plan-drawer';
+  var frag = document.createRange().createContextualFragment(planDrawerHTML());
+  drawer.appendChild(frag);
+  document.body.appendChild(drawer);
+
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      overlay.classList.add('plan-overlay-visible');
+      drawer.classList.add('plan-drawer-open');
+    });
+  });
+  bindPlanDrawerEvents(drawer);
+}
+
+function closePlanDrawer() {
+  var overlay = document.getElementById('plan-overlay');
+  var drawer  = document.getElementById('plan-drawer');
+  if (overlay) overlay.classList.remove('plan-overlay-visible');
+  if (drawer)  drawer.classList.remove('plan-drawer-open');
+  setTimeout(function() {
+    if (overlay && overlay.parentNode) overlay.remove();
+    if (drawer  && drawer.parentNode)  drawer.remove();
+  }, 280);
+}
+
+function bindPlanDrawerEvents(drawer) {
+  var closeBtn = drawer.querySelector('#plan-drawer-close');
+  if (closeBtn) closeBtn.addEventListener('click', closePlanDrawer);
+
+  var clearBtn = drawer.querySelector('#plan-clear');
+  if (clearBtn) clearBtn.addEventListener('click', function() { clearPlan(); renderPlanDrawer(); });
+
+  var shareBtn = drawer.querySelector('#plan-share');
+  if (shareBtn) shareBtn.addEventListener('click', sharePlan);
+
+  drawer.querySelectorAll('.plan-item-rm[data-key]').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      removeFromPlan(btn.dataset.key);
+      renderPlanDrawer();
+    });
+  });
+
+  bindPlanDragDrop(drawer.querySelector('#plan-list'));
+}
+
+function bindPlanDragDrop(listEl) {
+  if (!listEl) return;
+  var dragSrc = null;
+
+  listEl.querySelectorAll('.plan-item[draggable]').forEach(function(item) {
+    item.addEventListener('dragstart', function(e) {
+      dragSrc = item;
+      item.classList.add('plan-dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', item.dataset.key);
+    });
+    item.addEventListener('dragend', function() {
+      item.classList.remove('plan-dragging');
+      listEl.querySelectorAll('.plan-item').forEach(function(i) { i.classList.remove('plan-drag-over'); });
+      dragSrc = null;
+    });
+    item.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      if (dragSrc && dragSrc !== item) {
+        listEl.querySelectorAll('.plan-item').forEach(function(i) { i.classList.remove('plan-drag-over'); });
+        item.classList.add('plan-drag-over');
+      }
+    });
+    item.addEventListener('drop', function(e) {
+      e.preventDefault();
+      item.classList.remove('plan-drag-over');
+      if (!dragSrc || dragSrc === item) return;
+      var srcKey = dragSrc.dataset.key, tgtKey = item.dataset.key;
+      var srcIdx = -1, tgtIdx = -1;
+      state.plan.forEach(function(p, i) {
+        if (p.key === srcKey) srcIdx = i;
+        if (p.key === tgtKey) tgtIdx = i;
+      });
+      if (srcIdx !== -1 && tgtIdx !== -1) {
+        var tmp = state.plan[srcIdx];
+        state.plan[srcIdx] = state.plan[tgtIdx];
+        state.plan[tgtIdx] = tmp;
+        savePlan();
+        renderPlanDrawer();
+      }
+    });
+  });
+}
+
+function sharePlan() {
+  var keys = state.plan.slice(0, 20).map(function(i) { return i.key; }).join(',');
+  var url  = location.origin + location.pathname + '#?plan=' + keys;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url)
+      .then(function() { showToast(t('plan_share_ok')); })
+      .catch(function() { fallbackCopy(url); showToast(t('plan_share_ok')); });
+  } else {
+    fallbackCopy(url);
+    showToast(t('plan_share_ok'));
+  }
+}
+
+function loadPlanFromUrl() {
+  var hash = location.hash;
+  if (hash.indexOf('?plan=') === -1) return false;
+  var param = hash.split('?plan=')[1] || '';
+  param.split(',').filter(Boolean).forEach(function(key) {
+    if (isPlanItem(key)) return;
+    var parts     = key.split('__');
+    var citySlug  = parts[0] || '';
+    var placeSlug = parts.slice(1).join('__');
+    state.plan.push({
+      key:       key,
+      citySlug:  citySlug,
+      cityName:  citySlug,
+      placeName: placeSlug.replace(/-/g, ' '),
+      category:  '',
+      location:  null,
+    });
+  });
+  savePlan();
+  updatePlanBtn();
+  return true;
+}
+
+function createPlanFab() {
+  if (document.getElementById('plan-fab')) return;
+  var fab = document.createElement('button');
+  fab.id = 'plan-fab';
+  fab.className = 'plan-fab';
+  fab.style.display = 'none';
+  fab.setAttribute('aria-label', state.lang === 'tr' ? 'Gezi planını aç' : 'Open trip plan');
+
+  var iconSpan = document.createElement('span');
+  iconSpan.setAttribute('aria-hidden', 'true');
+  iconSpan.appendChild(document.createRange().createContextualFragment(IC.plan));
+
+  var labelSpan = document.createElement('span');
+  labelSpan.className = 'plan-fab-label';
+  labelSpan.textContent = state.lang === 'tr' ? 'Plan' : 'Plan';
+
+  var badge = document.createElement('span');
+  badge.className = 'plan-fab-badge';
+  badge.textContent = '0';
+
+  fab.appendChild(iconSpan);
+  fab.appendChild(labelSpan);
+  fab.appendChild(badge);
+  fab.addEventListener('click', openPlanDrawer);
+  document.body.appendChild(fab);
+  updatePlanBtn();
+}
+
+// ── 14. Favoriler Paylaş ──────────────────────────────────────────────
 
 function shareFavorites() {
   var slugs = Array.from(state.favorites).join(',');
@@ -1136,6 +1465,13 @@ async function router() {
   if (raw.indexOf('?favs=') === 0) {
     loadSharedFavs();
     location.hash = '';
+    return;
+  }
+
+  if (raw.indexOf('?plan=') === 0) {
+    loadPlanFromUrl();
+    location.hash = '';
+    openPlanDrawer();
     return;
   }
 
@@ -1222,7 +1558,7 @@ async function init() {
       var inp = document.getElementById('search-input');
       if (inp) { inp.focus(); inp.select(); }
     }
-    if (e.key === 'Escape') { closePlaceModal(); }
+    if (e.key === 'Escape') { closePlaceModal(); closePlanDrawer(); }
   });
 
   // Tarayıcı geri butonu → modal kapat
@@ -1242,9 +1578,18 @@ async function init() {
     }
   });
 
+  // Plan FAB oluştur
+  createPlanFab();
+
   // Paylaşılan favori URL'si var mı?
   if (location.hash.indexOf('#?favs=') === 0) {
     loadSharedFavs();
+    location.hash = '';
+  }
+
+  // Paylaşılan plan URL'si var mı?
+  if (location.hash.indexOf('#?plan=') === 0) {
+    loadPlanFromUrl();
     location.hash = '';
   }
 
