@@ -1,52 +1,130 @@
 # Seyyah 🧭
 
-> Türkiye'nin şehirlerini keşfetmek için sade, hızlı ve tamamen statik bir gezi rehberi.
+> A simple, fast, and fully static travel guide for discovering cities in Turkey.
 
-Çerçeve yok · Derleme adımı yok · Sunucu gerekmez · Saf HTML + CSS + JavaScript
+**No framework · No build step · No server · Pure HTML + CSS + JavaScript**
 
----
-
-## Özellikler
-
-- 🔎 **Canlı arama** — şehir veya mekan adına göre anında filtreleme
-- 🗺️ **Bölgeye göre süzme** — Marmara, Karadeniz, Güneydoğu… çipleri
-- 🏙️ **Şehir kartları** — kapak alanı, açıklama ve mekan sayacı
-- 📂 **Kategori sekmeleri** — Hepsi / Yemek / Cami / Müze / Gezilecek
-- 🏷️ **Etiket filtresi** — tarihi, ücretsiz, manzara, tatlı…
-- 🍽️ **"Meşhuru:"** — yemek mekanlarında ne yeneceği
-- 📍 **Yol tarifi** — her mekan için Google Maps linki
-- 🗺️ **Gömülü harita** — Leaflet + OpenStreetMap (isteğe bağlı, bkz. aşağıda)
-- ❤️ **Favoriler** — tarayıcıda saklanır, URL ile paylaşılabilir
-- 🌗 **Karanlık tema** — sistem tercihine göre başlar, değiştirilebilir
-- 🌍 **TR / EN** — tam iki dil desteği
-- 📱 **Tam responsive** — mobil, tablet, masaüstü
+🔗 **Live site:** [abdullahsahin.org/seyyah](https://abdullahsahin.org/seyyah)
 
 ---
 
-## Yerel Geliştirme
+## Features
 
-`fetch()` API'si `file://` protokolüyle çalışmaz; küçük bir yerel sunucu başlatın:
+### Discover & Filter
+- 🔎 **Cross-city live search** — instant autocomplete with search history
+- 🗺️ **Filter by region** — Marmara, Black Sea, Southeast Anatolia… chips
+- 🏙️ **City cards** — cover image, description, and place count
+- 📂 **Category tabs** — All / Food / Mosque / Museum / Sights
+- 🏷️ **Tag filter** — historic, free, scenic, sweets…
+- ⏰ **"Open now" filter** — real-time open/closed indicator per place
+
+### Place Details
+- 🍽️ **"Must eat:"** — what to order at food places
+- 📍 **Directions** — Google Maps link for every place
+- ♿ **Accessibility info** — wheelchair access, elevator, accessible toilet, audio guide
+- 🌸 **Seasonal calendar** — 12-month best-time-to-visit indicator
+- 👍 **"You might also like"** — similar place recommendations by category
+
+### Map & Navigation
+- 🗺️ **Embedded map** — Leaflet + OpenStreetMap with category-colored markers
+- 🧭 **Nearby places** — sort by distance using geolocation (Haversine formula)
+- 🔗 **Deep linking** — shareable URL for every place (`#istanbul/topkapi-sarayi`)
+
+### Planning & Tracking
+- 🗒️ **Trip planner** — drag-and-drop ordered place list + Google Maps route export
+- ✅ **Visit tracking** — mark places visited with date and personal notes
+- 📊 **Travel stats** — collapsible panel showing visited count, favorites, and plan progress
+- ❤️ **Favorites** — saved in the browser, shareable via URL
+
+### User Experience
+- 🌗 **Dark mode** — follows system preference, user-toggleable
+- 🌍 **TR / EN** — full bilingual support
+- 📱 **Fully responsive** — mobile, tablet, desktop
+- 📲 **PWA support** — installable app, works offline
+
+### SEO & Infrastructure
+- 🤖 **Search-engine friendly** — sitemap.xml, robots.txt, Open Graph, hreflang tags
+- 💾 **Service worker** — cache-first offline strategy
+- 🧠 **LLM-friendly** — llms.txt content summary for AI systems
+
+---
+
+## Architecture
+
+```mermaid
+graph TD
+    A[index.html] --> B[app.js]
+    A --> C[style.css]
+    A --> D[manifest.json]
+    A --> E[sw.js]
+
+    B --> F[data/cities.json]
+    B --> G[data/istanbul.json]
+    B --> H[data/ankara.json]
+    B --> I[data/…]
+
+    B --> J{Features}
+    J --> K[🔎 Search & Filter]
+    J --> L[🗺️ Map — Leaflet]
+    J --> M[🗒️ Trip Planner]
+    J --> N[✅ Visit Tracking]
+    J --> O[❤️ Favorites]
+    J --> P[🌍 i18n TR/EN]
+
+    E --> Q[(Browser Cache)]
+    Q -->|Offline| A
+```
+
+---
+
+## Data Flow
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant SW as Service Worker
+    participant App as app.js
+    participant Data as data/*.json
+    participant LS as localStorage
+
+    U->>SW: Open page
+    SW-->>U: Serve from cache (offline-capable)
+    App->>Data: Load cities.json
+    Data-->>App: City list
+    U->>App: Select a city
+    App->>Data: Load <slug>.json
+    Data-->>App: Place list
+    App->>LS: Read favorites / plan / visits
+    U->>App: Filter / search / add to plan
+    App->>LS: Persist changes
+```
+
+---
+
+## Local Development
+
+The `fetch()` API does not work over the `file://` protocol — start a small local server:
 
 ```bash
-# Python 3 (genellikle hazır yüklüdür)
+# Python 3 (usually pre-installed)
 python -m http.server 8000
 # → http://localhost:8000
 
-# veya Node.js ile
+# or with Node.js
 npx serve
 ```
 
 ---
 
-## Leaflet Harita Kurulumu (İsteğe Bağlı)
+## Leaflet Map Setup (Optional)
 
-Harita özelliği Leaflet kütüphanesini gerektirir. Leaflet olmadan uygulama
-tam çalışır; harita alanında yalnızca kısa bir bilgi mesajı görünür.
+The map feature requires the Leaflet library. Without it the app works perfectly —
+the map area simply shows a short info message.
 
-**Adımlar:**
+**Steps:**
 
-1. **İndir:** https://leafletjs.com/download.html → ZIP'i indir ve aç.
-2. **Kopyala:** Şu dosyaları `vendor/leaflet/` klasörüne koy:
+1. **Download:** https://leafletjs.com/download.html → download and extract the ZIP.
+2. **Copy** the following files into `vendor/leaflet/`:
 
 ```
 vendor/leaflet/
@@ -58,65 +136,127 @@ vendor/leaflet/
     └── marker-shadow.png
 ```
 
-3. Yerel sunucuyu yeniden başlat. Harita artık görünür olacak.
+3. Restart the local server. The map will now appear.
 
 ---
 
-## GitHub Pages'e Yayınlama
+## Deploying to GitHub Pages
 
-1. Projeyi GitHub'a **public** repo olarak yükle (repo adı: `seyyah`).
-2. Repo → **Settings → Pages**.
-3. **Source:** `Deploy from a branch` → branch: `main`, klasör: `/ (root)` → **Save**.
-4. Birkaç dakika içinde site şu adreste yayında:
+1. Push the project to GitHub as a **public** repo (repo name: `seyyah`).
+2. Go to **Settings → Pages**.
+3. **Source:** `Deploy from a branch` → branch: `main`, folder: `/ (root)` → **Save**.
+4. After a few minutes the site is live at:
 
 ```
-https://<kullanıcı-adı>.github.io/seyyah/
+https://<your-username>.github.io/seyyah/
 ```
 
-> ⚠️ Tüm dosya yolları görecelidir (`data/cities.json`). Başında `/` olan
-> mutlak yollar GitHub Pages alt klasöründe kırılır.
+> ⚠️ All file paths are relative (`data/cities.json`). Absolute paths starting
+> with `/` will break in a GitHub Pages subdirectory.
 
 ---
 
-## Yeni Şehir / Mekan Ekleme
+## Updating the Sitemap
 
-**Yeni şehir:**
-1. `data/<slug>.json` dosyası oluştur (istanbul.json şemasını takip et).
-2. `data/cities.json` içine yeni kaydı ekle.
+After adding a new city or place, regenerate the sitemap:
 
-**Yeni mekan:**
-- İlgili şehrin `places` dizisine yeni nesne ekle. Kod değişikliği gerekmez.
+```bash
+node generate-sitemap.js
+```
 
-### Mekan Alanları
+The script reads all JSON files in `data/` and writes an updated `sitemap.xml`.
 
-| Alan | Tip | Zorunlu | Açıklama |
-|------|-----|:-------:|----------|
-| `name` | string | ✓ | Mekan adı |
+---
+
+## Adding a New City or Place
+
+**New city:**
+1. Create `data/<slug>.json` following the `istanbul.json` schema.
+2. Add the new entry to `data/cities.json`.
+3. Run `node generate-sitemap.js` to update the sitemap.
+
+**New place:**
+- Add a new object to the `places` array in the relevant city file. No code changes needed.
+
+### City JSON Structure
+
+```json
+{
+  "city": "Istanbul",
+  "slug": "istanbul",
+  "region": "Marmara",
+  "description": "Capital of 2700 years of history bridging two continents.",
+  "seasons": [
+    { "month": 1, "rating": "ok",   "note": "Cold but quiet" },
+    { "month": 4, "rating": "good", "note": "Spring is the golden season" }
+  ],
+  "places": [ ... ]
+}
+```
+
+### Place Fields
+
+| Field | Type | Required | Description |
+|-------|------|:--------:|-------------|
+| `name` | string | ✓ | Place name |
 | `category` | string | ✓ | `yemek` / `cami` / `muze` / `gezi` |
-| `description` | string | ✓ | Kısa tanıtım |
-| `tags` | string[] | — | Etiketler (ücretsiz, tarihi, manzara…) |
-| `mustEat` | string[] | — | Yalnızca yemek: ne yenir |
-| `priceLevel` | 1–3 | — | Fiyat seviyesi (₺ sembolü sayısı) |
-| `openHours` | string | — | Açılış saatleri |
-| `location` | `{ lat, lng }` | — | Google Maps yol tarifi ve harita için |
+| `description` | string | ✓ | Short description |
+| `tags` | string[] | — | Tags (free, historic, scenic, sweets…) |
+| `mustEat` | string[] | — | Food places only: what to order |
+| `priceLevel` | 1–3 | — | Price level (number of ₺ symbols) |
+| `openHours` | string | — | Opening hours |
+| `location` | `{ lat, lng }` | — | For Google Maps directions and the map |
+| `accessibility` | object | — | `{ wheelchair, elevator, accessibleToilet, audioGuide }` |
+
+### Season Ratings
+
+| Value | Meaning |
+|-------|---------|
+| `"good"` | Ideal time to visit |
+| `"ok"` | Acceptable, some caveats |
+| `"avoid"` | Not recommended for this month |
 
 ---
 
-## Dosya Yapısı
+## File Structure
 
 ```
 seyyah/
-├── index.html          ← tek giriş noktası
-├── style.css           ← tüm stiller + iki tema
-├── app.js              ← SPA mantığı, i18n, router
+├── index.html              ← single entry point (includes SEO meta tags)
+├── style.css               ← all styles + light/dark themes
+├── app.js                  ← SPA logic, i18n, router, all features
+├── sw.js                   ← service worker (PWA / offline support)
+├── manifest.json           ← PWA manifest (installable app)
+├── robots.txt              ← search engine and LLM bot directives
+├── sitemap.xml             ← XML sitemap covering all URLs
+├── generate-sitemap.js     ← script to auto-generate sitemap.xml
+├── llms.txt                ← content summary for AI systems
+├── package.json            ← npm sitemap script
+│
 ├── data/
-│   ├── cities.json     ← şehir listesi
-│   ├── istanbul.json   ← şehir detayları
-│   └── …
+│   ├── cities.json         ← master city list (slug, region, description)
+│   ├── istanbul.json       ← Istanbul places + seasons
+│   ├── ankara.json
+│   ├── izmir.json
+│   ├── konya.json
+│   ├── trabzon.json
+│   └── gaziantep.json
+│
+├── icons/
+│   ├── icon-192.svg        ← PWA icon (192×192)
+│   └── icon-512.svg        ← PWA icon (512×512)
+│
+├── docs/
+│   ├── seyyah.md           ← LLM-friendly site documentation
+│   └── design.md           ← design system notes
+│
 └── vendor/
-    └── leaflet/        ← elle indirilir (bkz. yukarı)
+    └── leaflet/            ← manually downloaded (see above)
+        ├── leaflet.js
+        ├── leaflet.css
+        └── images/
 ```
 
 ---
 
-*Seyyah — yola çıkmadan önce.* 🧭
+*Seyyah — before you hit the road.* 🧭
