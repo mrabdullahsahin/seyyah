@@ -145,6 +145,14 @@ const STRINGS = {
       ok:    'Ziyaret için uygun ay',
       avoid: 'Daha iyi zamanlar var',
     },
+    acc_title:      'Erişilebilirlik',
+    acc_wheelchair: 'Tekerlekli Sandalye',
+    acc_elevator:   'Asansör',
+    acc_toilet:     'Engelli Tuvaleti',
+    acc_audio:      'Sesli Rehber',
+    acc_yes:        'Mevcut',
+    acc_no:         'Mevcut değil',
+    acc_unknown:    'Bilgi yok',
   },
   en: {
     tagline:      "Discover Turkey's cities",
@@ -230,6 +238,14 @@ const STRINGS = {
       ok:    'Fair time to visit',
       avoid: 'Consider another time',
     },
+    acc_title:      'Accessibility',
+    acc_wheelchair: 'Wheelchair Access',
+    acc_elevator:   'Elevator',
+    acc_toilet:     'Accessible Toilet',
+    acc_audio:      'Audio Guide',
+    acc_yes:        'Available',
+    acc_no:         'Not available',
+    acc_unknown:    'Unknown',
   },
 };
 
@@ -427,6 +443,37 @@ function buildSeasonCompact(seasons) {
   return '<div class="season-compact season-compact-' + esc(val) + '">'
     + '<span class="season-compact-dot" aria-hidden="true"></span>'
     + '<span>' + esc(months[curMo]) + ' — ' + esc(hint) + '</span>'
+    + '</div>';
+}
+
+// Erişilebilirlik şeridi (yer modali)
+function buildAccessibilityStrip(acc) {
+  if (!acc) return '';
+  var fields = [
+    { key: 'wheelchair', labelKey: 'acc_wheelchair' },
+    { key: 'elevator',   labelKey: 'acc_elevator'   },
+    { key: 'accessibleToilet', labelKey: 'acc_toilet' },
+    { key: 'audioGuide',labelKey: 'acc_audio'       },
+  ];
+  // En az bir tanımlı değer yoksa gösterme
+  var hasAny = fields.some(function(f) { return acc[f.key] !== undefined; });
+  if (!hasAny) return '';
+
+  var items = fields.map(function(f) {
+    var val = acc[f.key];
+    var cls  = val === true ? 'acc-yes' : val === false ? 'acc-no' : 'acc-unk';
+    var mark = val === true ? '✓' : val === false ? '✗' : '?';
+    var tip  = val === true ? t('acc_yes') : val === false ? t('acc_no') : t('acc_unknown');
+    return '<div class="acc-item ' + esc(cls) + '">'
+      + '<span class="acc-status-dot" aria-hidden="true"></span>'
+      + '<span class="acc-label-text">' + esc(t(f.labelKey)) + '</span>'
+      + '<span class="acc-mark" title="' + esc(tip) + '" aria-label="' + esc(tip) + '">' + esc(mark) + '</span>'
+      + '</div>';
+  }).join('');
+
+  return '<div class="accessibility-strip">'
+    + '<span class="accessibility-title">' + IC.check + ' ' + esc(t('acc_title')) + '</span>'
+    + '<div class="acc-grid">' + items + '</div>'
     + '</div>';
 }
 
@@ -1400,6 +1447,9 @@ function modalInnerHTML(place) {
     ? buildSeasonCompact(state.cityData.seasons)
     : '';
 
+  // Erişilebilirlik şeridi
+  var accessibilityHTML = buildAccessibilityStrip(place.accessibility);
+
   var mapHTML = hasLoc ? '<div id="modal-map" class="modal-map-mini"></div>' : '';
   var dirBtn  = hasLoc
     ? '<a class="modal-btn modal-btn-primary" href="' + esc(mapsUrl(place.location.lat, place.location.lng))
@@ -1436,6 +1486,7 @@ function modalInnerHTML(place) {
     + '<p class="modal-desc">' + esc(place.description) + '</p>'
     + (infoItems ? '<div class="modal-info-grid">' + infoItems + '</div>' : '')
     + seasonCompactHTML
+    + accessibilityHTML
     + mustEatHTML + mapHTML
     + '<div class="modal-actions">' + dirBtn
     + '<button class="modal-btn modal-btn-plan ' + (inPlan ? 'is-planned' : '') + '" id="modal-plan-btn">'

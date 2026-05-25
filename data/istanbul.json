@@ -4,10 +4,18 @@
   "region": "Marmara",
   "description": "İki kıtayı birleştiren, 2700 yıllık tarih başkenti.",
   "seasons": {
-    "jan": "avoid", "feb": "avoid", "mar": "ok",
-    "apr": "good",  "may": "good",  "jun": "good",
-    "jul": "ok",    "aug": "ok",    "sep": "good",
-    "oct": "good",  "nov": "ok",    "dec": "avoid",
+    "jan": "avoid",
+    "feb": "avoid",
+    "mar": "ok",
+    "apr": "good",
+    "may": "good",
+    "jun": "good",
+    "jul": "ok",
+    "aug": "ok",
+    "sep": "good",
+    "oct": "good",
+    "nov": "ok",
+    "dec": "avoid",
     "note": "İlkbahar (Nisan–Mayıs) ve erken sonbahar (Eylül–Ekim) altın dönem; kalabalık az, hava ılıman."
   },
   "places": [
@@ -15,79 +23,177 @@
       "name": "Sultanahmet Camii",
       "category": "cami",
       "description": "Mavi çinileriyle ünlü, altı minareli 17. yüzyıl Osmanlı şaheseri. Dünya'nın en güzel camilerinden biri.",
-      "tags": ["tarihi", "ücretsiz", "manzara"],
+      "tags": [
+        "tarihi",
+        "ücretsiz",
+        "manzara"
+      ],
       "openHours": "08:30 – 18:00 (namaz vakitleri hariç)",
-      "location": { "lat": 41.0054, "lng": 28.9768 }
+      "location": {
+        "lat": 41.0054,
+        "lng": 28.9768
+      },
+      "accessibility": {
+        "wheelchair": true,
+        "elevator": false,
+        "accessibleToilet": false,
+        "audioGuide": false
+      }
     },
     {
       "name": "Ayasofya",
       "category": "cami",
       "description": "Bizans'tan Osmanlı'ya, müzeden tekrar camiye dönüşen 1500 yıllık mimari harika.",
-      "tags": ["tarihi", "Bizans", "Osmanlı"],
+      "tags": [
+        "tarihi",
+        "Bizans",
+        "Osmanlı"
+      ],
       "openHours": "09:00 – 17:00 (namaz vakitleri hariç)",
-      "location": { "lat": 41.0086, "lng": 28.9802 }
+      "location": {
+        "lat": 41.0086,
+        "lng": 28.9802
+      },
+      "accessibility": {
+        "wheelchair": true,
+        "elevator": false,
+        "accessibleToilet": true,
+        "audioGuide": true
+      }
     },
     {
       "name": "Topkapı Sarayı",
       "category": "muze",
       "description": "Osmanlı İmparatorluğu'nun 400 yıl boyunca yönetim merkezi olan muhteşem saray kompleksi.",
-      "tags": ["tarihi", "Osmanlı", "saray"],
+      "tags": [
+        "tarihi",
+        "Osmanlı",
+        "saray"
+      ],
       "openHours": "09:00 – 18:45 (Salı kapalı)",
-      "location": { "lat": 41.0115, "lng": 28.9833 }
+      "location": {
+        "lat": 41.0115,
+        "lng": 28.9833
+      },
+      "accessibility": {
+        "wheelchair": false,
+        "elevator": false,
+        "accessibleToilet": true,
+        "audioGuide": true
+      }
     },
     {
       "name": "İstanbul Arkeoloji Müzeleri",
       "category": "muze",
       "description": "Dünya'nın en büyük antik eser koleksiyonlarından birine ev sahipliği yapan, üç binadan oluşan dev müze.",
-      "tags": ["tarihi", "antik", "arkeoloji"],
+      "tags": [
+        "tarihi",
+        "antik",
+        "arkeoloji"
+      ],
       "openHours": "09:00 – 19:00 (Pazartesi kapalı)",
-      "location": { "lat": 41.0122, "lng": 28.9804 }
+      "location": {
+        "lat": 41.0122,
+        "lng": 28.9804
+      },
+      "accessibility": {
+        "wheelchair": true,
+        "elevator": true,
+        "accessibleToilet": true,
+        "audioGuide": false
+      }
     },
     {
       "name": "Kapalıçarşı",
       "category": "gezi",
       "description": "Dünyanın en büyük kapalı çarşılarından biri; 4000'den fazla dükkan, yüzyıllık çarşı atmosferi.",
-      "tags": ["tarihi", "alışveriş", "kültür"],
+      "tags": [
+        "tarihi",
+        "alışveriş",
+        "kültür"
+      ],
       "openHours": "08:30 – 19:00 (Pazar kapalı)",
-      "location": { "lat": 41.0107, "lng": 28.9682 }
+      "location": {
+        "lat": 41.0107,
+        "lng": 28.9682
+      }
     },
     {
       "name": "Boğaz Turu",
       "category": "gezi",
       "description": "Avrupa ve Asya kıtaları arasında tekneyle gezinti; köprüler, yalılar ve nefes kesen panoramik manzara.",
-      "tags": ["manzara", "tekne", "deniz"],
+      "tags": [
+        "manzara",
+        "tekne",
+        "deniz"
+      ],
       "openHours": "10:00 – 18:00 (mevsime göre değişir)",
-      "location": { "lat": 41.0197, "lng": 28.9738 }
+      "location": {
+        "lat": 41.0197,
+        "lng": 28.9738
+      }
     },
     {
       "name": "Tarihi Sultanahmet Köftecisi",
       "category": "yemek",
       "description": "1920'den beri aynı lezzetle hizmet veren efsane köfteci. Sultanahmet'in 100 yıllık simgesi.",
-      "mustEat": ["Izgara köfte", "Piyaz", "İrmik helvası"],
+      "mustEat": [
+        "Izgara köfte",
+        "Piyaz",
+        "İrmik helvası"
+      ],
       "priceLevel": 2,
-      "tags": ["geleneksel", "efsane"],
+      "tags": [
+        "geleneksel",
+        "efsane"
+      ],
       "openHours": "11:00 – 22:00",
-      "location": { "lat": 41.0086, "lng": 28.9744 }
+      "location": {
+        "lat": 41.0086,
+        "lng": 28.9744
+      }
     },
     {
       "name": "Çiçek Pasajı",
       "category": "yemek",
       "description": "Beyoğlu'nun kalbinde tarihi pasajda meze ve rakı kültürünü yaşatan, asırlık İstanbul geleneği.",
-      "mustEat": ["Meze tabağı", "Balık", "Rakı"],
+      "mustEat": [
+        "Meze tabağı",
+        "Balık",
+        "Rakı"
+      ],
       "priceLevel": 3,
-      "tags": ["tarihi", "meze", "gece"],
+      "tags": [
+        "tarihi",
+        "meze",
+        "gece"
+      ],
       "openHours": "12:00 – 00:00",
-      "location": { "lat": 41.0318, "lng": 28.9769 }
+      "location": {
+        "lat": 41.0318,
+        "lng": 28.9769
+      }
     },
     {
       "name": "Karaköy Güllüoğlu",
       "category": "yemek",
       "description": "Karaköy'ün simgesi, Türkiye'nin en ünlü baklava ustalarından. Fıstıklı baklava burada farklı.",
-      "mustEat": ["Fıstıklı baklava", "Sütlü nuriye", "Kadayıf"],
+      "mustEat": [
+        "Fıstıklı baklava",
+        "Sütlü nuriye",
+        "Kadayıf"
+      ],
       "priceLevel": 2,
-      "tags": ["tatlı", "baklava", "efsane"],
+      "tags": [
+        "tatlı",
+        "baklava",
+        "efsane"
+      ],
       "openHours": "08:00 – 22:00",
-      "location": { "lat": 41.0225, "lng": 28.9742 }
+      "location": {
+        "lat": 41.0225,
+        "lng": 28.9742
+      }
     }
   ]
 }

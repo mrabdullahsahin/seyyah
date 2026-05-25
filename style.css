@@ -2943,3 +2943,83 @@ body.modal-open {
 [data-theme="dark"] .season-compact-good  { background: rgba(34,197,94,0.10); color: #4ade80; }
 [data-theme="dark"] .season-compact-ok    { background: rgba(245,158,11,0.10); color: #fbbf24; }
 [data-theme="dark"] .season-compact-avoid { background: rgba(100,116,139,0.12); }
+
+/* ── 35. Erişilebilirlik Şeridi ─────────────────────────────────────── */
+
+.accessibility-strip {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.875rem 1rem;
+  margin: 0 0 1rem;
+  background: var(--surface);
+}
+
+.accessibility-title {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 0.625rem;
+}
+
+.accessibility-title svg {
+  opacity: 0.6;
+}
+
+.acc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 1.25rem;
+}
+
+.acc-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+}
+
+.acc-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.acc-yes  .acc-status-dot { background: #22c55e; }
+.acc-no   .acc-status-dot { background: #ef4444; }
+.acc-unk  .acc-status-dot { background: var(--border); border: 1px solid var(--ink-2); }
+
+.acc-label-text {
+  flex: 1;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.acc-no .acc-label-text {
+  color: var(--ink-2);
+  text-decoration: line-through;
+  text-decoration-color: rgba(239,68,68,0.4);
+}
+
+.acc-unk .acc-label-text {
+  color: var(--ink-2);
+}
+
+.acc-mark {
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 14px;
+  text-align: center;
+}
+
+.acc-yes  .acc-mark { color: #16a34a; }
+.acc-no   .acc-mark { color: #dc2626; }
+.acc-unk  .acc-mark { color: var(--ink-2); }
+
+[data-theme="dark"] .acc-yes  .acc-mark { color: #4ade80; }
+[data-theme="dark"] .acc-no   .acc-mark { color: #f87171; }
