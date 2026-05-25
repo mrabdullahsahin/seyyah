@@ -153,6 +153,7 @@ const STRINGS = {
     acc_yes:        'Mevcut',
     acc_no:         'Mevcut değil',
     acc_unknown:    'Bilgi yok',
+    similar_title:  'Şunlara da bak',
   },
   en: {
     tagline:      "Discover Turkey's cities",
@@ -246,6 +247,7 @@ const STRINGS = {
     acc_yes:        'Available',
     acc_no:         'Not available',
     acc_unknown:    'Unknown',
+    similar_title:  'You might also like',
   },
 };
 
@@ -474,6 +476,56 @@ function buildAccessibilityStrip(acc) {
   return '<div class="accessibility-strip">'
     + '<span class="accessibility-title">' + IC.check + ' ' + esc(t('acc_title')) + '</span>'
     + '<div class="acc-grid">' + items + '</div>'
+    + '</div>';
+}
+
+// Benzerlik skoru: aynı kategori +3, her ortak etiket +1
+function getSimilarPlaces(place, max) {
+  if (!state.cityData) return [];
+  max = max || 3;
+  var placeTags = place.tags || [];
+  return state.cityData.places
+    .filter(function(p) { return p.name !== place.name; })
+    .map(function(p) {
+      var score = (p.category === place.category ? 3 : 0);
+      (p.tags || []).forEach(function(tag) {
+        if (placeTags.indexOf(tag) !== -1) score += 1;
+      });
+      return { place: p, score: score };
+    })
+    .filter(function(item) { return item.score > 0; })
+    .sort(function(a, b) { return b.score - a.score; })
+    .slice(0, max)
+    .map(function(item) { return item.place; });
+}
+
+// Benzer mekanlar yatay şerit
+function buildSimilarPlacesHTML(place) {
+  var similar = getSimilarPlaces(place, 3);
+  if (!similar.length) return '';
+
+  var placeTags = place.tags || [];
+  var cards = similar.map(function(p) {
+    // En fazla 2 ortak etiket göster
+    var commonTags = (p.tags || []).filter(function(tag) {
+      return placeTags.indexOf(tag) !== -1;
+    }).slice(0, 2);
+    var tagsH = commonTags.map(function(tag) {
+      return '<span class="similar-tag">' + esc(tag) + '</span>';
+    }).join('');
+    return '<button class="similar-card" data-place-name="' + esc(p.name) + '" '
+      + 'aria-label="' + esc(p.name) + '">'
+      + '<div class="similar-card-cat">'
+      + (CAT_IC[p.category] || '') + ' ' + esc(t('cats.' + p.category))
+      + '</div>'
+      + '<div class="similar-card-name">' + esc(p.name) + '</div>'
+      + (tagsH ? '<div class="similar-card-tags">' + tagsH + '</div>' : '')
+      + '</button>';
+  }).join('');
+
+  return '<div class="similar-section">'
+    + '<div class="similar-title">' + IC.bino + ' ' + esc(t('similar_title')) + '</div>'
+    + '<div class="similar-scroll">' + cards + '</div>'
     + '</div>';
 }
 
@@ -1450,6 +1502,9 @@ function modalInnerHTML(place) {
   // Erişilebilirlik şeridi
   var accessibilityHTML = buildAccessibilityStrip(place.accessibility);
 
+  // Benzer mekanlar
+  var similarHTML = buildSimilarPlacesHTML(place);
+
   var mapHTML = hasLoc ? '<div id="modal-map" class="modal-map-mini"></div>' : '';
   var dirBtn  = hasLoc
     ? '<a class="modal-btn modal-btn-primary" href="' + esc(mapsUrl(place.location.lat, place.location.lng))
@@ -1498,6 +1553,7 @@ function modalInnerHTML(place) {
     + (isFav ? IC.heartFill : IC.heart) + '</button>'
     + '</div>'
     + visitHTML
+    + similarHTML
     + '</div></div>';
 }
 
@@ -1692,6 +1748,15 @@ function bindModalEvents(overlay, place) {
       }
     });
   }
+
+  // ── Benzer Mekanlar ────────────────────────────────────────────────
+  overlay.querySelectorAll('.similar-card[data-place-name]').forEach(function(card) {
+    card.addEventListener('click', function() {
+      var pName   = card.dataset.placeName;
+      var similar = state.cityData && state.cityData.places.find(function(p) { return p.name === pName; });
+      if (similar) openPlaceModal(similar);
+    });
+  });
 }
 
 function bindPlaceCardClicks(container) {
