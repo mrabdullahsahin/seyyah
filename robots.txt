@@ -54,4 +54,4 @@ Allow: /
 Allow: /llms.txt
 
 # ── Sitemap ────────────────────────────────────────────────────────────
-Sitemap: https://seyyah.app/sitemap.xml
+Sitemap: https://abdullahsahin.org/seyyah/sitemap.xml

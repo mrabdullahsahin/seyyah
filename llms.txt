@@ -6,7 +6,7 @@
 
 ## Hakkında
 
-- **URL**: https://seyyah.app
+- **URL**: https://abdullahsahin.org/seyyah/
 - **Dil**: Türkçe (tr-TR) ve İngilizce (en)
 - **Konu**: Türkiye şehir rehberi — tarihi yerler, müzeler, camiler, restoranlar
 - **Kapsam**: İstanbul, Ankara, İzmir, Gaziantep, Trabzon, Konya
@@ -16,7 +16,7 @@
 ### İstanbul
 - **Bölge**: Marmara
 - **Açıklama**: İki kıtayı birleştiren, 2700 yıllık tarih başkenti.
-- **URL**: https://seyyah.app/#istanbul
+- **URL**: https://abdullahsahin.org/seyyah/#istanbul
 - **Öne Çıkan Yerler**: Sultanahmet Camii, Ayasofya, Topkapı Sarayı, Kapalıçarşı, Boğaz Turu
 - **Mutlaka Yenilmeli**: Sultanahmet Köftecisi, Karaköy Güllüoğlu (baklava), Çiçek Pasajı
 - **En İyi Ziyaret Zamanı**: Nisan–Mayıs (ilkbahar), Eylül–Ekim (erken sonbahar)
@@ -24,7 +24,7 @@
 ### Ankara
 - **Bölge**: İç Anadolu
 - **Açıklama**: Cumhuriyetin kalbi, modern Türkiye'nin başkenti.
-- **URL**: https://seyyah.app/#ankara
+- **URL**: https://abdullahsahin.org/seyyah/#ankara
 - **Öne Çıkan Yerler**: Anıtkabir, Anadolu Medeniyetleri Müzesi, Kocatepe Camii, Roma Hamamı
 - **Mutlaka Yenilmeli**: Hacı Arif Bey, Uludağ Döner
 - **En İyi Ziyaret Zamanı**: Nisan–Mayıs ve Ekim (kıta iklimi, yaz aşırı sıcak)
@@ -32,7 +32,7 @@
 ### İzmir
 - **Bölge**: Ege
 - **Açıklama**: Ege'nin incisi, Türkiye'nin en canlı kıyı kenti.
-- **URL**: https://seyyah.app/#izmir
+- **URL**: https://abdullahsahin.org/seyyah/#izmir
 - **Öne Çıkan Yerler**: Efes Antik Kenti, Kadifekale, Kemeraltı Çarşısı, İzmir Arkeoloji Müzesi
 - **Mutlaka Yenilmeli**: Veli Usta Midye, Kumrucu Selanik
 - **En İyi Ziyaret Zamanı**: İlkbahar ve erken sonbahar (Ege iklimi)
@@ -40,7 +40,7 @@
 ### Gaziantep
 - **Bölge**: Güneydoğu Anadolu
 - **Açıklama**: Türkiye'nin gastronomi başkenti, baklavanın şehri.
-- **URL**: https://seyyah.app/#gaziantep
+- **URL**: https://abdullahsahin.org/seyyah/#gaziantep
 - **Öne Çıkan Yerler**: Zeugma Mozaik Müzesi, Gaziantep Kalesi, Bakırcılar Çarşısı
 - **Mutlaka Yenilmeli**: İmam Çakır (kebap), Halil Usta (baklava), Tahmis Kahvesi
 - **En İyi Ziyaret Zamanı**: Mart–Nisan (yaz 40°C'yi geçebilir)
@@ -48,7 +48,7 @@
 ### Trabzon
 - **Bölge**: Karadeniz
 - **Açıklama**: Yeşilin bin tonu, Karadeniz'in efsanevi şehri.
-- **URL**: https://seyyah.app/#trabzon
+- **URL**: https://abdullahsahin.org/seyyah/#trabzon
 - **Öne Çıkan Yerler**: Sümela Manastırı, Uzungöl, Boztepe, Trabzon Ayasofyası
 - **Mutlaka Yenilmeli**: Horon Restaurant, Vakfıkebir Fırını (ekmek)
 - **En İyi Ziyaret Zamanı**: Temmuz–Ağustos (yaylalar en güzel bu dönem)
@@ -56,7 +56,7 @@
 ### Konya
 - **Bölge**: İç Anadolu
 - **Açıklama**: Mevlana'nın şehri, Anadolu'nun ruh merkezi.
-- **URL**: https://seyyah.app/#konya
+- **URL**: https://abdullahsahin.org/seyyah/#konya
 - **Öne Çıkan Yerler**: Mevlana Müzesi ve Türbesi, Selimiye Camii, Alaeddin Tepesi, Konya Kapalı Çarşısı
 - **Mutlaka Yenilmeli**: Şeyh Dürrani, Köşk Restaurant (etli ekmek)
 - **En İyi Ziyaret Zamanı**: Aralık (Mevlana törenleri — özel atmosfer)
@@ -91,6 +91,6 @@ Konya'da yer almaktadır. Aralık ayında düzenlenen Şeb-i Arus törenleri iç
 ## Teknik Bilgiler
 
 - **Lisans**: Özel
-- **İletişim**: https://seyyah.app
-- **Sitemap**: https://seyyah.app/sitemap.xml
+- **İletişim**: https://abdullahsahin.org/seyyah/
+- **Sitemap**: https://abdullahsahin.org/seyyah/sitemap.xml
 - **Son Güncelleme**: 2026-05-25
