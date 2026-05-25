@@ -3225,3 +3225,230 @@ body.modal-open {
 [data-theme="dark"] .pwa-install-bar {
   box-shadow: 0 -4px 24px rgba(0,0,0,0.25);
 }
+
+/* ── 38. İstatistik Paneli ──────────────────────────────────────────── */
+
+.stats-panel {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.stats-panel .container {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.stats-panel-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.875rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: left;
+}
+
+.stats-panel-toggle svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.stats-panel-title {
+  flex: 1;
+}
+
+.stats-toggle-icon {
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--ink-2);
+  min-width: 18px;
+  text-align: right;
+}
+
+/* Height animation via max-height */
+.stats-panel-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stats-open .stats-panel-body {
+  max-height: 520px;
+}
+
+.stats-body-inner {
+  padding-bottom: 1.25rem;
+}
+
+/* Empty state */
+.stats-empty {
+  font-size: 0.83rem;
+  color: var(--ink-2);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Sayaçlar */
+.stats-counters {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1rem;
+}
+
+.stats-counter {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-raised);
+  margin-right: 0.5rem;
+}
+
+.stats-counter:last-child {
+  margin-right: 0;
+}
+
+.stats-num {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+
+.stats-lbl {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+}
+
+/* En çok ziyaret edilen şehir */
+.stats-top-city {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  margin-bottom: 0.875rem;
+  flex-wrap: wrap;
+}
+
+.stats-top-label {
+  color: var(--ink-2);
+  font-weight: 500;
+}
+
+.stats-top-name {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.stats-top-count {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  margin-left: auto;
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Genel ilerleme */
+.stats-progress-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  margin-bottom: 0.35rem;
+}
+
+.stats-progress-label {
+  color: var(--ink-2);
+  font-weight: 500;
+}
+
+.stats-progress-pct {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.stats-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.stats-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--red-dark) 100%);
+  border-radius: 999px;
+  transition: width 0.6s ease;
+}
+
+/* Kategori barları */
+.stats-cats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.stats-cat-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 28px;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stats-cat-label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.stats-cat-label svg {
+  flex-shrink: 0;
+}
+
+.stats-cat-bar {
+  height: 8px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.stats-cat-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 999px;
+  opacity: 0.75;
+  transition: width 0.5s ease;
+}
+
+.stats-cat-num {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ink-2);
+  text-align: right;
+}
+
+[data-theme="dark"] .stats-counter {
+  background: var(--surface);
+}

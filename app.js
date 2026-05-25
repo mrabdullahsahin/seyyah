@@ -20,6 +20,7 @@ const LS_PLACE_FAVS  = 'seyyah-place-favs';
 const LS_PLAN        = 'seyyah-plan';
 const LS_VISITS      = 'seyyah-visits';
 const LS_SEARCH_HIST = 'seyyah-search-hist';
+const LS_STATS_OPEN  = 'seyyah-stats-open';
 const MAX_HIST       = 5;
 
 // Şehir merkezleri — yakın şehir hesabı için (slug → [lat, lng])
@@ -154,6 +155,13 @@ const STRINGS = {
     acc_no:         'Mevcut değil',
     acc_unknown:    'Bilgi yok',
     similar_title:  'Şunlara da bak',
+    stats_title:    'Gezgin Profilim',
+    stats_visited:  'Ziyaret',
+    stats_fav:      'Fav. Şehir',
+    stats_plan:     'Plan',
+    stats_progress: 'Genel ilerleme',
+    stats_top:      'En çok:',
+    stats_empty:    'Henüz veri yok. Şehirleri keşfet, mekanları ziyaret et!',
   },
   en: {
     tagline:      "Discover Turkey's cities",
@@ -248,6 +256,13 @@ const STRINGS = {
     acc_no:         'Not available',
     acc_unknown:    'Unknown',
     similar_title:  'You might also like',
+    stats_title:    'My Travel Profile',
+    stats_visited:  'Visited',
+    stats_fav:      'Fav. City',
+    stats_plan:     'Plan',
+    stats_progress: 'Overall progress',
+    stats_top:      'Most visited:',
+    stats_empty:    'No data yet. Explore cities and mark places as visited!',
   },
 };
 
@@ -591,6 +606,121 @@ function skeletonPlaceCard() {
     + '</div>';
 }
 
+// ── 8b. İstatistik Paneli ─────────────────────────────────────────────
+
+function getTopCity() {
+  var counts = {};
+  Object.keys(state.visits).forEach(function(key) {
+    var slug = key.split('__')[0];
+    counts[slug] = (counts[slug] || 0) + 1;
+  });
+  var top = null, max = 0;
+  Object.keys(counts).forEach(function(slug) {
+    if (counts[slug] > max) { max = counts[slug]; top = slug; }
+  });
+  if (!top) return null;
+  var city = state.cities.find(function(c) { return c.slug === top; });
+  return city ? { city: city, count: max } : null;
+}
+
+function getCategoryStats() {
+  if (!state.allPlacesLoaded) return null;
+  var counts = {};
+  Object.keys(state.visits).forEach(function(key) {
+    var parts  = key.split('__');
+    var cSlug  = parts[0];
+    var pSlug  = parts[1];
+    var found  = state.allPlaces.find(function(p) {
+      return p.citySlug === cSlug && slugify(p.name) === pSlug;
+    });
+    if (found && found.category) {
+      counts[found.category] = (counts[found.category] || 0) + 1;
+    }
+  });
+  return Object.keys(counts).length ? counts : null;
+}
+
+function buildStatsPanel() {
+  var totalVisited = Object.keys(state.visits).length;
+  var isOpen       = localStorage.getItem(LS_STATS_OPEN) !== 'false';
+  var isEmpty      = totalVisited === 0 && state.favorites.size === 0 && state.plan.length === 0;
+
+  // Ziyaret varsa arka planda allPlaces yükle (kategori istatistiği için)
+  if (totalVisited > 0 && !state.allPlacesLoaded) loadAllPlaces();
+
+  // Sayaçlar
+  var countersHTML = '<div class="stats-counters">'
+    + '<div class="stats-counter"><span class="stats-num">' + esc(String(totalVisited))        + '</span>'
+    + '<span class="stats-lbl">' + esc(t('stats_visited')) + '</span></div>'
+    + '<div class="stats-counter"><span class="stats-num">' + esc(String(state.favorites.size)) + '</span>'
+    + '<span class="stats-lbl">' + esc(t('stats_fav'))     + '</span></div>'
+    + '<div class="stats-counter"><span class="stats-num">' + esc(String(state.plan.length))    + '</span>'
+    + '<span class="stats-lbl">' + esc(t('stats_plan'))    + '</span></div>'
+    + '</div>';
+
+  // Genel ilerleme — placeCount arka planda yüklenir; sıfırsa bar yok
+  var totalPlaces = state.cities.reduce(function(s, c) { return s + (c.placeCount || 0); }, 0);
+  var overallPct  = totalPlaces > 0 ? Math.round(totalVisited / totalPlaces * 100) : 0;
+  var progressHTML = totalPlaces > 0
+    ? '<div class="stats-progress-row">'
+      + '<span class="stats-progress-label">' + esc(t('stats_progress')) + '</span>'
+      + '<span class="stats-progress-pct">' + esc(String(overallPct)) + '%</span>'
+      + '</div>'
+      + '<div class="stats-bar"><div class="stats-bar-fill" style="width:' + esc(String(Math.min(overallPct, 100))) + '%"></div></div>'
+    : '';
+
+  // En çok ziyaret edilen şehir
+  var topCity    = getTopCity();
+  var topCityHTML = topCity
+    ? '<div class="stats-top-city">'
+      + '<span class="stats-top-label">' + esc(t('stats_top')) + '</span>'
+      + ' <span class="stats-top-name">' + esc(topCity.city.city) + '</span>'
+      + '<span class="stats-top-count">' + IC.check + ' ' + esc(String(topCity.count)) + '</span>'
+      + '</div>'
+    : '';
+
+  // Kategori dağılımı (sadece allPlaces yüklüyse)
+  var catStats = getCategoryStats();
+  var catHTML  = '';
+  if (catStats) {
+    var maxCat   = Math.max.apply(null, Object.keys(catStats).map(function(k) { return catStats[k]; }));
+    var catOrder = ['yemek', 'muze', 'gezi', 'cami'];
+    catHTML = '<div class="stats-cats">'
+      + catOrder.filter(function(c) { return catStats[c]; }).map(function(cat) {
+          var n   = catStats[cat];
+          var pct = Math.round(n / maxCat * 100);
+          return '<div class="stats-cat-row">'
+            + '<span class="stats-cat-label">'
+            + (CAT_IC[cat] ? CAT_IC[cat] : '') + ' ' + esc(t('cats.' + cat))
+            + '</span>'
+            + '<div class="stats-cat-bar"><div class="stats-cat-fill" style="width:' + esc(String(pct)) + '%"></div></div>'
+            + '<span class="stats-cat-num">' + esc(String(n)) + '</span>'
+            + '</div>';
+        }).join('')
+      + '</div>';
+  }
+
+  var bodyContent = isEmpty
+    ? '<p class="stats-empty">' + esc(t('stats_empty')) + '</p>'
+    : countersHTML + topCityHTML + progressHTML + catHTML;
+
+  return '<div class="stats-panel' + (isOpen ? ' stats-open' : '') + '" id="stats-panel">'
+    + '<div class="container">'
+    + '<button class="stats-panel-toggle" id="stats-panel-toggle" '
+    + 'aria-expanded="' + (isOpen ? 'true' : 'false') + '" '
+    + 'aria-controls="stats-panel-body">'
+    + IC.bino
+    + ' <span class="stats-panel-title">' + esc(t('stats_title')) + '</span>'
+    + '<span class="stats-toggle-icon" aria-hidden="true">' + (isOpen ? '−' : '+') + '</span>'
+    + '</button>'
+    + '<div class="stats-panel-body" id="stats-panel-body" role="region" '
+    + 'aria-label="' + esc(t('stats_title')) + '">'
+    + '<div class="stats-body-inner">' + bodyContent + '</div>'
+    + '</div>'
+    + '</div>'
+    + '</div>';
+}
+
 // ── 9. Şehir Listesi ──────────────────────────────────────────────────
 
 function getRegions() {
@@ -792,6 +922,7 @@ function renderCityList() {
     + '</div></section>';
 
   main.innerHTML = heroHTML
+    + buildStatsPanel()
     + '<div id="city-content" class="container section-wrap">'
     + buildCityContentInner()
     + '</div>';
@@ -867,6 +998,20 @@ function bindCityListEvents() {
       updateCityContent();
     });
   });
+
+  // İstatistik paneli aç/kapa
+  var statsToggle = main.querySelector('#stats-panel-toggle');
+  if (statsToggle) {
+    statsToggle.addEventListener('click', function() {
+      var panel = document.getElementById('stats-panel');
+      var icon  = statsToggle.querySelector('.stats-toggle-icon');
+      if (!panel) return;
+      var nowOpen = panel.classList.toggle('stats-open');
+      statsToggle.setAttribute('aria-expanded', nowOpen ? 'true' : 'false');
+      if (icon) icon.textContent = nowOpen ? '−' : '+';
+      localStorage.setItem(LS_STATS_OPEN, nowOpen ? 'true' : 'false');
+    });
+  }
 
   bindCityCardEvents();
 }
