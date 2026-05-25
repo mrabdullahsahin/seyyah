@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="112" fill="#C8432A"/>
+  <circle cx="256" cy="256" r="138" fill="none" stroke="#FAF8F4" stroke-width="18" opacity="0.35"/>
+  <circle cx="256" cy="256" r="96" fill="none" stroke="#FAF8F4" stroke-width="16" opacity="0.6"/>
+  <!-- Compass needle NE pointing -->
+  <polygon points="256,156 270,256 256,240 242,256" fill="#FAF8F4"/>
+  <polygon points="256,356 242,256 256,272 270,256" fill="#FAF8F4" opacity="0.45"/>
+  <!-- Cardinal dots -->
+  <circle cx="256" cy="132" r="9" fill="#FAF8F4"/>
+  <circle cx="380" cy="256" r="9" fill="#FAF8F4" opacity="0.5"/>
+  <circle cx="256" cy="380" r="9" fill="#FAF8F4" opacity="0.5"/>
+  <circle cx="132" cy="256" r="9" fill="#FAF8F4" opacity="0.5"/>
+</svg>

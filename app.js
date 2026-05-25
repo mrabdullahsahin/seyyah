@@ -2463,9 +2463,83 @@ async function router() {
   }
 }
 
+// ── 14b. PWA — Service Worker & Install Banner ───────────────────────
+
+var _deferredInstall = null;
+
+function registerSW() {
+  if (!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.register('./sw.js').catch(function() {});
+}
+
+function showInstallBar() {
+  if (document.getElementById('pwa-install-bar')) return;
+  var label   = state.lang === 'tr' ? 'Uygulamayı Yükle' : 'Install App';
+  var dismiss = state.lang === 'tr' ? 'Kapat' : 'Dismiss';
+  var desc    = state.lang === 'tr'
+    ? 'Seyyah\'ı ana ekrana ekle'
+    : 'Add Seyyah to your home screen';
+
+  var bar = document.createElement('div');
+  bar.id        = 'pwa-install-bar';
+  bar.className = 'pwa-install-bar';
+  bar.setAttribute('role', 'complementary');
+  bar.setAttribute('aria-label', label);
+
+  var html = '<div class="pwa-install-inner">'
+    + '<span class="pwa-install-icon" aria-hidden="true">' + IC.compass + '</span>'
+    + '<span class="pwa-install-desc">' + esc(desc) + '</span>'
+    + '<button class="pwa-install-btn" id="pwa-install-btn">' + esc(label) + '</button>'
+    + '<button class="pwa-install-dismiss" id="pwa-install-dismiss" aria-label="' + esc(dismiss) + '">'
+    + IC.xMark + '</button>'
+    + '</div>';
+
+  var frag = document.createRange().createContextualFragment(html);
+  bar.appendChild(frag);
+  document.body.appendChild(bar);
+
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { bar.classList.add('pwa-bar-visible'); });
+  });
+
+  document.getElementById('pwa-install-btn').addEventListener('click', function() {
+    if (!_deferredInstall) return;
+    _deferredInstall.prompt();
+    _deferredInstall.userChoice.then(function() {
+      _deferredInstall = null;
+      hideInstallBar();
+    });
+  });
+
+  document.getElementById('pwa-install-dismiss').addEventListener('click', hideInstallBar);
+}
+
+function hideInstallBar() {
+  var bar = document.getElementById('pwa-install-bar');
+  if (!bar) return;
+  bar.classList.remove('pwa-bar-visible');
+  setTimeout(function() { if (bar.parentNode) bar.remove(); }, 320);
+}
+
+function initInstallBanner() {
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    _deferredInstall = e;
+    showInstallBar();
+  });
+  window.addEventListener('appinstalled', function() {
+    hideInstallBar();
+    _deferredInstall = null;
+  });
+}
+
 // ── 15. Başlangıç ─────────────────────────────────────────────────────
 
 async function init() {
+  // Service Worker kaydı ve install banner (PWA)
+  registerSW();
+  initInstallBanner();
+
   var logoIconEl = document.getElementById('logo-icon');
   if (logoIconEl) logoIconEl.innerHTML = IC.compass;
 
