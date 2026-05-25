@@ -287,44 +287,12 @@ svg {
 /* ── 7. Hero Section ──────────────────────────────────────────────── */
 .hero {
   padding: 3.5rem 0 2.75rem;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(160deg, #FFF5F2 0%, #FFF8F4 35%, var(--bg) 100%);
+  background: var(--bg);
   transition: background var(--trans);
-}
-
-[data-theme="dark"] .hero {
-  background: linear-gradient(160deg, #28150E 0%, #211A10 35%, var(--bg) 100%);
-}
-
-/* subtle dot-grid texture */
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(200, 67, 42, 0.07) 1px, transparent 0);
-  background-size: 28px 28px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* soft glow blobs */
-.hero::after {
-  content: '';
-  position: absolute;
-  top: -80px;
-  right: -60px;
-  width: 440px;
-  height: 440px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(200, 67, 42, 0.08) 0%, transparent 65%);
-  pointer-events: none;
-  z-index: 0;
 }
 
 .hero-content {
   position: relative;
-  z-index: 1;
 }
 
 .hero-eyebrow {
@@ -588,7 +556,7 @@ svg {
 /* ── 12. City Grid ────────────────────────────────────────────────── */
 .city-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
 }
 
@@ -625,25 +593,31 @@ svg {
   height: 175px;
   overflow: hidden;
   flex-shrink: 0;
-  background: var(--bg-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.35s ease;
 }
 
-.city-card-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-  display: block;
+.city-card:hover .city-card-img {
+  filter: brightness(1.12);
 }
 
-.city-card:hover .city-card-img img {
-  transform: scale(1.06);
+/* Large initial letter */
+.city-card-initial {
+  font-family: 'Cinzel', serif;
+  font-size: 5.5rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.18);
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
 }
 
 .city-card-img-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(28, 20, 9, 0.55) 0%, transparent 55%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.45) 0%, transparent 60%);
 }
 
 .city-card-region {
@@ -833,10 +807,10 @@ svg {
 
 .detail-city-name {
   font-family: 'Cinzel', serif;
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
   font-weight: 700;
   color: var(--ink);
-  line-height: 1.15;
+  line-height: 1.2;
   letter-spacing: -0.01em;
   margin-bottom: 0.5rem;
   transition: color var(--trans);
@@ -858,6 +832,9 @@ svg {
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  /* Fade right edge so users know there's more to scroll */
+  -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+  mask-image: linear-gradient(to right, black 80%, transparent 100%);
 }
 
 .tabs::-webkit-scrollbar { display: none; }
@@ -1650,33 +1627,28 @@ body.modal-open {
 /* Banner */
 .modal-banner {
   position: relative;
-  height: 210px;
+  height: 170px;
   overflow: hidden;
   flex-shrink: 0;
   border-radius: var(--r-card) var(--r-card) 0 0;
-  background: var(--bg-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (min-width: 620px) {
-  .modal-banner { height: 240px; }
+  .modal-banner { height: 190px; }
 }
 
-.modal-banner-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.4s ease;
-}
-
-.modal-banner:hover .modal-banner-img {
-  transform: scale(1.03);
-}
-
-.modal-banner-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(28, 20, 9, 0.65) 0%, transparent 55%);
+/* Large decorative initial letter */
+.modal-banner-initial {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(5rem, 15vw, 8rem);
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.15);
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
 }
 
 /* Kapat butonu */
@@ -1853,8 +1825,7 @@ body.modal-open {
 }
 
 .modal-btn-fav {
-  flex: 0 0 42px;
-  padding: 0;
+  flex: 1;
   background: var(--surface);
   color: var(--ink-3);
   border: 1.5px solid var(--border-md);
@@ -1876,9 +1847,7 @@ body.modal-open {
   background: var(--surface);
 }
 
-[data-theme="dark"] .modal-banner {
-  background: var(--bg-hover);
-}
+/* modal-banner bg set via inline style (category gradient) */
 
 /* Responsive — tam ekran modal mobilde */
 @media (max-width: 480px) {
@@ -3049,11 +3018,13 @@ body.modal-open {
 .acc-item {
   display: flex;
   align-items: center;
+  gap: 0.35rem;
   gap: 0.45rem;
   font-size: 0.8rem;
 }
 
 .acc-status-dot {
+  display: none;
   width: 8px;
   height: 8px;
   border-radius: 50%;

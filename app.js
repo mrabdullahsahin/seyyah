@@ -23,7 +23,26 @@ const LS_SEARCH_HIST = "seyyah-search-hist";
 const LS_STATS_OPEN = "seyyah-stats-open";
 const MAX_HIST = 5;
 
-// City centers — used for nearest-city calculation (slug → [lat, lng])
+// Region colour palettes — used for city card gradient backgrounds (no external images)
+const REGION_PALETTE = {
+  "Marmara":              { from: "#8B3A2A", to: "#3D1610" }, // brick red
+  "İç Anadolu":           { from: "#8A6230", to: "#3D2B10" }, // earthy sand
+  "Ege":                  { from: "#1A5F8A", to: "#0A2E45" }, // Mediterranean blue
+  "Güneydoğu Anadolu":    { from: "#A05C18", to: "#4A2708" }, // spice amber
+  "Karadeniz":            { from: "#1F6B3E", to: "#0A3020" }, // forest green
+  "Akdeniz":              { from: "#1A7A6E", to: "#0A3A35" }, // teal
+  "Doğu Anadolu":         { from: "#6B3A8A", to: "#2E1040" }, // purple
+};
+
+// Category colour palettes — used for modal banner gradient backgrounds
+const CAT_BANNER_PALETTE = {
+  yemek: { from: "#9B3020", to: "#4A1410" }, // coral/red
+  cami:  { from: "#0F6648", to: "#063324" }, // teal/green
+  muze:  { from: "#5B2EA6", to: "#2C1550" }, // purple
+  gezi:  { from: "#8A5518", to: "#3D2408" }, // amber
+};
+
+// City centres — used for nearest-city calculation (slug → [lat, lng])
 const CITY_CENTERS = {
   istanbul: [41.0082, 28.9784],
   ankara: [39.9334, 32.8597],
@@ -692,16 +711,11 @@ function buildAccessibilityStrip(acc) {
         '<div class="acc-item ' +
         esc(cls) +
         '">' +
-        '<span class="acc-status-dot" aria-hidden="true"></span>' +
+        '<span class="acc-mark" aria-hidden="true">' +
+        esc(mark) +
+        "</span>" +
         '<span class="acc-label-text">' +
         esc(t(f.labelKey)) +
-        "</span>" +
-        '<span class="acc-mark" title="' +
-        esc(tip) +
-        '" aria-label="' +
-        esc(tip) +
-        '">' +
-        esc(mark) +
         "</span>" +
         "</div>"
       );
@@ -916,9 +930,11 @@ function getCategoryStats() {
 
 function buildStatsPanel() {
   var totalVisited = Object.keys(state.visits).length;
-  var isOpen = localStorage.getItem(LS_STATS_OPEN) !== "false";
   var isEmpty =
     totalVisited === 0 && state.favorites.size === 0 && state.plan.length === 0;
+  // Default closed when there is no data yet; respect saved preference otherwise
+  var savedPref = localStorage.getItem(LS_STATS_OPEN);
+  var isOpen = isEmpty ? false : (savedPref !== "false");
 
   // If there are visits, load allPlaces in background (for category stats)
   if (totalVisited > 0 && !state.allPlacesLoaded) loadAllPlaces();
@@ -1113,8 +1129,8 @@ function filterCities() {
 function cityCardHTML(city) {
   var isFav = state.favorites.has(city.slug);
   var count = city.placeCount != null ? city.placeCount : "…";
-  var imgUrl =
-    "https://picsum.photos/seed/" + encodeURIComponent(city.slug) + "/600/400";
+  var palette = REGION_PALETTE[city.region] || { from: "#555", to: "#222" };
+  var initial = (city.city || "?").charAt(0).toUpperCase();
   var cityVisited = Object.keys(state.visits).filter(function (k) {
     return k.indexOf(city.slug + "__") === 0;
   }).length;
@@ -1125,10 +1141,9 @@ function cityCardHTML(city) {
     'aria-label="' +
     esc(city.city) +
     '">' +
-    '<div class="city-card-img">' +
-    '<img src="' +
-    imgUrl +
-    '" alt="" loading="lazy" aria-hidden="true">' +
+    '<div class="city-card-img" style="background: linear-gradient(145deg, ' +
+    esc(palette.from) + ' 0%, ' + esc(palette.to) + ' 100%)">' +
+    '<span class="city-card-initial" aria-hidden="true">' + esc(initial) + '</span>' +
     '<div class="city-card-img-overlay"></div>' +
     '<span class="city-card-region">' +
     esc(city.region) +
@@ -1388,7 +1403,9 @@ function renderCityList() {
     '">' +
     IC.xMark +
     "</button>" +
-    '<span class="search-badge" aria-hidden="true">⌘K</span>' +
+    '<span class="search-badge" aria-hidden="true">' +
+    (/Mac|iPhone|iPad|iPod/.test(navigator.platform) ? '⌘K' : 'Ctrl K') +
+    '</span>' +
     "</div>" +
     '<div class="region-chips" role="group" aria-label="' +
     esc(t("region_filter")) +
@@ -1609,6 +1626,9 @@ function getAllTags() {
       });
   });
   return Object.keys(tags).sort(function (a, b) {
+    var aActive = state.activeTags.has(a) ? 0 : 1;
+    var bActive = state.activeTags.has(b) ? 0 : 1;
+    if (aActive !== bActive) return aActive - bActive;
     return a.localeCompare(b, "tr");
   });
 }
@@ -2333,9 +2353,12 @@ function initMap() {
   var map = L.map("city-map", { zoomControl: true, scrollWheelZoom: false });
   state.mapInstance = map;
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution:
-      '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',
+  var isDark = document.documentElement.dataset.theme === "dark";
+  var tileUrl = isDark
+    ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+    : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+  L.tileLayer(tileUrl, {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> © <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
     maxZoom: 19,
   }).addTo(map);
 
@@ -2415,11 +2438,7 @@ function initMap() {
 
 function modalInnerHTML(place) {
   var hasLoc = place.location && place.location.lat && place.location.lng;
-  var imgSeed = slugify(place.name) || "place";
-  var imgUrl =
-    "https://picsum.photos/seed/" +
-    encodeURIComponent(imgSeed + "-detail") +
-    "/800/420";
+  var bannerPalette = CAT_BANNER_PALETTE[place.category] || { from: "#333", to: "#111" };
   var favKey = (state.slug || "") + "__" + slugify(place.name);
   var isFav = state.placeFavs.has(favKey);
   var planKey = (state.slug || "") + "__" + slugify(place.name);
@@ -2542,11 +2561,11 @@ function modalInnerHTML(place) {
 
   return (
     '<div class="modal">' +
-    '<div class="modal-banner">' +
-    '<img class="modal-banner-img" src="' +
-    imgUrl +
-    '" alt="" loading="eager" aria-hidden="true">' +
-    '<div class="modal-banner-overlay"></div>' +
+    '<div class="modal-banner" style="background: linear-gradient(145deg, ' +
+    esc(bannerPalette.from) + ' 0%, ' + esc(bannerPalette.to) + ' 100%)">' +
+    '<span class="modal-banner-initial" aria-hidden="true">' +
+    esc((place.name || "?").charAt(0).toUpperCase()) +
+    '</span>' +
     '<button class="modal-close" id="modal-close" aria-label="' +
     esc(t("modal_close")) +
     '">' +
@@ -2705,7 +2724,12 @@ function initModalMap(place) {
       attributionControl: false,
     });
     state.modalMapInst = map;
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    var isModalDark = document.documentElement.dataset.theme === "dark";
+    var modalTileUrl = isModalDark
+      ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+      : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+    L.tileLayer(modalTileUrl, {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> © <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
       maxZoom: 19,
     }).addTo(map);
     var color = MAP_COL[place.category] || "#555";
