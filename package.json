@@ -1,0 +1,9 @@
+{
+  "name": "seyyah",
+  "version": "1.0.0",
+  "description": "Türkiye'nin şehirlerini keşfetmek için sade, hızlı gezi rehberi.",
+  "scripts": {
+    "sitemap": "node generate-sitemap.js"
+  },
+  "private": true
+}

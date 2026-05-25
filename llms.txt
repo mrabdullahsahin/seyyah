@@ -1,0 +1,96 @@
+# Seyyah — Türkiye Gezi Rehberi
+
+> Seyyah, Türkiye'nin şehirlerini keşfetmek için tasarlanmış, sade ve hızlı bir gezi rehberidir.
+> Harita entegrasyonu, mevsim takvimi, erişilebilirlik bilgileri ve kişiselleştirilebilir gezi planı özelliklerine sahiptir.
+> Türkçe ve İngilizce olarak kullanılabilir.
+
+## Hakkında
+
+- **URL**: https://seyyah.app
+- **Dil**: Türkçe (tr-TR) ve İngilizce (en)
+- **Konu**: Türkiye şehir rehberi — tarihi yerler, müzeler, camiler, restoranlar
+- **Kapsam**: İstanbul, Ankara, İzmir, Gaziantep, Trabzon, Konya
+
+## Şehirler
+
+### İstanbul
+- **Bölge**: Marmara
+- **Açıklama**: İki kıtayı birleştiren, 2700 yıllık tarih başkenti.
+- **URL**: https://seyyah.app/#istanbul
+- **Öne Çıkan Yerler**: Sultanahmet Camii, Ayasofya, Topkapı Sarayı, Kapalıçarşı, Boğaz Turu
+- **Mutlaka Yenilmeli**: Sultanahmet Köftecisi, Karaköy Güllüoğlu (baklava), Çiçek Pasajı
+- **En İyi Ziyaret Zamanı**: Nisan–Mayıs (ilkbahar), Eylül–Ekim (erken sonbahar)
+
+### Ankara
+- **Bölge**: İç Anadolu
+- **Açıklama**: Cumhuriyetin kalbi, modern Türkiye'nin başkenti.
+- **URL**: https://seyyah.app/#ankara
+- **Öne Çıkan Yerler**: Anıtkabir, Anadolu Medeniyetleri Müzesi, Kocatepe Camii, Roma Hamamı
+- **Mutlaka Yenilmeli**: Hacı Arif Bey, Uludağ Döner
+- **En İyi Ziyaret Zamanı**: Nisan–Mayıs ve Ekim (kıta iklimi, yaz aşırı sıcak)
+
+### İzmir
+- **Bölge**: Ege
+- **Açıklama**: Ege'nin incisi, Türkiye'nin en canlı kıyı kenti.
+- **URL**: https://seyyah.app/#izmir
+- **Öne Çıkan Yerler**: Efes Antik Kenti, Kadifekale, Kemeraltı Çarşısı, İzmir Arkeoloji Müzesi
+- **Mutlaka Yenilmeli**: Veli Usta Midye, Kumrucu Selanik
+- **En İyi Ziyaret Zamanı**: İlkbahar ve erken sonbahar (Ege iklimi)
+
+### Gaziantep
+- **Bölge**: Güneydoğu Anadolu
+- **Açıklama**: Türkiye'nin gastronomi başkenti, baklavanın şehri.
+- **URL**: https://seyyah.app/#gaziantep
+- **Öne Çıkan Yerler**: Zeugma Mozaik Müzesi, Gaziantep Kalesi, Bakırcılar Çarşısı
+- **Mutlaka Yenilmeli**: İmam Çakır (kebap), Halil Usta (baklava), Tahmis Kahvesi
+- **En İyi Ziyaret Zamanı**: Mart–Nisan (yaz 40°C'yi geçebilir)
+
+### Trabzon
+- **Bölge**: Karadeniz
+- **Açıklama**: Yeşilin bin tonu, Karadeniz'in efsanevi şehri.
+- **URL**: https://seyyah.app/#trabzon
+- **Öne Çıkan Yerler**: Sümela Manastırı, Uzungöl, Boztepe, Trabzon Ayasofyası
+- **Mutlaka Yenilmeli**: Horon Restaurant, Vakfıkebir Fırını (ekmek)
+- **En İyi Ziyaret Zamanı**: Temmuz–Ağustos (yaylalar en güzel bu dönem)
+
+### Konya
+- **Bölge**: İç Anadolu
+- **Açıklama**: Mevlana'nın şehri, Anadolu'nun ruh merkezi.
+- **URL**: https://seyyah.app/#konya
+- **Öne Çıkan Yerler**: Mevlana Müzesi ve Türbesi, Selimiye Camii, Alaeddin Tepesi, Konya Kapalı Çarşısı
+- **Mutlaka Yenilmeli**: Şeyh Dürrani, Köşk Restaurant (etli ekmek)
+- **En İyi Ziyaret Zamanı**: Aralık (Mevlana törenleri — özel atmosfer)
+
+## Özellikler
+
+- **Harita**: Her mekan için interaktif OpenStreetMap entegrasyonu
+- **Mevsim Takvimi**: 12 aylık en iyi ziyaret zamanı takvimi
+- **Erişilebilirlik**: Tekerlekli sandalye, asansör, sesli rehber bilgileri
+- **Gezi Planı**: Ziyaret etmek istenen yerleri listeye ekleme ve Google Maps rotası
+- **Favoriler**: Şehir ve mekanları favorilere ekleme, liste paylaşma
+- **Çevrimdışı**: PWA — internet bağlantısı olmadan da çalışır
+- **Konum**: Kullanıcıya en yakın şehri tespit etme (Haversine mesafesi)
+
+## Sık Sorulan Sorular
+
+**Türkiye'nin en çok ziyaret edilen şehri hangisi?**
+İstanbul — Sultanahmet Camii, Ayasofya ve Topkapı Sarayı gibi dünya mirası alanlarıyla Türkiye'nin en popüler destinasyonudur.
+
+**Türkiye'nin gastronomi başkenti neresi?**
+Gaziantep — UNESCO Yaratıcı Şehirler Ağı'nda yer alan Gaziantep, baklavası, kebabı ve 400'den fazla yöresel yemeğiyle Türkiye'nin mutfak başkenti sayılır.
+
+**Türkiye'de hangi mevsimde gezmek en iyisidir?**
+Genel olarak ilkbahar (Nisan–Mayıs) ve erken sonbahar (Eylül–Ekim) en ideal dönemlerdir. Her şehrin iklimi farklıdır; Trabzon için yaz, Konya için Aralık önerilir.
+
+**Efes Antik Kenti hangi şehre yakındır?**
+Efes, İzmir'e yaklaşık 80 km uzaklıkta olup İzmir üzerinden ulaşılabilir.
+
+**Mevlana Müzesi nerede?**
+Konya'da yer almaktadır. Aralık ayında düzenlenen Şeb-i Arus törenleri için dünyadan ziyaretçi çeker.
+
+## Teknik Bilgiler
+
+- **Lisans**: Özel
+- **İletişim**: https://seyyah.app
+- **Sitemap**: https://seyyah.app/sitemap.xml
+- **Son Güncelleme**: 2026-05-25

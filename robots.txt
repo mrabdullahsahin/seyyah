@@ -1,0 +1,57 @@
+# ── Genel Kurallar ────────────────────────────────────────────────────
+User-agent: *
+Allow: /
+Allow: /data/
+Allow: /llms.txt
+Disallow: /vendor/
+Disallow: /icons/
+Disallow: /*.json$
+
+# ── AI / LLM Botları — İçerik indexlemeye açık ────────────────────────
+# OpenAI (ChatGPT)
+User-agent: GPTBot
+Allow: /
+Allow: /llms.txt
+
+# OpenAI (Bing Arama entegrasyonu)
+User-agent: OAI-SearchBot
+Allow: /
+Allow: /llms.txt
+
+# Google Gemini / AI Overviews
+User-agent: Google-Extended
+Allow: /
+Allow: /llms.txt
+
+# Anthropic (Claude)
+User-agent: ClaudeBot
+Allow: /
+Allow: /llms.txt
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+Allow: /llms.txt
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Allow: /
+Allow: /llms.txt
+
+# Common Crawl (LLM eğitim veri seti)
+User-agent: CCBot
+Allow: /
+Allow: /llms.txt
+
+# Cohere AI
+User-agent: cohere-ai
+Allow: /
+Allow: /llms.txt
+
+# You.com
+User-agent: YouBot
+Allow: /
+Allow: /llms.txt
+
+# ── Sitemap ────────────────────────────────────────────────────────────
+Sitemap: https://seyyah.app/sitemap.xml
