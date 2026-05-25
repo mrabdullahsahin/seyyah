@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <!-- ─── Temel Meta ──────────────────────────────────────────────── -->
+        <!-- ─── Core Meta ───────────────────────────────────────────────── -->
         <title>Seyyah — Türkiye'nin şehirlerini keşfet</title>
         <meta
             name="description"
@@ -56,7 +56,7 @@
             content="Seyyah — Türkiye Gezi Rehberi"
         />
 
-        <!-- ─── Dil Alternatifleri ─────────────────────────────────────── -->
+        <!-- ─── Language Alternates ──────────────────────────────────────── -->
         <link
             rel="alternate"
             hreflang="tr"
@@ -88,20 +88,20 @@
         />
 
         <!--
-    Leaflet harita kütüphanesi — yerel dosyalar gereklidir.
-    İndirme: https://leafletjs.com/download.html
-    → ZIP'i aç, şu dosyaları vendor/leaflet/ klasörüne koy:
-        leaflet.js  ·  leaflet.css  ·  images/ (klasörün tamamı)
+    Leaflet map library — local files required.
+    Download: https://leafletjs.com/download.html
+    → Extract the ZIP and place these files in vendor/leaflet/:
+        leaflet.js  ·  leaflet.css  ·  images/ (the entire folder)
   -->
         <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
         <div id="app">
-            <!-- ─── Üst Başlık ─────────────────────────────────── -->
+            <!-- ─── Site Header ──────────────────────────────────── -->
             <header class="site-header" role="banner">
                 <div class="container header-inner">
-                    <a href="#" class="logo" aria-label="Seyyah — Ana sayfa">
+                    <a href="#" class="logo" aria-label="Seyyah — Home">
                         <div
                             class="logo-icon"
                             id="logo-icon"
@@ -123,7 +123,7 @@
                         <button
                             class="btn-pill"
                             id="btn-theme"
-                            aria-label="Temayı değiştir"
+                            aria-label="Toggle theme"
                         >
                             <span id="theme-icon" aria-hidden="true"></span>
                         </button>
@@ -131,9 +131,9 @@
                 </div>
             </header>
 
-            <!-- ─── Ana İçerik ─────────────────────────────────── -->
+            <!-- ─── Main Content ─────────────────────────────────── -->
             <main id="main" role="main">
-                <!-- JavaScript tarafından dinamik olarak doldurulur -->
+                <!-- Dynamically populated by JavaScript -->
             </main>
         </div>
         <!-- #app -->

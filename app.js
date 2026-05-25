@@ -2,16 +2,16 @@
 
 /*
  * Seyyah — app.js
- * Vanilla JS SPA — çerçeve yok, derleme adımı yok.
+ * Vanilla JS SPA — no framework, no build step.
  *
- * GÜVENLİK NOTU:
- * Tüm JSON verisi sadece bizim kontrolümüzdeki yerel dosyalardan gelir.
- * Dinamik içerik ekrana basılmadan önce esc() fonksiyonundan geçer;
- * bu fonksiyon &, <, >, ", ' karakterlerini HTML varlıklarına dönüştürür.
- * innerHTML kullanımı kasıtlıdır ve XSS güvenliği esc() ile sağlanmıştır.
+ * SECURITY NOTE:
+ * All JSON data comes exclusively from local files under our control.
+ * Dynamic content is passed through esc() before being rendered;
+ * that function converts &, <, >, ", ' to their HTML entities.
+ * innerHTML usage is intentional; XSS safety is ensured by esc().
  */
 
-// ── 1. Sabitler ───────────────────────────────────────────────────────
+// ── 1. Constants ─────────────────────────────────────────────────────
 const CITIES_URL = "data/cities.json";
 const LS_LANG = "seyyah-lang";
 const LS_THEME = "seyyah-theme";
@@ -23,7 +23,7 @@ const LS_SEARCH_HIST = "seyyah-search-hist";
 const LS_STATS_OPEN = "seyyah-stats-open";
 const MAX_HIST = 5;
 
-// Şehir merkezleri — yakın şehir hesabı için (slug → [lat, lng])
+// City centers — used for nearest-city calculation (slug → [lat, lng])
 const CITY_CENTERS = {
   istanbul: [41.0082, 28.9784],
   ankara: [39.9334, 32.8597],
@@ -33,7 +33,7 @@ const CITY_CENTERS = {
   gaziantep: [37.0594, 37.3825],
 };
 
-// ── 2. Durum ──────────────────────────────────────────────────────────
+// ── 2. State ─────────────────────────────────────────────────────────
 const state = {
   cities: [],
   cityData: null,
@@ -60,7 +60,7 @@ const state = {
   allPlacesLoaded: false,
 };
 
-// ── 3. Çeviriler ──────────────────────────────────────────────────────
+// ── 3. Translations ──────────────────────────────────────────────────
 const STRINGS = {
   tr: {
     tagline: "Türkiye'nin şehirlerini keşfet",
@@ -302,7 +302,7 @@ function t(key, ...args) {
   return val != null ? val : key;
 }
 
-// ── 4. SVG İkonlar ────────────────────────────────────────────────────
+// ── 4. SVG Icons ─────────────────────────────────────────────────────
 function svg(paths, size) {
   size = size || 16;
   return (
@@ -394,9 +394,9 @@ const MAP_COL = {
   gezi: "#e67e22",
 };
 
-// ── 5. Yardımcılar ────────────────────────────────────────────────────
+// ── 5. Helpers ───────────────────────────────────────────────────────
 
-// Tüm dinamik içerik bu fonksiyondan geçirilir (XSS önlemi)
+// All dynamic content passes through this function (XSS prevention)
 function esc(s) {
   return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
     return {
@@ -474,7 +474,7 @@ function getVisitProgress() {
   };
 }
 
-// Mevcut place card'larında ziyaret rozetini güncelle (modal kapanmadan re-render olmadan)
+// Update visited badge on existing place cards (without re-rendering while modal is open)
 function updateVisitedCards() {
   if (!state.cityData) return;
   var slug = state.slug || "";
@@ -503,7 +503,7 @@ function updateVisitedCards() {
   updateCityProgress();
 }
 
-// Şehir detayındaki progress bar'ı güncelle
+// Update the progress bar on the city detail page
 function updateCityProgress() {
   var bar = document.getElementById("city-progress");
   if (!bar) return;
@@ -516,7 +516,7 @@ function updateCityProgress() {
   if (pct) pct.textContent = prog.pct + "%";
 }
 
-// ── 5b. Mevsim Takvimi ───────────────────────────────────────────────
+// ── 5b. Season Calendar ─────────────────────────────────────────────
 
 var MONTH_KEYS = [
   "jan",
@@ -561,7 +561,7 @@ var MONTHS_EN = [
   "Dec",
 ];
 
-// Tam 12-aylık takvim (şehir detay sayfası)
+// Full 12-month calendar (city detail page)
 function buildSeasonCalendar(seasons) {
   if (!seasons) return "";
   var now = new Date();
@@ -620,7 +620,7 @@ function buildSeasonCalendar(seasons) {
   );
 }
 
-// Kompakt ay şeridi (yer modali)
+// Compact month strip (place modal)
 function buildSeasonCompact(seasons) {
   if (!seasons) return "";
   var now = new Date();
@@ -643,7 +643,7 @@ function buildSeasonCompact(seasons) {
   );
 }
 
-// Erişilebilirlik şeridi (yer modali)
+// Accessibility strip (place modal)
 function buildAccessibilityStrip(acc) {
   if (!acc) return "";
   var fields = [
@@ -652,7 +652,7 @@ function buildAccessibilityStrip(acc) {
     { key: "accessibleToilet", labelKey: "acc_toilet" },
     { key: "audioGuide", labelKey: "acc_audio" },
   ];
-  // En az bir tanımlı değer yoksa gösterme
+  // Hide if no field has a defined value
   var hasAny = fields.some(function (f) {
     return acc[f.key] !== undefined;
   });
@@ -703,7 +703,7 @@ function buildAccessibilityStrip(acc) {
   );
 }
 
-// Benzerlik skoru: aynı kategori +3, her ortak etiket +1
+// Similarity score: same category +3, each shared tag +1
 function getSimilarPlaces(place, max) {
   if (!state.cityData) return [];
   max = max || 3;
@@ -731,7 +731,7 @@ function getSimilarPlaces(place, max) {
     });
 }
 
-// Benzer mekanlar yatay şerit
+// Similar places horizontal strip
 function buildSimilarPlacesHTML(place) {
   var similar = getSimilarPlaces(place, 3);
   if (!similar.length) return "";
@@ -739,7 +739,7 @@ function buildSimilarPlacesHTML(place) {
   var placeTags = place.tags || [];
   var cards = similar
     .map(function (p) {
-      // En fazla 2 ortak etiket göster
+      // Show at most 2 shared tags
       var commonTags = (p.tags || [])
         .filter(function (tag) {
           return placeTags.indexOf(tag) !== -1;
@@ -785,7 +785,7 @@ function buildSimilarPlacesHTML(place) {
   );
 }
 
-// ── 6. Tema & Dil ─────────────────────────────────────────────────────
+// ── 6. Theme & Language ──────────────────────────────────────────────
 
 function applyTheme() {
   document.documentElement.setAttribute("data-theme", state.theme);
@@ -822,7 +822,7 @@ function toggleLang() {
   else renderCityList();
 }
 
-// ── 7. Veri Çekme ─────────────────────────────────────────────────────
+// ── 7. Data Fetching ─────────────────────────────────────────────────
 
 function fetchJSON(url) {
   return fetch(url).then(function (res) {
@@ -831,7 +831,7 @@ function fetchJSON(url) {
   });
 }
 
-// ── 8. Skeleton ───────────────────────────────────────────────────────
+// ── 8. Skeleton ──────────────────────────────────────────────────────
 
 function skeletonCityCard() {
   return (
@@ -855,7 +855,7 @@ function skeletonPlaceCard() {
   );
 }
 
-// ── 8b. İstatistik Paneli ─────────────────────────────────────────────
+// ── 8b. Stats Panel ──────────────────────────────────────────────────
 
 function getTopCity() {
   var counts = {};
@@ -901,10 +901,10 @@ function buildStatsPanel() {
   var isEmpty =
     totalVisited === 0 && state.favorites.size === 0 && state.plan.length === 0;
 
-  // Ziyaret varsa arka planda allPlaces yükle (kategori istatistiği için)
+  // If there are visits, load allPlaces in background (for category stats)
   if (totalVisited > 0 && !state.allPlacesLoaded) loadAllPlaces();
 
-  // Sayaçlar
+  // Counters
   var countersHTML =
     '<div class="stats-counters">' +
     '<div class="stats-counter"><span class="stats-num">' +
@@ -927,7 +927,7 @@ function buildStatsPanel() {
     "</span></div>" +
     "</div>";
 
-  // Genel ilerleme — placeCount arka planda yüklenir; sıfırsa bar yok
+  // Overall progress — placeCount loaded in background; skip bar if zero
   var totalPlaces = state.cities.reduce(function (s, c) {
     return s + (c.placeCount || 0);
   }, 0);
@@ -948,7 +948,7 @@ function buildStatsPanel() {
         '%"></div></div>'
       : "";
 
-  // En çok ziyaret edilen şehir
+  // Most visited city
   var topCity = getTopCity();
   var topCityHTML = topCity
     ? '<div class="stats-top-city">' +
@@ -966,7 +966,7 @@ function buildStatsPanel() {
       "</div>"
     : "";
 
-  // Kategori dağılımı (sadece allPlaces yüklüyse)
+  // Category breakdown (only if allPlaces is loaded)
   var catStats = getCategoryStats();
   var catHTML = "";
   if (catStats) {
@@ -1041,7 +1041,7 @@ function buildStatsPanel() {
   );
 }
 
-// ── 9. Şehir Listesi ──────────────────────────────────────────────────
+// ── 9. City List ─────────────────────────────────────────────────────
 
 function getRegions() {
   var seen = {};
@@ -1064,7 +1064,7 @@ function filterCities() {
     var matchCity =
       city.city.toLowerCase().indexOf(q) !== -1 ||
       city.description.toLowerCase().indexOf(q) !== -1;
-    // allPlaces yüklüyse o şehirdeki mekanlarda da ara
+    // If allPlaces is loaded, also search places within that city
     var matchPlace =
       !matchCity &&
       state.allPlacesLoaded &&
@@ -1141,7 +1141,7 @@ function cityCardHTML(city) {
   );
 }
 
-// Şehir kartları bölümünü oluşturur (hero harici)
+// Builds the city cards section (excluding the hero)
 function buildCityContentInner() {
   var filtered = filterCities();
   var favCities = state.cities.filter(function (c) {
@@ -1220,7 +1220,7 @@ function buildCityContentInner() {
   );
 }
 
-// Sadece kartlar bölümünü günceller — hero & input\'a dokunmaz
+// Updates only the cards section — does not touch the hero or input
 function updateCityContent() {
   var container = document.getElementById("city-content");
   if (!container) {
@@ -1231,14 +1231,14 @@ function updateCityContent() {
   bindCityCardEvents();
 }
 
-// Bölge chip görünümünü senkronize eder (re-render olmadan)
+// Syncs region chip active states (without a full re-render)
 function updateChipActiveStates() {
   document.querySelectorAll(".chip[data-region]").forEach(function (chip) {
     chip.classList.toggle("chip-active", chip.dataset.region === state.region);
   });
 }
 
-// Kart & favori event\'lerini yalnızca #city-content içinde bağlar
+// Binds card & favourite events only within #city-content
 function bindCityCardEvents() {
   var container = document.getElementById("city-content");
   if (!container) return;
@@ -1318,7 +1318,7 @@ function renderCityList() {
       ? "✶  " + state.cities.length + " şehir keşfet"
       : "✶  " + state.cities.length + " cities to explore";
 
-  // search-clear ve search-badge her zaman DOM\'da; has-search class ile göster/gizle
+  // search-clear and search-badge are always in the DOM; toggled via has-search class
   var heroHTML =
     '<section class="hero">' +
     '<div class="container hero-content">' +
@@ -1372,7 +1372,7 @@ function bindCityListEvents() {
   var inp = main.querySelector("#search-input");
 
   if (inp) {
-    // İlk odakta: mekanları arka planda yükle + geçmişi göster
+    // On first focus: load places in background + show search history
     inp.addEventListener("focus", function () {
       loadAllPlaces();
       if (!inp.value.trim()) {
@@ -1381,10 +1381,10 @@ function bindCityListEvents() {
       }
     });
 
-    // Her tuş vuruşunda: sadece kartları güncelle, input'a dokunma
+    // On each keystroke: update cards only, do not touch the input
     inp.addEventListener("input", function () {
       state.search = inp.value;
-      // has-search class ile × / ⌘K görünümünü toggle et
+      // Toggle × / ⌘K visibility via has-search class
       var wrap = inp.closest(".search-wrap");
       if (wrap) wrap.classList.toggle("has-search", !!state.search);
       updateCityContent();
@@ -1444,7 +1444,7 @@ function bindCityListEvents() {
     });
   });
 
-  // İstatistik paneli aç/kapa
+  // Toggle stats panel open/closed
   var statsToggle = main.querySelector("#stats-panel-toggle");
   if (statsToggle) {
     statsToggle.addEventListener("click", function () {
@@ -1461,7 +1461,7 @@ function bindCityListEvents() {
   bindCityCardEvents();
 }
 
-// ── 10. Şehir Detayı ──────────────────────────────────────────────────
+// ── 10. City Detail ──────────────────────────────────────────────────
 
 function filterPlaces() {
   if (!state.cityData) return [];
@@ -1477,8 +1477,8 @@ function filterPlaces() {
   });
 }
 
-// "08:30 – 18:00 (...)" formatını parse eder, şu an açık mı döner.
-// null → bilgi yok; true/false → açık/kapalı
+// Parses "08:30 – 18:00 (...)" format and returns whether the place is currently open.
+// null → no data; true/false → open/closed
 function isOpenNow(openHours) {
   if (!openHours) return null;
   var m = openHours.match(/(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})/);
@@ -1487,8 +1487,8 @@ function isOpenNow(openHours) {
   var cur = now.getHours() * 60 + now.getMinutes();
   var open = parseInt(m[1], 10) * 60 + parseInt(m[2], 10);
   var close = parseInt(m[3], 10) * 60 + parseInt(m[4], 10);
-  if (close === 0) close = 24 * 60; // 00:00 → gece yarısı
-  if (close < open) close += 24 * 60; // gece geçen vardiya
+  if (close === 0) close = 24 * 60; // 00:00 → midnight
+  if (close < open) close += 24 * 60; // overnight shift
   return cur >= open && cur < close;
 }
 
@@ -1536,11 +1536,11 @@ function sortPlaces(places) {
       return da - db;
     });
   }
-  // 'default' → JSON sırası, hiçbir şey yapma
+  // 'default' → preserve JSON order, do nothing
   return sorted;
 }
 
-// Filtrelenmiş + sıralanmış mekan listesi
+// Filtered + sorted place list
 function getPlaces() {
   return sortPlaces(filterPlaces());
 }
@@ -1559,7 +1559,7 @@ function getAllTags() {
   });
 }
 
-// Açık / kapalı rozeti HTML'i döner (saat bilgisi yoksa boş string)
+// Returns open/closed badge HTML (empty string if no hours data)
 function openBadgeHTML(openHours) {
   var status = isOpenNow(openHours);
   if (status === null) return "";
@@ -1743,7 +1743,7 @@ function tagChipsHTML(tags) {
 async function renderCityDetail() {
   var main = document.getElementById("main");
 
-  // Skeleton göster
+  // Show skeleton
   main.innerHTML =
     '<div class="container detail-view">' +
     '<div class="detail-header">' +
@@ -1769,12 +1769,12 @@ async function renderCityDetail() {
         location.hash = "";
       });
 
-  // Veriyi çek
+  // Fetch data
   try {
     var cityMeta = state.cities.find(function (c) {
       return c.slug === state.slug;
     });
-    if (!cityMeta) throw new Error("Şehir bulunamadı: " + state.slug);
+    if (!cityMeta) throw new Error("City not found: " + state.slug);
     state.cityData = await fetchJSON(cityMeta.data);
     cityMeta.placeCount = state.cityData.places.length;
     updateMetaTags("city", { cityMeta: cityMeta, cityData: state.cityData });
@@ -1802,7 +1802,7 @@ async function renderCityDetail() {
     return;
   }
 
-  // Sekmeler
+  // Tabs
   var categories = ["all", "yemek", "cami", "muze", "gezi"];
   var tabsHTML = categories
     .map(function (cat) {
@@ -1832,7 +1832,7 @@ async function renderCityDetail() {
     })
     .join("");
 
-  // Etiket filtresi
+  // Tag filter
   var allTags = getAllTags();
   var tagFilterHTML = allTags.length
     ? '<div class="tag-filter">' +
@@ -1847,7 +1847,7 @@ async function renderCityDetail() {
       "</div>"
     : "";
 
-  // Sıralama dropdown
+  // Sort dropdown
   var sortOpts = ["default", "name", "price", "open", "nearby"];
   var sortOptsHTML = sortOpts
     .map(function (v) {
@@ -1896,13 +1896,13 @@ async function renderCityDetail() {
     "</select>" +
     "</div>";
 
-  // Mekanlar
+  // Places
   var filtered = getPlaces();
   var placesHTML = filtered.length
     ? filtered.map(placeCardHTML).join("")
     : '<p class="empty-state col-span">' + esc(t("no_places")) + "</p>";
 
-  // Sezon takvimi
+  // Season calendar
   var seasonHTML = buildSeasonCalendar(state.cityData.seasons);
 
   var prog = getVisitProgress();
@@ -2001,13 +2001,13 @@ function bindDetailEvents() {
   var nearbyLocBtn = document.getElementById("nearby-loc-btn");
   if (nearbyLocBtn) {
     nearbyLocBtn.addEventListener("click", function () {
-      if (state.userLat !== null) return; // zaten alındı
+      if (state.userLat !== null) return; // already acquired
       getUserLocation(function () {
-        // Butonu güncelle
+        // Update button
         nearbyLocBtn.classList.add("has-location");
         var txt = nearbyLocBtn.querySelector(".nearby-loc-text");
         if (txt) txt.textContent = t("nearby_got");
-        // En yakın bilgisini ekle
+        // Add nearest info
         var widget = document.getElementById("nearby-widget");
         if (widget && !widget.querySelector(".nearby-info")) {
           var infoHTML = buildNearestPlaceInfo();
@@ -2018,7 +2018,7 @@ function bindDetailEvents() {
             widget.appendChild(frag);
           }
         }
-        // Sort dropdown'da nearby'ı aktif et
+        // Enable nearby option in the sort dropdown
         var sortSel = document.getElementById("sort-select");
         if (sortSel) {
           var opt = sortSel.querySelector('option[value="nearby"]');
@@ -2029,7 +2029,7 @@ function bindDetailEvents() {
           sortSel.value = "nearby";
           state.sortBy = "nearby";
         }
-        // Grid + haritayı yenile
+        // Refresh grid + map
         updatePlaceGrid();
         updateMapMarkers();
       });
@@ -2097,7 +2097,7 @@ function updatePlaceGrid() {
     ? filtered.map(placeCardHTML).join("")
     : '<p class="empty-state col-span">' + esc(t("no_places")) + "</p>";
 
-  // Kart içi etiket çiplerini bağla
+  // Bind tag chips inside cards
   grid.querySelectorAll(".chip-tag[data-tag]").forEach(function (chip) {
     chip.addEventListener("click", function (e) {
       e.stopPropagation();
@@ -2113,7 +2113,7 @@ function updatePlaceGrid() {
   updateMapMarkers();
 }
 
-// ── 11. Leaflet Harita ────────────────────────────────────────────────
+// ── 11. Leaflet Map ──────────────────────────────────────────────────
 
 function buildRouteUrl(places) {
   var located = places.filter(function (p) {
@@ -2181,7 +2181,7 @@ function updateMapMarkers() {
     }
   });
 
-  // Görünür markerlara fit et
+  // Fit bounds to visible markers
   var visibleMarkers = filtered
     .filter(function (p) {
       return p.location && p.location.lat && state.mapMarkers[slugify(p.name)];
@@ -2300,7 +2300,7 @@ function initMap() {
       { closeButton: false },
     );
 
-    // Pin tıklanınca → ilgili karta scroll et + vurgula
+    // On marker click → scroll to the related card and highlight it
     marker.on("click", function () {
       var pName = place.name;
       var cards = document.querySelectorAll(
@@ -2333,7 +2333,7 @@ function initMap() {
   updateRouteBtn(state.cityData.places);
 }
 
-// ── 12. Yer Detay Modalı ──────────────────────────────────────────────
+// ── 12. Place Detail Modal ───────────────────────────────────────────
 
 function modalInnerHTML(place) {
   var hasLoc = place.location && place.location.lat && place.location.lng;
@@ -2399,16 +2399,16 @@ function modalInnerHTML(place) {
       "</span></div>";
   }
 
-  // Şehir sezon verisi varsa kompakt şerit
+  // Compact strip if city has season data
   var seasonCompactHTML =
     state.cityData && state.cityData.seasons
       ? buildSeasonCompact(state.cityData.seasons)
       : "";
 
-  // Erişilebilirlik şeridi
+  // Accessibility strip
   var accessibilityHTML = buildAccessibilityStrip(place.accessibility);
 
-  // Benzer mekanlar
+  // Similar places
   var similarHTML = buildSimilarPlacesHTML(place);
 
   var mapHTML = hasLoc
@@ -2532,7 +2532,7 @@ function openPlaceModal(place, updateUrl) {
   if (updateUrl !== false && state.slug) {
     history.pushState(null, "", "#" + state.slug + "/" + slugify(place.name));
   }
-  // SEO: yer modalı açılınca meta tagları güncelle
+  // SEO: update meta tags when place modal opens
   var cityMeta = state.cities.find(function (c) {
     return c.slug === state.slug;
   });
@@ -2545,7 +2545,7 @@ function openPlaceModal(place, updateUrl) {
   overlay.setAttribute("aria-modal", "true");
   overlay.setAttribute("aria-labelledby", "modal-place-name");
 
-  // Güvenli HTML enjeksiyonu: tüm içerik esc() ile sanitize edilmiştir (dosya başı notuna bak)
+  // Safe HTML injection: all content is sanitized via esc() (see file header note)
   var safeHTML = modalInnerHTML(place);
   var frag = document.createRange().createContextualFragment(safeHTML);
   overlay.appendChild(frag);
@@ -2589,7 +2589,7 @@ function closePlaceModal(updateUrl) {
   if (updateUrl !== false && state.slug) {
     history.pushState(null, "", "#" + state.slug);
   }
-  // SEO: modal kapanınca şehir meta'larına geri dön
+  // SEO: restore city meta tags when modal closes
   if (state.slug && state.cityData) {
     var closeCityMeta = state.cities.find(function (c) {
       return c.slug === state.slug;
@@ -2721,7 +2721,7 @@ function bindModalEvents(overlay, place) {
     });
   }
 
-  // ── Ziyaret Takip Sistemi ──────────────────────────────────────────
+  // ── Visit Tracking System ──────────────────────────────────────────
   var visitBtn = overlay.querySelector("#modal-visit-btn");
   var visitMeta = overlay.querySelector("#visit-meta");
   var dateInput = overlay.querySelector("#visit-date");
@@ -2731,7 +2731,7 @@ function bindModalEvents(overlay, place) {
   if (visitBtn) {
     visitBtn.addEventListener("click", function () {
       if (isVisited(visitKey)) {
-        // Ziyareti kaldır
+        // Remove visit
         unmarkVisited(visitKey);
         visitBtn.classList.remove("is-visited");
         var frag = document
@@ -2741,7 +2741,7 @@ function bindModalEvents(overlay, place) {
         visitBtn.appendChild(frag);
         if (visitMeta) visitMeta.style.display = "none";
       } else {
-        // Bugünün tarihiyle ziyaret olarak işaretle
+        // Mark as visited with today's date
         var todayStr = new Date().toISOString().slice(0, 10);
         markVisited(visitKey, todayStr, "");
         visitBtn.classList.add("is-visited");
@@ -2761,7 +2761,7 @@ function bindModalEvents(overlay, place) {
     });
   }
 
-  // Tarih değiştiğinde güncelle
+  // Update when date changes
   if (dateInput) {
     dateInput.addEventListener("change", function () {
       if (isVisited(visitKey)) {
@@ -2771,7 +2771,7 @@ function bindModalEvents(overlay, place) {
     });
   }
 
-  // Not kaydedildiğinde (blur) güncelle
+  // Update when note is saved (blur)
   if (noteInput) {
     noteInput.addEventListener("blur", function () {
       if (isVisited(visitKey)) {
@@ -2781,7 +2781,7 @@ function bindModalEvents(overlay, place) {
     });
   }
 
-  // ── Benzer Mekanlar ────────────────────────────────────────────────
+  // ── Similar Places ────────────────────────────────────────────────
   overlay
     .querySelectorAll(".similar-card[data-place-name]")
     .forEach(function (card) {
@@ -2825,7 +2825,7 @@ function bindPlaceCardClicks(container) {
         }
       });
 
-      // Hover → harita pini vurgula
+      // Hover → highlight map marker
       card.addEventListener("mouseenter", function () {
         if (!state.mapInstance) return;
         var md = state.mapMarkers[slugify(card.dataset.placeName)];
@@ -2854,7 +2854,7 @@ function bindPlaceCardClicks(container) {
     });
 }
 
-// ── 13. Gezi Planı ────────────────────────────────────────────────────
+// ── 13. Trip Planner ────────────────────────────────────────────────────
 
 var DURATION = { muze: 90, gezi: 60, cami: 30, yemek: 45 };
 
@@ -3242,7 +3242,7 @@ function createPlanFab() {
   updatePlanBtn();
 }
 
-// ── 13b. Yakınlar (Geolocation) ──────────────────────────────────────
+// ── 13b. Nearby Places (Geolocation) ───────────────────────────────
 
 function haversineKm(lat1, lng1, lat2, lng2) {
   var R = 6371;
@@ -3281,7 +3281,7 @@ function getUserLocation(onSuccess) {
   );
 }
 
-// Mevcut şehirdeki en yakın mekanı döner
+// Returns the nearest place in the current city
 function buildNearestPlaceInfo() {
   if (!state.cityData || state.userLat === null) return "";
   var places = state.cityData.places.filter(function (p) {
@@ -3313,7 +3313,7 @@ function buildNearestPlaceInfo() {
   );
 }
 
-// Home için en yakın şehri döner
+// Returns the nearest city for the home screen
 function getNearestCity() {
   if (state.userLat === null || !state.cities.length) return null;
   var best = null;
@@ -3326,9 +3326,9 @@ function getNearestCity() {
   return best;
 }
 
-// ── 14. Gelişmiş Arama & Autocomplete ────────────────────────────────
+// ── 14. Advanced Search & Autocomplete ──────────────────────────────
 
-// Tek seferlik Promise — eş zamanlı çoklu fetch'i önler
+// One-time Promise — prevents concurrent duplicate fetches
 var _allPlacesPromise = null;
 
 function loadAllPlaces() {
@@ -3406,8 +3406,8 @@ function closeAutocomplete() {
   ac.remove();
 }
 
-// Dropdown'ı viewport koordinatlarıyla body'ye append eder.
-// .hero { overflow: hidden } ile kırpılmasını önler.
+// Appends the dropdown to body using viewport coordinates.
+// Prevents clipping by .hero { overflow: hidden }.
 function positionAutocomplete(inp) {
   var ac = document.getElementById("ac-dropdown");
   if (!ac || !inp) return;
@@ -3480,11 +3480,11 @@ function openAutocomplete(inp, items, isHist) {
 
   var frag = document.createRange().createContextualFragment(itemsHTML);
   ac.appendChild(frag);
-  // body'ye append et — .hero overflow:hidden kırpmasından kaçınmak için
+  // Append to body — to avoid clipping by .hero overflow:hidden
   document.body.appendChild(ac);
   positionAutocomplete(inp);
 
-  // Scroll / resize sırasında konumu güncelle
+  // Update position on scroll / resize
   var _rePos = function () {
     positionAutocomplete(inp);
   };
@@ -3495,7 +3495,7 @@ function openAutocomplete(inp, items, isHist) {
     window.removeEventListener("resize", _rePos);
   };
 
-  // Mekan sonuçlarına tıklama
+  // Click on place results
   ac.querySelectorAll(".ac-item[data-city]").forEach(function (el) {
     el.addEventListener("mousedown", function (e) {
       e.preventDefault();
@@ -3507,7 +3507,7 @@ function openAutocomplete(inp, items, isHist) {
     });
   });
 
-  // Geçmiş öğelerine tıklama
+  // Click on history items
   ac.querySelectorAll(".ac-item[data-query]").forEach(function (el) {
     el.addEventListener("mousedown", function (e) {
       if (e.target.closest(".ac-hist-rm")) return;
@@ -3520,7 +3520,7 @@ function openAutocomplete(inp, items, isHist) {
     });
   });
 
-  // Geçmişten sil butonları
+  // Delete-from-history buttons
   ac.querySelectorAll(".ac-hist-rm").forEach(function (btn) {
     btn.addEventListener("mousedown", function (e) {
       e.preventDefault();
@@ -3534,7 +3534,7 @@ function openAutocomplete(inp, items, isHist) {
   });
 }
 
-// Belirli bir input için autocomplete içeriğini güncelle (render sonrası)
+// Refresh autocomplete content for a specific input (after render)
 function refreshAutocomplete(inp) {
   if (!inp) return;
   var q = inp.value.trim();
@@ -3558,7 +3558,7 @@ function refreshAutocomplete(inp) {
   }
 }
 
-// ── 15. Favoriler Paylaş ──────────────────────────────────────────────
+// ── 15. Share Favorites ──────────────────────────────────────────────
 
 function shareFavorites() {
   var slugs = Array.from(state.favorites).join(",");
@@ -3629,12 +3629,12 @@ function showToast(msg) {
   }, 2500);
 }
 
-// ── 13b. SEO — Meta Tag & JSON-LD Yönetimi ───────────────────────────
+// ── 13b. SEO — Meta Tag & JSON-LD Management ───────────────────────
 
 var SEO_BASE_URL = "https://abdullahsahin.org/seyyah/";
 var SEO_OG_IMAGE = SEO_BASE_URL + "/icons/icon-512.svg";
 
-/** Meta tag ekle / güncelle (name veya property attr ile) */
+/** Add / update a meta tag (by name or property attribute) */
 function setMeta(attr, key, value) {
   var el = document.querySelector("meta[" + attr + '="' + key + '"]');
   if (!el) {
@@ -3645,7 +3645,7 @@ function setMeta(attr, key, value) {
   el.setAttribute("content", value || "");
 }
 
-/** Link rel ekle / güncelle */
+/** Add / update a link rel tag */
 function setLink(rel, href) {
   var el = document.querySelector('link[rel="' + rel + '"]');
   if (!el) {
@@ -3656,7 +3656,7 @@ function setLink(rel, href) {
   el.setAttribute("href", href || "");
 }
 
-/** Yer kategorisini Schema.org tipine çevir */
+/** Convert a place category to a Schema.org type */
 function categoryToSchema(cat) {
   var map = {
     yemek: "FoodEstablishment",
@@ -3667,7 +3667,7 @@ function categoryToSchema(cat) {
   return map[cat] || "TouristAttraction";
 }
 
-/** JSON-LD script tag'ini güncelle */
+/** Update the JSON-LD script tag */
 function setJsonLd(obj) {
   var ldEl = document.getElementById("ld-json");
   if (!ldEl) {
@@ -3679,9 +3679,9 @@ function setJsonLd(obj) {
   ldEl.textContent = JSON.stringify(obj, null, 2);
 }
 
-// ── AI SEO yardımcıları ───────────────────────────────────────────────
+// ── AI SEO helpers ──────────────────────────────────────────────────
 
-/** FAQ schema: şehir sayfası için soru-cevap bloğu */
+/** FAQ schema: Q&A block for the city page */
 function buildCityFAQ(cityData, cityMeta, isTr) {
   var cityName   = cityData.city || cityMeta.city;
   var places     = cityData.places || [];
@@ -3749,7 +3749,7 @@ function buildCityFAQ(cityData, cityMeta, isTr) {
   };
 }
 
-/** FAQ schema: yer modalı için soru-cevap */
+/** FAQ schema: Q&A block for the place modal */
 function buildPlaceFAQ(place, cityMeta, isTr) {
   var cityName = cityMeta ? cityMeta.city : '';
   var pairs = isTr ? [
@@ -3794,7 +3794,7 @@ function buildPlaceFAQ(place, cityMeta, isTr) {
   };
 }
 
-/** HowTo schema: şehir gezi planı nasıl yapılır */
+/** HowTo schema: how to plan a city trip */
 function buildCityHowTo(cityData, cityMeta, isTr) {
   var cityName = cityData.city || cityMeta.city;
   var places   = cityData.places || [];
@@ -3869,12 +3869,12 @@ function buildCityHowTo(cityData, cityMeta, isTr) {
   }
 }
 
-/** Speakable: AI sesli yanıtı için CSS selector'lar */
+/** Speakable: CSS selectors for AI voice responses */
 function buildSpeakable(cssSelectors) {
   return { '@type': 'SpeakableSpecification', cssSelector: cssSelectors };
 }
 
-/** İkinci JSON-LD script tag'ini güncelle (AI schema'ları için) */
+/** Update the second JSON-LD script tag (for AI schemas) */
 function setJsonLdAI(obj) {
   var ldEl = document.getElementById('ld-json-ai');
   if (!ldEl) {
@@ -4101,7 +4101,7 @@ function updateMetaTags(type, data) {
       ],
     };
 
-    // AI SEO: Yer FAQ'ı
+    // AI SEO: Place FAQ
     ldJsonAI = {
       '@context': 'https://schema.org',
       '@graph': [ buildPlaceFAQ(place, cityMeta, isTr) ],
@@ -4146,13 +4146,13 @@ async function router() {
     return;
   }
 
-  // #cityslug/placeslug → şehir detayı + yer modalı
+  // #cityslug/placeslug → city detail + place modal
   var slashIdx = hash.indexOf("/");
   if (slashIdx !== -1) {
     var citySlug = hash.slice(0, slashIdx);
     var placeSlug = hash.slice(slashIdx + 1);
     if (citySlug && placeSlug) {
-      // Açık modal varsa hemen temizle
+      // Clear any open modal immediately
       var oldM = document.getElementById("place-modal-overlay");
       if (oldM) {
         oldM.remove();
@@ -4163,7 +4163,7 @@ async function router() {
         }
         state.modalPlace = null;
       }
-      // Şehri yükle (zaten yüklüyse tekrar yükleme)
+      // Load the city (skip if already loaded)
       if (state.slug !== citySlug || !state.cityData) {
         state.slug = citySlug;
         state.category = "all";
@@ -4172,7 +4172,7 @@ async function router() {
         state.openOnly = false;
         await renderCityDetail();
       }
-      // Yeri bul ve modalı aç
+      // Find the place and open its modal
       if (state.cityData) {
         var target = null;
         for (var pi = 0; pi < state.cityData.places.length; pi++) {
@@ -4187,7 +4187,7 @@ async function router() {
     }
   }
 
-  // Modal açıksa kapat (city URL'e geri döndük)
+  // Close modal if open (we navigated back to the city URL)
   var oldM2 = document.getElementById("place-modal-overlay");
   if (oldM2) {
     oldM2.remove();
@@ -4307,10 +4307,10 @@ function initInstallBanner() {
   });
 }
 
-// ── 15. Başlangıç ─────────────────────────────────────────────────────
+// ── 15. Initialisation ──────────────────────────────────────────────
 
 async function init() {
-  // Service Worker kaydı ve install banner (PWA)
+  // Register service worker and show install banner (PWA)
   registerSW();
   initInstallBanner();
 
@@ -4326,7 +4326,7 @@ async function init() {
   var langBtn = document.getElementById("btn-lang");
   if (langBtn) langBtn.addEventListener("click", toggleLang);
 
-  // ⌘K / Ctrl+K → search odağı  |  ESC → modal kapat
+  // ⌘K / Ctrl+K → focus search  |  ESC → close modal
   document.addEventListener("keydown", function (e) {
     if ((e.metaKey || e.ctrlKey) && e.key === "k") {
       e.preventDefault();
@@ -4347,7 +4347,7 @@ async function init() {
     }
   });
 
-  // Tarayıcı geri butonu → modal kapat
+  // Browser back button → close modal
   window.addEventListener("popstate", function () {
     var h = location.hash.slice(1).split("?")[0];
     if (h.indexOf("/") === -1) {
@@ -4367,22 +4367,22 @@ async function init() {
     }
   });
 
-  // Plan FAB oluştur
+  // Create plan FAB
   createPlanFab();
 
-  // Paylaşılan favori URL'si var mı?
+  // Is there a shared favourites URL?
   if (location.hash.indexOf("#?favs=") === 0) {
     loadSharedFavs();
     location.hash = "";
   }
 
-  // Paylaşılan plan URL'si var mı?
+  // Is there a shared plan URL?
   if (location.hash.indexOf("#?plan=") === 0) {
     loadPlanFromUrl();
     location.hash = "";
   }
 
-  // Şehirleri yükle
+  // Load cities
   try {
     state.cities = await fetchJSON(CITIES_URL);
   } catch (err) {
@@ -4397,7 +4397,7 @@ async function init() {
   await router();
   window.addEventListener("hashchange", router);
 
-  // Arka planda mekan sayılarını getir
+  // Fetch place counts in the background
   state.cities.forEach(function (city) {
     if (city.placeCount == null) {
       fetchJSON(city.data)

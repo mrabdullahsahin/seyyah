@@ -1,4 +1,4 @@
-# ── Genel Kurallar ────────────────────────────────────────────────────
+# ── General Rules ─────────────────────────────────────────────────────
 User-agent: *
 Allow: /
 Allow: /data/
@@ -7,13 +7,13 @@ Disallow: /vendor/
 Disallow: /icons/
 Disallow: /*.json$
 
-# ── AI / LLM Botları — İçerik indexlemeye açık ────────────────────────
+# ── AI / LLM Bots — open for content indexing ─────────────────────────
 # OpenAI (ChatGPT)
 User-agent: GPTBot
 Allow: /
 Allow: /llms.txt
 
-# OpenAI (Bing Arama entegrasyonu)
+# OpenAI (Bing Search integration)
 User-agent: OAI-SearchBot
 Allow: /
 Allow: /llms.txt
@@ -38,7 +38,7 @@ User-agent: Meta-ExternalAgent
 Allow: /
 Allow: /llms.txt
 
-# Common Crawl (LLM eğitim veri seti)
+# Common Crawl (LLM training dataset)
 User-agent: CCBot
 Allow: /
 Allow: /llms.txt

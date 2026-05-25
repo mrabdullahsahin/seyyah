@@ -1,9 +1,9 @@
 'use strict';
 
-// Sürüm numarasını güncelleyince eski cache otomatik temizlenir
+// Bumping the version number automatically clears the old cache
 var CACHE_NAME = 'seyyah-v1';
 
-// Önceden önbelleğe alınacak app shell + tüm veri dosyaları
+// App shell + all data files to precache
 var PRECACHE = [
   './',
   './style.css',
@@ -18,18 +18,18 @@ var PRECACHE = [
   './data/gaziantep.json',
 ];
 
-// ── Install: app shell'i önceden önbelleğe al ─────────────────────────
+// ── Install: precache the app shell ──────────────────────────────────
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
       return cache.addAll(PRECACHE);
     })
   );
-  // Mevcut SW'u beklemeden hemen devral
+  // Take control immediately without waiting for the current SW
   self.skipWaiting();
 });
 
-// ── Activate: eski cache'leri temizle ────────────────────────────────
+// ── Activate: clear old caches ────────────────────────────────────────
 self.addEventListener('activate', function(event) {
   event.waitUntil(
     caches.keys().then(function(keys) {
@@ -40,20 +40,20 @@ self.addEventListener('activate', function(event) {
       );
     })
   );
-  // Açık sekmeleri hemen kontrol al (sayfa yenileme gerekmez)
+  // Claim open tabs immediately (no page refresh needed)
   self.clients.claim();
 });
 
 // ── Fetch: cache-first, network fallback ─────────────────────────────
 self.addEventListener('fetch', function(event) {
-  // Sadece GET isteklerini yönet; diğerlerini normal geçir
+  // Only handle GET requests; let everything else pass through
   if (event.request.method !== 'GET') return;
 
-  // chrome-extension:// gibi şemaları atla
+  // Skip non-http(s) schemes such as chrome-extension://
   var url = new URL(event.request.url);
   if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
 
-  // Üçüncü taraf istekleri (fonts, tile sunucusu) → network-first
+  // Third-party requests (fonts, tile server) → network-first
   var isThirdParty = url.origin !== self.location.origin
     && !url.hostname.includes('tile.openstreetmap.org');
   if (isThirdParty) {
@@ -63,13 +63,13 @@ self.addEventListener('fetch', function(event) {
     return;
   }
 
-  // Kendi kaynaklarımız → cache-first
+  // Own resources → cache-first
   event.respondWith(
     caches.match(event.request).then(function(cached) {
       if (cached) return cached;
 
       return fetch(event.request).then(function(response) {
-        // Başarılı yanıtı önbelleğe ekle
+        // Cache a successful response
         if (response && response.status === 200 && response.type !== 'opaque') {
           var clone = response.clone();
           caches.open(CACHE_NAME).then(function(cache) {
@@ -78,8 +78,8 @@ self.addEventListener('fetch', function(event) {
         }
         return response;
       }).catch(function() {
-        // Ağ ve cache ikisi de başarısız → boş 503
-        return new Response('Çevrimdışı: içerik önbellekte bulunamadı.', {
+        // Both network and cache failed → return empty 503
+        return new Response('Offline: content not found in cache.', {
           status: 503,
           headers: { 'Content-Type': 'text/plain; charset=utf-8' },
         });

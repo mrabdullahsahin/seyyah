@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * generate-sitemap.js
- * Seyyah — sitemap.xml üretici
+ * Seyyah — sitemap.xml generator
  *
- * Kullanım: node generate-sitemap.js
- * Çıktı:    sitemap.xml
+ * Usage:  node generate-sitemap.js
+ * Output: sitemap.xml
  */
 
 const fs = require("fs");
@@ -13,14 +13,14 @@ const path = require("path");
 const BASE_URL = "https://abdullahsahin.org/seyyah/";
 const TODAY = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
-// Şehir listesini oku
+// Read the city list
 const cities = JSON.parse(
   fs.readFileSync(path.join(__dirname, "data", "cities.json"), "utf-8"),
 );
 
 const urls = [];
 
-// 1. Ana sayfa
+// 1. Homepage
 urls.push({
   loc: BASE_URL + "/",
   lastmod: TODAY,
@@ -28,7 +28,7 @@ urls.push({
   priority: "1.0",
 });
 
-// 2. Şehir sayfaları (#cityslug)
+// 2. City pages (#cityslug)
 for (const city of cities) {
   urls.push({
     loc: BASE_URL + "/#" + city.slug,
@@ -37,7 +37,7 @@ for (const city of cities) {
     priority: "0.8",
   });
 
-  // 3. Yer sayfaları (#cityslug/placeslug) — isteğe bağlı (çok sayıda olabilir)
+  // 3. Place pages (#cityslug/placeslug) — optional (can be many)
   const cityFile = path.join(__dirname, "data", city.slug + ".json");
   if (fs.existsSync(cityFile)) {
     const cityData = JSON.parse(fs.readFileSync(cityFile, "utf-8"));
@@ -55,7 +55,7 @@ for (const city of cities) {
   }
 }
 
-// slugify — app.js ile aynı mantık
+// slugify — same logic as app.js
 function slugify(str) {
   return str
     .toLowerCase()
@@ -75,7 +75,7 @@ function slugify(str) {
     .replace(/^-+|-+$/g, "");
 }
 
-// XML üret
+// Generate XML
 const xml = [
   '<?xml version="1.0" encoding="UTF-8"?>',
   '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
@@ -93,4 +93,4 @@ const xml = [
 ].join("\n");
 
 fs.writeFileSync(path.join(__dirname, "sitemap.xml"), xml, "utf-8");
-console.log("✅ sitemap.xml oluşturuldu — " + urls.length + " URL");
+console.log("✅ sitemap.xml generated — " + urls.length + " URLs");
