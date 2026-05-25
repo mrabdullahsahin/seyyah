@@ -58,6 +58,9 @@ const state = {
   userLng: null,
   allPlaces: [],
   allPlacesLoaded: false,
+  // Focus management: element that last triggered modal / plan drawer
+  _modalTrigger: null,
+  _planDrawerTrigger: null,
 };
 
 // ── 3. Translations ──────────────────────────────────────────────────
@@ -177,6 +180,14 @@ const STRINGS = {
     stats_progress: "Genel ilerleme",
     stats_top: "En çok:",
     stats_empty: "Henüz veri yok. Şehirleri keşfet, mekanları ziyaret et!",
+    search_clear: "Aramayı temizle",
+    region_filter: "Bölgeye göre filtrele",
+    cat_filter: "Kategoriye göre filtrele",
+    visit_note_label: "Ziyaret notun",
+    plan_move_up: "Yukarı taşı",
+    plan_move_down: "Aşağı taşı",
+    hist_remove: "Geçmişten sil",
+    map_region_label: "Haritadaki mekanlar",
   },
   en: {
     tagline: "Discover Turkey's cities",
@@ -293,6 +304,14 @@ const STRINGS = {
     stats_progress: "Overall progress",
     stats_top: "Most visited:",
     stats_empty: "No data yet. Explore cities and mark places as visited!",
+    search_clear: "Clear search",
+    region_filter: "Filter by region",
+    cat_filter: "Filter by category",
+    visit_note_label: "Your visit notes",
+    plan_move_up: "Move up",
+    plan_move_down: "Move down",
+    hist_remove: "Remove from history",
+    map_region_label: "Places shown on map",
   },
 };
 
@@ -943,7 +962,11 @@ function buildStatsPanel() {
         esc(String(overallPct)) +
         "%</span>" +
         "</div>" +
-        '<div class="stats-bar"><div class="stats-bar-fill" style="width:' +
+        '<div class="stats-bar" role="progressbar" aria-valuenow="' +
+        esc(String(Math.min(overallPct, 100))) +
+        '" aria-valuemin="0" aria-valuemax="100" aria-label="' +
+        esc(t("stats_progress")) +
+        '"><div class="stats-bar-fill" style="width:' +
         esc(String(Math.min(overallPct, 100))) +
         '%"></div></div>'
       : "";
@@ -993,7 +1016,11 @@ function buildStatsPanel() {
             " " +
             esc(t("cats." + cat)) +
             "</span>" +
-            '<div class="stats-cat-bar"><div class="stats-cat-fill" style="width:' +
+            '<div class="stats-cat-bar" role="progressbar" aria-valuenow="' +
+            esc(String(pct)) +
+            '" aria-valuemin="0" aria-valuemax="100" aria-label="' +
+            esc(t("cats." + cat)) +
+            '"><div class="stats-cat-fill" style="width:' +
             esc(String(pct)) +
             '%"></div></div>' +
             '<span class="stats-cat-num">' +
@@ -1031,6 +1058,8 @@ function buildStatsPanel() {
     '<div class="stats-panel-body" id="stats-panel-body" role="region" ' +
     'aria-label="' +
     esc(t("stats_title")) +
+    '" aria-hidden="' +
+    (isOpen ? "false" : "true") +
     '">' +
     '<div class="stats-body-inner">' +
     bodyContent +
@@ -1099,9 +1128,7 @@ function cityCardHTML(city) {
     '<div class="city-card-img">' +
     '<img src="' +
     imgUrl +
-    '" alt="' +
-    esc(city.city) +
-    '" loading="lazy">' +
+    '" alt="" loading="lazy" aria-hidden="true">' +
     '<div class="city-card-img-overlay"></div>' +
     '<span class="city-card-region">' +
     esc(city.region) +
@@ -1231,10 +1258,12 @@ function updateCityContent() {
   bindCityCardEvents();
 }
 
-// Syncs region chip active states (without a full re-render)
+// Syncs region chip active states and aria-pressed (without a full re-render)
 function updateChipActiveStates() {
   document.querySelectorAll(".chip[data-region]").forEach(function (chip) {
-    chip.classList.toggle("chip-active", chip.dataset.region === state.region);
+    var isActive = chip.dataset.region === state.region;
+    chip.classList.toggle("chip-active", isActive);
+    chip.setAttribute("aria-pressed", isActive ? "true" : "false");
   });
 }
 
@@ -1287,7 +1316,9 @@ function renderCityList() {
   var regionChipsHTML =
     '<button class="chip ' +
     (state.region === "all" ? "chip-active" : "") +
-    '" data-region="all">' +
+    '" data-region="all" aria-pressed="' +
+    (state.region === "all" ? "true" : "false") +
+    '">' +
     esc(t("all_regions")) +
     "</button>" +
     getRegions()
@@ -1298,6 +1329,8 @@ function renderCityList() {
           (state.region === r ? "chip-active" : "") +
           '" data-region="' +
           esc(r) +
+          '" aria-pressed="' +
+          (state.region === r ? "true" : "false") +
           '">' +
           esc(label) +
           "</button>"
@@ -1347,13 +1380,19 @@ function renderCityList() {
     'aria-label="' +
     esc(t("search_ph")) +
     '" ' +
+    'role="combobox" aria-expanded="false" aria-autocomplete="list" ' +
+    'aria-controls="ac-dropdown" aria-activedescendant="" ' +
     'autocomplete="off" spellcheck="false">' +
-    '<button class="search-clear" id="search-clear" aria-label="Arama temizle">' +
+    '<button class="search-clear" id="search-clear" aria-label="' +
+    esc(t("search_clear")) +
+    '">' +
     IC.xMark +
     "</button>" +
-    '<span class="search-badge">⌘K</span>' +
+    '<span class="search-badge" aria-hidden="true">⌘K</span>' +
     "</div>" +
-    '<div class="region-chips" role="group" aria-label="Bölge filtresi">' +
+    '<div class="region-chips" role="group" aria-label="' +
+    esc(t("region_filter")) +
+    '">' +
     regionChipsHTML +
     "</div>" +
     "</div></section>";
@@ -1402,16 +1441,26 @@ function bindCityListEvents() {
       var focIdx = items.findIndex(function (i) {
         return i.classList.contains("ac-item-focused");
       });
+
+      // Helper: move focus to a specific item index
+      function moveFocusTo(newIdx) {
+        items.forEach(function (i) {
+          i.classList.remove("ac-item-focused");
+          i.setAttribute("aria-selected", "false");
+        });
+        var target = items[newIdx];
+        if (!target) return;
+        target.classList.add("ac-item-focused");
+        target.setAttribute("aria-selected", "true");
+        inp.setAttribute("aria-activedescendant", target.id || "");
+      }
+
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        if (focIdx >= 0) items[focIdx].classList.remove("ac-item-focused");
-        items[Math.min(focIdx + 1, items.length - 1)].classList.add(
-          "ac-item-focused",
-        );
+        moveFocusTo(Math.min(focIdx + 1, items.length - 1));
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
-        if (focIdx >= 0) items[focIdx].classList.remove("ac-item-focused");
-        items[Math.max(focIdx - 1, 0)].classList.add("ac-item-focused");
+        moveFocusTo(Math.max(focIdx - 1, 0));
       } else if (e.key === "Enter") {
         var focused = ac.querySelector(".ac-item-focused");
         if (focused) {
@@ -1444,6 +1493,8 @@ function bindCityListEvents() {
     });
   });
 
+
+
   // Toggle stats panel open/closed
   var statsToggle = main.querySelector("#stats-panel-toggle");
   if (statsToggle) {
@@ -1454,6 +1505,9 @@ function bindCityListEvents() {
       var nowOpen = panel.classList.toggle("stats-open");
       statsToggle.setAttribute("aria-expanded", nowOpen ? "true" : "false");
       if (icon) icon.textContent = nowOpen ? "−" : "+";
+      // Sync aria-hidden so screen readers skip the collapsed body
+      var body = document.getElementById("stats-panel-body");
+      if (body) body.setAttribute("aria-hidden", nowOpen ? "false" : "true");
       localStorage.setItem(LS_STATS_OPEN, nowOpen ? "true" : "false");
     });
   }
@@ -1618,6 +1672,8 @@ function placeCardHTML(place) {
             (state.activeTags.has(tag) ? "chip-tag-active" : "") +
             '" data-tag="' +
             esc(tag) +
+            '" aria-pressed="' +
+            (state.activeTags.has(tag) ? "true" : "false") +
             '">' +
             esc(tag) +
             "</button>"
@@ -1726,6 +1782,8 @@ function tagChipsHTML(tags) {
           (state.activeTags.has(tag) ? "chip-tag-active" : "") +
           '" data-tag="' +
           esc(tag) +
+          '" aria-pressed="' +
+          (state.activeTags.has(tag) ? "true" : "false") +
           '">' +
           esc(tag) +
           "</button>"
@@ -1817,11 +1875,13 @@ async function renderCityDetail() {
         '<button class="tab ' +
         (state.category === cat ? "tab-active" : "") +
         '" ' +
-        'data-cat="' +
+        'id="tab-' +
+        cat +
+        '" data-cat="' +
         cat +
         '" role="tab" aria-selected="' +
-        (state.category === cat) +
-        '">' +
+        (state.category === cat ? "true" : "false") +
+        '" aria-controls="place-grid">' +
         (CAT_IC[cat] || "") +
         " " +
         esc(t("cats." + cat)) +
@@ -1871,7 +1931,9 @@ async function renderCityDetail() {
     '<div class="nearby-widget" id="nearby-widget">' +
     '<button class="nearby-loc-btn' +
     (hasLoc ? " has-location" : "") +
-    '" id="nearby-loc-btn">' +
+    '" id="nearby-loc-btn" aria-pressed="' +
+    (hasLoc ? "true" : "false") +
+    '">' +
     IC.locate +
     ' <span class="nearby-loc-text">' +
     esc(hasLoc ? t("nearby_got") : t("nearby_btn")) +
@@ -1884,7 +1946,9 @@ async function renderCityDetail() {
     '<div class="sort-bar">' +
     '<button class="open-filter-btn' +
     (state.openOnly ? " open-filter-active" : "") +
-    '" id="open-filter-btn">' +
+    '" id="open-filter-btn" aria-pressed="' +
+    (state.openOnly ? "true" : "false") +
+    '">' +
     '<span class="open-filter-dot" aria-hidden="true"></span>' +
     esc(t("open_only_btn")) +
     "</button>" +
@@ -1917,7 +1981,11 @@ async function renderCityDetail() {
         prog.pct +
         "%</span>" +
         "</div>" +
-        '<div class="progress-bar"><div class="progress-fill" style="width:' +
+        '<div class="progress-bar" role="progressbar" aria-valuenow="' +
+        prog.pct +
+        '" aria-valuemin="0" aria-valuemax="100" aria-label="' +
+        esc(t("visit_progress", prog.visited, prog.total)) +
+        '"><div class="progress-fill" style="width:' +
         prog.pct +
         '%"></div></div>' +
         "</div>"
@@ -1942,13 +2010,15 @@ async function renderCityDetail() {
     "</div>" +
     seasonHTML +
     progressHTML +
-    '<nav class="tabs" role="tablist" aria-label="Kategori filtresi">' +
+    '<nav class="tabs" role="tablist" aria-label="' + esc(t("cat_filter")) + '">' +
     tabsHTML +
     "</nav>" +
     tagFilterHTML +
     sortBarHTML +
     nearbyWidgetHTML +
-    '<div class="place-grid" id="place-grid">' +
+    '<div class="place-grid" id="place-grid" role="tabpanel" aria-labelledby="tab-' +
+    esc(state.category) +
+    '">' +
     placesHTML +
     "</div>" +
     '<div class="map-section">' +
@@ -1965,8 +2035,8 @@ async function renderCityDetail() {
     ' <span class="map-route-count"></span>' +
     "</a>" +
     "</div>" +
-    '<div id="city-map" class="city-map" role="img" aria-label="' +
-    esc(t("map_legend")) +
+    '<div id="city-map" class="city-map" role="region" aria-label="' +
+    esc(t("map_region_label")) +
     '"></div>' +
     "</div>" +
     "</div>";
@@ -1988,9 +2058,13 @@ function bindDetailEvents() {
     tab.addEventListener("click", function (e) {
       state.category = e.currentTarget.dataset.cat;
       main.querySelectorAll(".tab").forEach(function (tb) {
-        tb.classList.toggle("tab-active", tb.dataset.cat === state.category);
-        tb.setAttribute("aria-selected", tb.dataset.cat === state.category);
+        var isActive = tb.dataset.cat === state.category;
+        tb.classList.toggle("tab-active", isActive);
+        tb.setAttribute("aria-selected", isActive ? "true" : "false");
       });
+      // Keep tabpanel labelled by the active tab
+      var grid = document.getElementById("place-grid");
+      if (grid) grid.setAttribute("aria-labelledby", "tab-" + state.category);
       updatePlaceGrid();
       updateMapMarkers();
     });
@@ -2003,8 +2077,9 @@ function bindDetailEvents() {
     nearbyLocBtn.addEventListener("click", function () {
       if (state.userLat !== null) return; // already acquired
       getUserLocation(function () {
-        // Update button
+        // Update button state
         nearbyLocBtn.classList.add("has-location");
+        nearbyLocBtn.setAttribute("aria-pressed", "true");
         var txt = nearbyLocBtn.querySelector(".nearby-loc-text");
         if (txt) txt.textContent = t("nearby_got");
         // Add nearest info
@@ -2041,6 +2116,7 @@ function bindDetailEvents() {
     openFilterBtn.addEventListener("click", function () {
       state.openOnly = !state.openOnly;
       openFilterBtn.classList.toggle("open-filter-active", state.openOnly);
+      openFilterBtn.setAttribute("aria-pressed", state.openOnly ? "true" : "false");
       updatePlaceGrid();
       updateMapMarkers();
     });
@@ -2067,6 +2143,8 @@ function bindTagChipEvents() {
       var tag = e.currentTarget.dataset.tag;
       if (state.activeTags.has(tag)) state.activeTags.delete(tag);
       else state.activeTags.add(tag);
+      // Keep aria-pressed in sync before re-render
+      e.currentTarget.setAttribute("aria-pressed", state.activeTags.has(tag) ? "true" : "false");
       refreshTagFilter();
       updatePlaceGrid();
     });
@@ -2452,7 +2530,9 @@ function modalInnerHTML(place) {
     '" max="' +
     esc(today) +
     '"></label>' +
-    '<textarea id="visit-note" class="visit-note-input" placeholder="' +
+    '<textarea id="visit-note" class="visit-note-input" ' +
+    'aria-label="' + esc(t("visit_note_label")) + '" ' +
+    'placeholder="' +
     esc(t("visit_note_ph")) +
     '" rows="2">' +
     esc(visitNote) +
@@ -2461,13 +2541,11 @@ function modalInnerHTML(place) {
     "</div>";
 
   return (
-    '<div class="modal" role="document">' +
+    '<div class="modal">' +
     '<div class="modal-banner">' +
     '<img class="modal-banner-img" src="' +
     imgUrl +
-    '" alt="' +
-    esc(place.name) +
-    '" loading="eager">' +
+    '" alt="" loading="eager" aria-hidden="true">' +
     '<div class="modal-banner-overlay"></div>' +
     '<button class="modal-close" id="modal-close" aria-label="' +
     esc(t("modal_close")) +
@@ -2520,6 +2598,9 @@ function modalInnerHTML(place) {
 }
 
 function openPlaceModal(place, updateUrl) {
+  // Store the trigger so focus can return when the modal closes
+  state._modalTrigger = document.activeElement || null;
+
   var old = document.getElementById("place-modal-overlay");
   if (old) {
     old.remove();
@@ -2565,6 +2646,7 @@ function openPlaceModal(place, updateUrl) {
     }, 100);
   }
   bindModalEvents(overlay, place);
+  trapFocus(overlay);
 
   var closeBtn = overlay.querySelector("#modal-close");
   if (closeBtn)
@@ -2577,6 +2659,7 @@ function closePlaceModal(updateUrl) {
   var overlay = document.getElementById("place-modal-overlay");
   if (!overlay) return;
   overlay.classList.remove("modal-overlay-visible");
+  if (overlay._cleanupTrap) overlay._cleanupTrap();
   setTimeout(function () {
     if (overlay.parentNode) overlay.remove();
     document.body.classList.remove("modal-open");
@@ -2585,6 +2668,11 @@ function closePlaceModal(updateUrl) {
       state.modalMapInst.remove();
       state.modalMapInst = null;
     }
+    // Return focus to the card that opened the modal
+    if (state._modalTrigger && state._modalTrigger.focus) {
+      state._modalTrigger.focus();
+    }
+    state._modalTrigger = null;
   }, 270);
   if (updateUrl !== false && state.slug) {
     history.pushState(null, "", "#" + state.slug);
@@ -2967,8 +3055,26 @@ function planDrawerHTML() {
               '<button class="plan-item-rm" data-key="' +
               esc(item.key) +
               '" aria-label="' +
-              esc(isTr ? "Plandan çıkar" : "Remove") +
+              esc(t("plan_remove")) +
+              ' ' +
+              esc(item.placeName) +
               '">✕</button>' +
+              '<div class="plan-item-reorder">' +
+              '<button class="plan-item-move" data-move="up" data-key="' +
+              esc(item.key) +
+              '" aria-label="' +
+              esc(t("plan_move_up")) +
+              '" ' +
+              (idx === 0 ? "disabled" : "") +
+              '>▲</button>' +
+              '<button class="plan-item-move" data-move="down" data-key="' +
+              esc(item.key) +
+              '" aria-label="' +
+              esc(t("plan_move_down")) +
+              '" ' +
+              (idx === items.length - 1 ? "disabled" : "") +
+              '>▼</button>' +
+              '</div>' +
               "</li>"
             );
           })
@@ -2989,7 +3095,7 @@ function planDrawerHTML() {
   return (
     '<div class="plan-drawer-panel">' +
     '<div class="plan-drawer-header">' +
-    '<h2 class="plan-drawer-title">' +
+    '<h2 class="plan-drawer-title" id="plan-drawer-title">' +
     IC.plan +
     " " +
     esc(t("plan_title")) +
@@ -3001,7 +3107,7 @@ function planDrawerHTML() {
         "</button>"
       : "") +
     '<button class="plan-close-btn" id="plan-drawer-close" aria-label="' +
-    esc(isTr ? "Kapat" : "Close") +
+    esc(t("modal_close")) +
     '">' +
     IC.xMark +
     "</button>" +
@@ -3051,6 +3157,9 @@ function openPlanDrawer() {
     return;
   }
 
+  // Remember the element that triggered the drawer so we can restore focus
+  state._planDrawerTrigger = document.activeElement || null;
+
   var overlay = document.createElement("div");
   overlay.id = "plan-overlay";
   overlay.className = "plan-overlay";
@@ -3060,6 +3169,10 @@ function openPlanDrawer() {
   var drawer = document.createElement("div");
   drawer.id = "plan-drawer";
   drawer.className = "plan-drawer";
+  // Drawer is a dialog — give it the correct ARIA semantics
+  drawer.setAttribute("role", "dialog");
+  drawer.setAttribute("aria-modal", "true");
+  drawer.setAttribute("aria-labelledby", "plan-drawer-title");
   var frag = document.createRange().createContextualFragment(planDrawerHTML());
   drawer.appendChild(frag);
   document.body.appendChild(drawer);
@@ -3068,19 +3181,31 @@ function openPlanDrawer() {
     requestAnimationFrame(function () {
       overlay.classList.add("plan-overlay-visible");
       drawer.classList.add("plan-drawer-open");
+      // Move focus to the close button inside the drawer
+      var closeBtn = drawer.querySelector("#plan-drawer-close");
+      if (closeBtn) closeBtn.focus();
     });
   });
   bindPlanDrawerEvents(drawer);
+  trapFocus(drawer);
 }
 
 function closePlanDrawer() {
   var overlay = document.getElementById("plan-overlay");
   var drawer = document.getElementById("plan-drawer");
   if (overlay) overlay.classList.remove("plan-overlay-visible");
-  if (drawer) drawer.classList.remove("plan-drawer-open");
+  if (drawer) {
+    drawer.classList.remove("plan-drawer-open");
+    if (drawer._cleanupTrap) drawer._cleanupTrap();
+  }
   setTimeout(function () {
     if (overlay && overlay.parentNode) overlay.remove();
     if (drawer && drawer.parentNode) drawer.remove();
+    // Return focus to the element that opened the drawer
+    if (state._planDrawerTrigger && state._planDrawerTrigger.focus) {
+      state._planDrawerTrigger.focus();
+    }
+    state._planDrawerTrigger = null;
   }, 280);
 }
 
@@ -3103,6 +3228,31 @@ function bindPlanDrawerEvents(drawer) {
       e.stopPropagation();
       removeFromPlan(btn.dataset.key);
       renderPlanDrawer();
+    });
+  });
+
+  // Keyboard reorder — move up / move down buttons
+  drawer.querySelectorAll(".plan-item-move[data-key]").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var key = btn.dataset.key;
+      var direction = btn.dataset.move;
+      var idx = state.plan.findIndex(function (p) { return p.key === key; });
+      if (idx === -1) return;
+      var swapIdx = direction === "up" ? idx - 1 : idx + 1;
+      if (swapIdx < 0 || swapIdx >= state.plan.length) return;
+      var tmp = state.plan[idx];
+      state.plan[idx] = state.plan[swapIdx];
+      state.plan[swapIdx] = tmp;
+      savePlan();
+      renderPlanDrawer();
+      // Restore focus to the moved item's button in the new position
+      setTimeout(function () {
+        var moved = drawer.querySelector(
+          '.plan-item-move[data-key="' + key + '"][data-move="' + direction + '"]'
+        );
+        if (moved && !moved.disabled) moved.focus();
+      }, 30);
     });
   });
 
@@ -3404,6 +3554,12 @@ function closeAutocomplete() {
   if (!ac) return;
   if (ac._cleanupPos) ac._cleanupPos();
   ac.remove();
+  // Announce collapsed state to screen readers
+  var inp = document.getElementById("search-input");
+  if (inp) {
+    inp.setAttribute("aria-expanded", "false");
+    inp.setAttribute("aria-activedescendant", "");
+  }
 }
 
 // Appends the dropdown to body using viewport coordinates.
@@ -3423,10 +3579,16 @@ function openAutocomplete(inp, items, isHist) {
   if (!inp) return;
 
   var itemsHTML = items
-    .map(function (item) {
+    .map(function (item, idx) {
+      var optId = "ac-opt-" + idx;
       if (isHist) {
+        // History items: the option element holds text; the delete button is
+        // a sibling so it does not violate the rule against interactive
+        // children inside role="option".
         return (
-          '<div class="ac-item ac-hist-item" role="option" tabindex="-1" data-query="' +
+          '<div class="ac-hist-row" style="display:flex;align-items:center">' +
+          '<div class="ac-item ac-hist-item" role="option" aria-selected="false" ' +
+          'id="' + optId + '" tabindex="-1" data-query="' +
           esc(item) +
           '">' +
           '<span class="ac-item-icon" aria-hidden="true">' +
@@ -3435,10 +3597,11 @@ function openAutocomplete(inp, items, isHist) {
           '<span class="ac-item-text">' +
           esc(item) +
           "</span>" +
+          "</div>" +
           '<button class="ac-hist-rm" data-query="' +
           esc(item) +
           '" aria-label="' +
-          esc(state.lang === "tr" ? "Geçmişten sil" : "Remove") +
+          esc(t("hist_remove") + ": " + item) +
           '" tabindex="-1">' +
           IC.xMark +
           "</button>" +
@@ -3446,7 +3609,8 @@ function openAutocomplete(inp, items, isHist) {
         );
       }
       return (
-        '<div class="ac-item" role="option" tabindex="-1" ' +
+        '<div class="ac-item" role="option" aria-selected="false" ' +
+        'id="' + optId + '" tabindex="-1" ' +
         'data-city="' +
         esc(item.citySlug) +
         '" data-place="' +
@@ -3483,6 +3647,10 @@ function openAutocomplete(inp, items, isHist) {
   // Append to body — to avoid clipping by .hero overflow:hidden
   document.body.appendChild(ac);
   positionAutocomplete(inp);
+
+  // Mark the combobox input as expanded and link it to the listbox
+  inp.setAttribute("aria-expanded", "true");
+  inp.setAttribute("aria-activedescendant", "");
 
   // Update position on scroll / resize
   var _rePos = function () {
@@ -3603,6 +3771,46 @@ function loadSharedFavs() {
     });
   saveFavs();
   return true;
+}
+
+// ── Focus trap utility ────────────────────────────────────────────────
+// Constrains Tab/Shift+Tab navigation within a container element.
+// Returns a cleanup function; also stores it on container._cleanupTrap.
+function trapFocus(container) {
+  var FOCUSABLE =
+    'a[href], button:not([disabled]), textarea, input, select, ' +
+    '[tabindex]:not([tabindex="-1"])';
+
+  function getFocusable() {
+    return Array.from(container.querySelectorAll(FOCUSABLE)).filter(function (el) {
+      return !el.closest('[aria-hidden="true"]') && el.offsetParent !== null;
+    });
+  }
+
+  function onKeyDown(e) {
+    if (e.key !== "Tab") return;
+    var focusable = getFocusable();
+    if (!focusable.length) return;
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
+  container.addEventListener("keydown", onKeyDown);
+  container._cleanupTrap = function () {
+    container.removeEventListener("keydown", onKeyDown);
+  };
+  return container._cleanupTrap;
 }
 
 // ── 13. Toast ─────────────────────────────────────────────────────────
