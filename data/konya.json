@@ -23,12 +23,7 @@
       "name": "Mevlana Müzesi ve Türbesi",
       "category": "muze",
       "description": "Celaleddin Rumi'nin türbesi ve dergahı. Konya'ya gelen herkesin mutlaka ziyaret ettiği huzurlu ve görkemli yer.",
-      "tags": [
-        "tarihi",
-        "kültür",
-        "dini",
-        "ücretsiz"
-      ],
+      "tags": ["tarihi", "kültür", "dini", "ücretsiz"],
       "openHours": "09:00 – 17:30 (Pazartesi öğleden sonra açık)",
       "location": {
         "lat": 37.8713,
@@ -42,90 +37,224 @@
       }
     },
     {
-      "name": "Selimiye Camii",
-      "category": "cami",
-      "description": "Selim I döneminden kalma, Mevlana Müzesi'nin hemen yanındaki zarif Osmanlı camisi.",
-      "tags": [
-        "tarihi",
-        "Osmanlı"
-      ],
-      "openHours": "Gün boyu açık (namaz vakitleri)",
-      "location": {
-        "lat": 37.871,
-        "lng": 32.4938
-      }
-    },
-    {
-      "name": "Alaeddin Tepesi ve Camii",
-      "category": "gezi",
-      "description": "Kentin merkezindeki tarihi tepe; Selçuklu döneminden kalma cami ve etrafını saran parkıyla huzurlu bir durak.",
-      "tags": [
-        "tarihi",
-        "park",
-        "manzara",
-        "ücretsiz"
-      ],
-      "openHours": "Gün boyu açık",
-      "location": {
-        "lat": 37.8741,
-        "lng": 32.4903
-      }
-    },
-    {
-      "name": "Konya Kapalı Çarşısı",
-      "category": "gezi",
-      "description": "Yüzyıllık ticaret geleneğini yaşatan, yerel el dokumalarından baharata her şeyi bulabileceğiniz tarihi çarşı.",
-      "tags": [
-        "tarihi",
-        "alışveriş",
-        "kültür"
-      ],
-      "openHours": "09:00 – 19:00 (Pazar kapalı)",
-      "location": {
-        "lat": 37.8716,
-        "lng": 32.4918
-      }
-    },
-    {
-      "name": "Şeyh Dürrani",
+      "name": "Tandırcı Emine Abla",
       "category": "yemek",
-      "description": "Konya'nın simgesi etli ekmeği yüzyıllık reçeteyle pişiren, şehrin en köklü lokantalarından biri.",
-      "mustEat": [
-        "Etli ekmek",
-        "Fırın kebabı",
-        "Tirit"
-      ],
+      "description": "Konya'nın geleneksel tandır böreğini yemek için güzel bir yer.",
+      "mustEat": ["Tandır", "Kuru Fasulye"],
       "priceLevel": 2,
-      "tags": [
-        "geleneksel",
-        "efsane",
-        "Konya mutfağı"
-      ],
+      "tags": ["tandır", "geleneksel", "kuru fasülye"],
+      "openHours": "11:00 – 18:15",
+      "location": {
+        "lat": 37.86942843486357,
+        "lng": 32.499059280195624
+      }
+    },
+    {
+      "name": "Kazımağa Lokantası",
+      "category": "yemek",
+      "description": "Konya'nın esnaf lokantalarındandır. Kuru fasülyesini denemelisiniz.",
+      "mustEat": ["Kuru Fasulye"],
+      "priceLevel": 2,
+      "tags": ["yemek", "kuru fasülye"],
+      "openHours": "07:00 – 19:00",
+      "location": {
+        "lat": 37.87031360444366,
+        "lng": 32.492547854335896
+      }
+    },
+    {
+      "name": "Sema Lokantası",
+      "category": "yemek",
+      "description": "Konya'nın esnaf lokantalarındandır. Su böreği dönerini denemelisiniz.",
+      "mustEat": ["Su Böreği"],
+      "priceLevel": 2,
+      "tags": ["yemek", "döner"],
+      "openHours": "06:30 – 20:00",
+      "location": {
+        "lat": 37.9456673236265,
+        "lng": 32.55789036931251
+      }
+    },
+    {
+      "name": "Hasır Döner 6",
+      "category": "yemek",
+      "description": "İçi bir buçuk ekmeği alınmış şekilde yemelisiniz.",
+      "mustEat": ["Döner"],
+      "priceLevel": 2,
+      "tags": ["yemek", "döner"],
+      "openHours": "10:00 – 22:00",
+      "location": {
+        "lat": 37.86187133820297,
+        "lng": 32.52880463899172
+      }
+    },
+    {
+      "name": "Cihan Pide Fırını",
+      "category": "yemek",
+      "description": "Esnaf mekanıdır. Etliekmek ve diğer ürünleri güzel.",
+      "mustEat": ["Etliekmek"],
+      "priceLevel": 2,
+      "tags": ["yemek", "etliekmek"],
+      "openHours": "11:30 – 20:30",
+      "location": {
+        "lat": 37.892100643165115,
+        "lng": 32.502281838993
+      }
+    },
+    {
+      "name": "Buhara İnegöl Köftecisi",
+      "category": "yemek",
+      "description": "Bu şubeyi arkadaşımgil işletiyor. Tavsiye ederim.",
+      "mustEat": ["İnegöl Köftesi"],
+      "priceLevel": 2,
+      "tags": ["yemek", "köfte"],
+      "openHours": "08:00 – 20:30",
+      "location": {
+        "lat": 37.87897760583209,
+        "lng": 32.493353788711815
+      }
+    },
+    {
+      "name": "Seranade Etliekmek",
+      "category": "yemek",
+      "description": "Etliekmek konusunda iyiler.",
+      "mustEat": ["Etliekmek"],
+      "priceLevel": 2,
+      "tags": ["yemek", "etliekmek"],
+      "openHours": "08:00 – 18:00",
+      "location": {
+        "lat": 37.89964755610003,
+        "lng": 32.50360036782935
+      }
+    },
+    {
+      "name": "Osman İzmir Kokoreç",
+      "category": "yemek",
+      "description": "Konya'da kokoreç konusunda en iyiler.",
+      "mustEat": ["Kokoreç"],
+      "priceLevel": 2,
+      "tags": ["yemek", "kokoreç"],
+      "openHours": "17:00 – 03:00",
+      "location": {
+        "lat": 37.862821355261644,
+        "lng": 32.47066766782783
+      }
+    },
+    {
+      "name": "Tarihi Konya kellecisi",
+      "category": "yemek",
+      "description": "Konya'da kelle söğüş yiyebileceğiniz en iyi yer.",
+      "mustEat": ["Kelle"],
+      "priceLevel": 2,
+      "tags": ["yemek", "kelle"],
+      "openHours": "08:00 – 20:30",
+      "location": {
+        "lat": 37.87252257876252,
+        "lng": 32.501933417195296
+      }
+    },
+    {
+      "name": "Paşam Pastanesi - Nişantaşı",
+      "category": "tatlı",
+      "description": "Konya'da pastane kültürü ve tatlıları konusunda en iyi mekan.",
+      "mustEat": ["Tiramisu"],
+      "priceLevel": 2,
+      "tags": ["tatlı", "tiramisu"],
+      "openHours": "09:00 – 00:00",
+      "location": {
+        "lat": 37.882887855027015,
+        "lng": 32.48638889666466
+      }
+    },
+    {
+      "name": "Yağ Somunu Pideci Hasan Şendağlı",
+      "category": "yemek",
+      "description": "Konya'da yağ somununun icat edildiği mekan.",
+      "mustEat": ["Yağ Somunu"],
+      "priceLevel": 2,
+      "tags": ["yemek", "yağ somunu"],
+      "openHours": "06:00 – 21:00",
+      "location": {
+        "lat": 37.86830722501041,
+        "lng": 32.50094716370041
+      }
+    },
+    {
+      "name": "Tarihi Tiritci Mithat",
+      "category": "yemek",
+      "description": "Konya'da tirit yiyebileceğiniz iyi mekanlardan.",
+      "mustEat": ["Tirit"],
+      "priceLevel": 2,
+      "tags": ["yemek", "tirit"],
+      "openHours": "11:30 – 17:45",
+      "location": {
+        "lat": 37.870897082080624,
+        "lng": 32.50117365248425
+      }
+    },
+    {
+      "name": "Karamanoğlu Tatlıpark",
+      "category": "tatlı",
+      "description": "Konya'da saç arası yiyebileceğiniz iyi mekanlardan.",
+      "mustEat": ["Saç Arası"],
+      "priceLevel": 2,
+      "tags": ["tatlı", "sac arası"],
+      "openHours": "12:00 – 23:00",
+      "location": {
+        "lat": 37.87284246098377,
+        "lng": 32.4990660120079
+      }
+    },
+    {
+      "name": "Ali Baba Fırın Kebap",
+      "category": "kebap",
+      "description": "Konya'da fırın kebabı yiyebileceğiniz iyi mekanlardan.",
+      "mustEat": ["Fırın Kebabı"],
+      "priceLevel": 2,
+      "tags": ["yemek", "fırın kebabı"],
+      "openHours": "10:00 – 18:30",
+      "location": {
+        "lat": 37.872683577377934,
+        "lng": 32.49995837791016
+      }
+    },
+    {
+      "name": "Lokmahane Çarşı",
+      "category": "yemek",
+      "description": "Konya'da geleneksel etliekmeği deneyimleyebileceğiniz iyi bir mekan.",
+      "mustEat": ["Etliekmek"],
+      "priceLevel": 2,
+      "tags": ["yemek", "etliekmek"],
+      "openHours": "09:00 – 23:00",
+      "location": {
+        "lat": 37.87152421822944,
+        "lng": 32.451186510156255
+      }
+    },
+    {
+      "name": "Örnek Lokantası",
+      "category": "yemek",
+      "description": "Konya'da geleneksel ramazanda çıkan tahinli pidesini deneyimleyebileceğiniz bir mekan yalnız sadece perşembe günleri çıkartıyorlar.",
+      "mustEat": ["Tahinli Pide"],
+      "priceLevel": 2,
+      "tags": ["yemek", "tahinli pide"],
+      "openHours": "09:00 – 23:00",
+      "location": {
+        "lat": 37.87023118518478,
+        "lng": 32.500151082599665
+      }
+    },
+    {
+      "name": "Cigerci Fatih / Anadolu Şube",
+      "category": "ızgara",
+      "description": "Konya'da ciğer yiyebileceğiniz mekan",
+      "mustEat": ["Ciğer"],
+      "priceLevel": 2,
+      "tags": ["ızgara", "ciger"],
       "openHours": "11:00 – 22:00",
       "location": {
-        "lat": 37.8741,
-        "lng": 32.489
-      }
-    },
-    {
-      "name": "Köşk Restaurant",
-      "category": "yemek",
-      "description": "Konya'nın geleneksel tatlarını, tarihi bir konakta modern bir sunumla buluşturan zarif restoran.",
-      "mustEat": [
-        "Höşmerim",
-        "Bamya çorbası",
-        "Sac kavurma"
-      ],
-      "priceLevel": 2,
-      "tags": [
-        "yerel",
-        "geleneksel",
-        "konak"
-      ],
-      "openHours": "12:00 – 22:00",
-      "location": {
-        "lat": 37.872,
-        "lng": 32.4905
+        "lat": 37.933595213384635,
+        "lng": 32.51231142777657
       }
     }
   ]
