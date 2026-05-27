@@ -1,0 +1,86 @@
+{
+  "city": "Bursa",
+  "slug": "bursa",
+  "region": "Marma",
+  "description": "Tarihin ve yeşilliği iç içe geçtiği şehir.",
+  "seasons": {
+    "jan": "avoid",
+    "feb": "avoid",
+    "mar": "ok",
+    "apr": "good",
+    "may": "good",
+    "jun": "ok",
+    "jul": "avoid",
+    "aug": "avoid",
+    "sep": "ok",
+    "oct": "good",
+    "nov": "ok",
+    "dec": "avoid",
+    "note": "Bursa"
+  },
+  "places": [
+    {
+      "name": "İnanç Fırın",
+      "category": "yemek",
+      "description": "Tahinli Pide deneyimlemek için iyi bir yer.",
+      "tags": ["tahinli pide"],
+      "openHours": "07:00 – 20:00",
+      "location": {
+        "lat": 40.1930394390802,
+        "lng": 29.047270692488837
+      }
+    },
+    {
+      "name": "Rumeli Kardeşler Sofrası",
+      "category": "yemek",
+      "description": "Süt helvası denemek için iyi bir mekan.",
+      "mustEat": ["Süt Helvası"],
+      "priceLevel": 2,
+      "tags": ["süt helvası", "komposto"],
+      "openHours": "00:00 – 00:00",
+      "location": {
+        "lat": 40.19732977599343,
+        "lng": 29.0726337660713
+      }
+    },
+    {
+      "name": "Tarihi Aynalı Çarşı Pide Ve Cantık",
+      "category": "yemek",
+      "description": "Cantık denemek için iyi bir mekan.",
+      "mustEat": ["Cantık"],
+      "priceLevel": 2,
+      "tags": ["cantık"],
+      "openHours": "11:00 – 18:00",
+      "location": {
+        "lat": 40.18459550175649,
+        "lng": 29.062714167922362
+      }
+    },
+    {
+      "name": "Kayhan Köftecisi",
+      "category": "yemek",
+      "description": "Köfte denemek için iyi bir mekan.",
+      "mustEat": ["Pideli Köfte", "Sarma Köfte", "Üsküp Köfte", "Kosova Köfte"],
+      "priceLevel": 2,
+      "tags": ["köfte"],
+      "openHours": "12:00 – 22:00",
+      "location": {
+        "lat": 40.20300960559309,
+        "lng": 28.99116755692714
+      }
+    },
+    {
+      "name": "Uludağ Kebapçısı Cemal & Cemil Usta Ataşehir Şubesi",
+      "category": "yemek",
+      "description": "İskender denemek için iyi bir mekan.",
+      "mustEat": ["İskender"],
+      "priceLevel": 2,
+      "tags": ["iskender"],
+      "openHours": "11:30 – 21:00",
+      "location": {
+        "lat": 40.97962634163912,
+        "lng": 29.107654266332876
+      }
+    }
+  ]
+}

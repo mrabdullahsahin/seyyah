@@ -1,5 +1,12 @@
 [
   {
+    "city": "Bursa",
+    "slug": "bursa",
+    "region": "Marmara",
+    "description": "Tarihin ve yeşilliği iç içe geçtiği şehir.",
+    "data": "data/bursa.json"
+  },
+  {
     "city": "Gaziantep",
     "slug": "gaziantep",
     "region": "Güneydoğu Anadolu",
