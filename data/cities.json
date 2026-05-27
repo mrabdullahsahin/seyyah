@@ -1,38 +1,10 @@
 [
   {
-    "city": "İstanbul",
-    "slug": "istanbul",
-    "region": "Marmara",
-    "description": "İki kıtayı birleştiren, 2700 yıllık tarih başkenti.",
-    "data": "data/istanbul.json"
-  },
-  {
-    "city": "Ankara",
-    "slug": "ankara",
-    "region": "İç Anadolu",
-    "description": "Cumhuriyetin kalbi, modern Türkiye'nin başkenti.",
-    "data": "data/ankara.json"
-  },
-  {
-    "city": "İzmir",
-    "slug": "izmir",
-    "region": "Ege",
-    "description": "Ege'nin incisi, Türkiye'nin en canlı kıyı kenti.",
-    "data": "data/izmir.json"
-  },
-  {
     "city": "Gaziantep",
     "slug": "gaziantep",
     "region": "Güneydoğu Anadolu",
     "description": "Türkiye'nin gastronomi başkenti, baklavanın şehri.",
     "data": "data/gaziantep.json"
-  },
-  {
-    "city": "Trabzon",
-    "slug": "trabzon",
-    "region": "Karadeniz",
-    "description": "Yeşilin bin tonu, Karadeniz'in efsanevi şehri.",
-    "data": "data/trabzon.json"
   },
   {
     "city": "Konya",
