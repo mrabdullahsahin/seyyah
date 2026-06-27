@@ -20,6 +20,7 @@
   },
   "places": [
     {
+      "id": "zeugma-mozaik-muzesi",
       "name": "Zeugma Mozaik Müzesi",
       "category": "muze",
       "description": "Dünya'nın en büyük mozaik koleksiyonuna ev sahipliği yapan eşsiz müze. Çingene Kızı mozaiği burada.",
@@ -37,6 +38,7 @@
       }
     },
     {
+      "id": "gaziantep-kalesi",
       "name": "Gaziantep Kalesi",
       "category": "gezi",
       "description": "Roma ve Bizans döneminden kalma, şehrin merkezinde yükselen tarihi kale. Kentin panoramik manzarası.",
@@ -54,6 +56,7 @@
       }
     },
     {
+      "id": "bakırcilar-carsisi",
       "name": "Bakırcılar Çarşısı",
       "category": "gezi",
       "description": "Yüzyıllık geleneği yaşatan, bakır işlemeciliği ustalarının dükkanlarıyla tarihi çarşı.",
@@ -65,6 +68,7 @@
       }
     },
     {
+      "id": "dogan-dondurma",
       "name": "Doğan Dondurma",
       "category": "yemek",
       "description": "Gaziantep'te birçok şubeleri bulunuyor biz bu şubelerine gitmiştik. Hemen yanında park var dondurma alıp parkta oturmak için ideal.",
@@ -78,6 +82,7 @@
       }
     },
     {
+      "id": "tahmis-kahvesi",
       "name": "Tahmis Kahvesi",
       "category": "yemek",
       "description": "1635'ten beri hizmet veren, Türkiye'nin en eski kahvehanelerinden biri. Tarihi atmosferde gerçek Türk kahvesi.",
@@ -91,6 +96,7 @@
       }
     },
     {
+      "id": "kasap-selcuk-usta",
       "name": "Kasap Selçuk Usta",
       "category": "yemek",
       "description": "Gaziantep'te bulunan güzel ızgaracılardan. Biz özellikle Kıyma deneyimledik, gayet güzel.",
@@ -104,6 +110,7 @@
       }
     },
     {
+      "id": "gulluoglu-baklava",
       "name": "Tarihi Elmacıpazarı Güllüoğlu Baklava",
       "category": "baklava",
       "description": "Gaziantep'te bulunan en iyi baklavacılardan biri.",
@@ -117,6 +124,7 @@
       }
     },
     {
+      "id": "celebiogullari-baklava",
       "name": "Çelebioğulları Baklavacı Elmacı Pazarı",
       "category": "baklava",
       "description": "Gaziantep'te bulunan en iyi baklavacılardan biri.",
@@ -130,6 +138,7 @@
       }
     },
     {
+      "id": "kocak-baklava",
       "name": "Koçak Baklava",
       "category": "baklava",
       "description": "Gaziantep'te bulunan en iyi baklavacılardan biri.",
@@ -143,6 +152,7 @@
       }
     },
     {
+      "id": "akıncioglu-baklava",
       "name": "Akıncıoğlu Baklavaları",
       "category": "baklava",
       "description": "Gaziantep'te bulunan en iyi baklavacılardan biri.",
@@ -156,6 +166,7 @@
       }
     },
     {
+      "id": "yesemek-mutfagi",
       "name": "Yesemek Gaziantep Mutfağı",
       "category": "yemek",
       "description": "Gaziantep yöresel yemeklerini bir arada bulabileceğiniz iyi bir yer.",
@@ -169,6 +180,7 @@
       }
     },
     {
+      "id": "dukat-kebap",
       "name": "Dukat Kebap",
       "category": "yemek",
       "description": "Gaziantep beyran çorbası ve katmerini yiyebileceğiniz iyi bir mekan.",
@@ -180,6 +192,64 @@
         "lat": 37.07801649017717,
         "lng": 37.38420400185156
       }
+    }
+  ],
+  "itineraries": [
+    {
+      "id": "gaziantep-1-gun",
+      "duration": 1,
+      "title": "1 Günlük Gaziantep",
+      "title_en": "1-Day Gaziantep",
+      "description": "Mozaikten baklavaya: Gaziantep'in öne çıkan tarihi ve lezzetlerini tek günde gör.",
+      "description_en": "From mosaics to baklava: Gaziantep's highlights in one day.",
+      "days": [
+        {
+          "day": 1,
+          "title": "Tarih, Çarşı ve Baklava",
+          "title_en": "History, Bazaar & Baklava",
+          "places": [
+            "zeugma-mozaik-muzesi",
+            "gaziantep-kalesi",
+            "tahmis-kahvesi",
+            "bakırcilar-carsisi",
+            "gulluoglu-baklava"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gaziantep-2-gun",
+      "duration": 2,
+      "title": "2 Günlük Gaziantep",
+      "title_en": "2-Day Gaziantep",
+      "description": "Kale, çarşı, Zeugma ve gastronomi — Gaziantep'i iki günde derinlemesine keşfet.",
+      "description_en": "Castle, bazaar, Zeugma and gastronomy — explore Gaziantep in depth over two days.",
+      "days": [
+        {
+          "day": 1,
+          "title": "Tarih ve Çarşı",
+          "title_en": "History & Bazaar",
+          "places": [
+            "zeugma-mozaik-muzesi",
+            "gaziantep-kalesi",
+            "bakırcilar-carsisi",
+            "tahmis-kahvesi",
+            "dogan-dondurma"
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Gastronomi Turu",
+          "title_en": "Gastronomy Tour",
+          "places": [
+            "dukat-kebap",
+            "yesemek-mutfagi",
+            "kasap-selcuk-usta",
+            "kocak-baklava",
+            "akıncioglu-baklava"
+          ]
+        }
+      ]
     }
   ]
 }

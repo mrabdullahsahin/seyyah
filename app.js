@@ -207,6 +207,18 @@ const STRINGS = {
     plan_move_down: "Aşağı taşı",
     hist_remove: "Geçmişten sil",
     map_region_label: "Haritadaki mekanlar",
+    itin_tab: "Güzergahlar",
+    itin_load_plan: "Planıma Ekle",
+    itin_loaded: function(n) { return n + " mekan plana eklendi"; },
+    itin_empty: "Bu şehir için henüz güzergah eklenmedi.",
+    itin_day: function(n) { return n + ". Gün"; },
+    itin_duration: function(n) { return n === 1 ? "1 Günlük" : n + " Günlük"; },
+    itin_places_count: function(n) { return n + " mekan"; },
+    itin_map_btn: "Haritada Gör",
+    itin_map_title: "Güzergah Haritası",
+    itin_map_day_label: function(n) { return "Gün " + n; },
+    itin_map_filter_all: "Tümü",
+    itin_map_no_coord: "Bu güzergahtaki mekanlarda koordinat bilgisi bulunamadı.",
   },
   en: {
     tagline: "Discover Turkey's cities",
@@ -331,6 +343,18 @@ const STRINGS = {
     plan_move_down: "Move down",
     hist_remove: "Remove from history",
     map_region_label: "Places shown on map",
+    itin_tab: "Itineraries",
+    itin_load_plan: "Add to My Plan",
+    itin_loaded: function(n) { return n + " place" + (n !== 1 ? "s" : "") + " added to plan"; },
+    itin_empty: "No itineraries added for this city yet.",
+    itin_day: function(n) { return "Day " + n; },
+    itin_duration: function(n) { return n === 1 ? "1-Day" : n + "-Day"; },
+    itin_places_count: function(n) { return n + " place" + (n !== 1 ? "s" : ""); },
+    itin_map_btn: "View on Map",
+    itin_map_title: "Route Map",
+    itin_map_day_label: function(n) { return "Day " + n; },
+    itin_map_filter_all: "All",
+    itin_map_no_coord: "No coordinates found for places in this itinerary.",
   },
 };
 
@@ -416,6 +440,9 @@ const IC = {
   check: svg('<polyline points="20 6 9 17 4 12"/>'),
   locate: svg(
     '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>',
+  ),
+  route: svg(
+    '<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',
   ),
 };
 
@@ -1880,6 +1907,12 @@ async function renderCityDetail() {
     return;
   }
 
+  // Reset category if itinerary mode but city has no itineraries
+  var cityItineraries = state.cityData.itineraries || [];
+  if (state.category === "guzergahlar" && cityItineraries.length === 0) {
+    state.category = "all";
+  }
+
   // Tabs
   var categories = ["all", "yemek", "cami", "muze", "gezi"];
   var tabsHTML = categories
@@ -1911,6 +1944,22 @@ async function renderCityDetail() {
       );
     })
     .join("");
+
+  // Itineraries tab
+  if (cityItineraries.length > 0) {
+    tabsHTML +=
+      '<button class="tab tab-itin ' +
+      (state.category === "guzergahlar" ? "tab-active" : "") +
+      '" id="tab-guzergahlar" data-cat="guzergahlar" role="tab" aria-selected="' +
+      (state.category === "guzergahlar" ? "true" : "false") +
+      '" aria-controls="place-grid">' +
+      IC.route +
+      " " +
+      esc(t("itin_tab")) +
+      ' <span class="tab-count">' +
+      cityItineraries.length +
+      "</span></button>";
+  }
 
   // Tag filter
   var allTags = getAllTags();
@@ -1981,10 +2030,13 @@ async function renderCityDetail() {
     "</div>";
 
   // Places
-  var filtered = getPlaces();
-  var placesHTML = filtered.length
-    ? filtered.map(placeCardHTML).join("")
-    : '<p class="empty-state col-span">' + esc(t("no_places")) + "</p>";
+  var isItinMode = state.category === "guzergahlar";
+  var filtered = isItinMode ? [] : getPlaces();
+  var placesHTML = isItinMode
+    ? renderItinerariesHTML()
+    : filtered.length
+      ? filtered.map(placeCardHTML).join("")
+      : '<p class="empty-state col-span">' + esc(t("no_places")) + "</p>";
 
   // Season calendar
   var seasonHTML = buildSeasonCalendar(state.cityData.seasons);
@@ -2012,7 +2064,7 @@ async function renderCityDetail() {
       : "";
 
   main.innerHTML =
-    '<div class="container detail-view">' +
+    '<div class="container detail-view' + (isItinMode ? " itinerary-mode" : "") + '">' +
     '<div class="detail-header">' +
     '<button class="btn-back" id="btn-back">' +
     IC.arrowLeft +
@@ -2062,6 +2114,10 @@ async function renderCityDetail() {
     "</div>";
 
   bindDetailEvents();
+  if (isItinMode) {
+    var initGrid = document.getElementById("place-grid");
+    if (initGrid) bindItineraryEvents(initGrid);
+  }
   initMap();
 }
 
@@ -2085,8 +2141,11 @@ function bindDetailEvents() {
       // Keep tabpanel labelled by the active tab
       var grid = document.getElementById("place-grid");
       if (grid) grid.setAttribute("aria-labelledby", "tab-" + state.category);
+      // Toggle itinerary mode on the container
+      var container = main.querySelector(".detail-view");
+      if (container) container.classList.toggle("itinerary-mode", state.category === "guzergahlar");
       updatePlaceGrid();
-      updateMapMarkers();
+      if (state.category !== "guzergahlar") updateMapMarkers();
     });
   });
 
@@ -2190,6 +2249,13 @@ function refreshTagFilter() {
 function updatePlaceGrid() {
   var grid = document.getElementById("place-grid");
   if (!grid) return;
+
+  if (state.category === "guzergahlar") {
+    grid.innerHTML = renderItinerariesHTML();
+    bindItineraryEvents(grid);
+    return;
+  }
+
   var filtered = getPlaces();
   grid.innerHTML = filtered.length
     ? filtered.map(placeCardHTML).join("")
@@ -3356,6 +3422,355 @@ function sharePlan() {
     showToast(t("plan_share_ok"));
   }
 }
+
+// ── 12b. Itinerary Feature ───────────────────────────────────────────
+
+function renderItinerariesHTML() {
+  var itins = (state.cityData && state.cityData.itineraries) || [];
+  if (!itins.length) {
+    return '<p class="empty-state col-span">' + esc(t("itin_empty")) + "</p>";
+  }
+
+  return itins
+    .map(function (itin) {
+      var totalPlaces = itin.days.reduce(function (sum, d) { return sum + d.places.length; }, 0);
+      var daysHTML = itin.days
+        .map(function (day) {
+          var placesListHTML = day.places
+            .map(function (placeId) {
+              var p = null;
+              for (var pi = 0; pi < state.cityData.places.length; pi++) {
+                if (state.cityData.places[pi].id === placeId) { p = state.cityData.places[pi]; break; }
+              }
+              return (
+                '<li class="itin-place-item">' +
+                IC.mapPin +
+                " " +
+                esc(p ? p.name : placeId) +
+                "</li>"
+              );
+            })
+            .join("");
+          return (
+            '<div class="itin-day">' +
+            '<p class="itin-day-title">' +
+            esc(t("itin_day", day.day)) +
+            (day.title ? " — " + esc(state.lang === "en" && day.title_en ? day.title_en : day.title) : "") +
+            "</p>" +
+            '<ul class="itin-places-list">' +
+            placesListHTML +
+            "</ul>" +
+            "</div>"
+          );
+        })
+        .join("");
+
+      var title = state.lang === "en" && itin.title_en ? itin.title_en : itin.title;
+      var desc = state.lang === "en" && itin.description_en ? itin.description_en : itin.description;
+
+      return (
+        '<div class="itin-card">' +
+        '<div class="itin-card-header">' +
+        '<span class="itin-duration-badge">' +
+        esc(t("itin_duration", itin.duration)) +
+        "</span>" +
+        '<h3 class="itin-title">' +
+        esc(title) +
+        "</h3>" +
+        '<p class="itin-desc">' +
+        esc(desc) +
+        "</p>" +
+        "</div>" +
+        '<div class="itin-days">' +
+        daysHTML +
+        "</div>" +
+        '<div class="itin-card-footer">' +
+        '<span class="itin-meta">' +
+        IC.clock +
+        " " +
+        esc(t("itin_duration", itin.duration)) +
+        " · " +
+        esc(t("itin_places_count", totalPlaces)) +
+        "</span>" +
+        '<div class="itin-card-actions">' +
+        '<button class="btn-itin-map" data-itin-id="' +
+        esc(itin.id) +
+        '">' +
+        IC.mapPin +
+        " " +
+        esc(t("itin_map_btn")) +
+        "</button>" +
+        '<button class="btn-itin-load" data-itin-id="' +
+        esc(itin.id) +
+        '">' +
+        IC.plan +
+        " " +
+        esc(t("itin_load_plan")) +
+        "</button>" +
+        "</div>" +
+        "</div>" +
+        "</div>"
+      );
+    })
+    .join("");
+}
+
+function loadItinerary(itinId) {
+  var itins = (state.cityData && state.cityData.itineraries) || [];
+  var itin = null;
+  for (var i = 0; i < itins.length; i++) {
+    if (itins[i].id === itinId) { itin = itins[i]; break; }
+  }
+  if (!itin) return;
+  var count = 0;
+  itin.days.forEach(function (day) {
+    day.places.forEach(function (placeId) {
+      var place = null;
+      for (var j = 0; j < state.cityData.places.length; j++) {
+        if (state.cityData.places[j].id === placeId) { place = state.cityData.places[j]; break; }
+      }
+      if (place) {
+        addToPlan(place);
+        count++;
+      }
+    });
+  });
+  updatePlanBtn();
+  showToast(t("itin_loaded", count));
+  openPlanDrawer();
+}
+
+function bindItineraryEvents(container) {
+  container.querySelectorAll(".btn-itin-load[data-itin-id]").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      loadItinerary(btn.dataset.itinId);
+    });
+  });
+
+  container.querySelectorAll(".btn-itin-map[data-itin-id]").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      openItinMapModal(btn.dataset.itinId, btn);
+    });
+  });
+}
+
+function openItinMapModal(itinId, triggerEl) {
+  var itins = (state.cityData && state.cityData.itineraries) || [];
+  var itin = null;
+  for (var i = 0; i < itins.length; i++) {
+    if (itins[i].id === itinId) { itin = itins[i]; break; }
+  }
+  if (!itin) return;
+
+  // Build ordered stop list: flatten all days
+  var stops = [];
+  itin.days.forEach(function (day) {
+    day.places.forEach(function (placeId) {
+      var place = null;
+      for (var j = 0; j < state.cityData.places.length; j++) {
+        if (state.cityData.places[j].id === placeId) { place = state.cityData.places[j]; break; }
+      }
+      stops.push({ placeId: placeId, place: place, day: day.day });
+    });
+  });
+
+  var title = state.lang === "en" && itin.title_en ? itin.title_en : itin.title;
+
+  // Stop list HTML (legend)
+  var stopsListHTML = stops.map(function (s, idx) {
+    var hasLoc = s.place && s.place.location && s.place.location.lat;
+    return (
+      '<li class="itin-modal-stop' + (hasLoc ? "" : " itin-modal-stop-noloc") + '" data-day="' + s.day + '">' +
+      '<span class="itin-modal-stop-num">' + (idx + 1) + '</span>' +
+      '<span class="itin-modal-stop-name">' + esc(s.place ? s.place.name : s.placeId) + '</span>' +
+      '<span class="itin-modal-stop-day">' + esc(t("itin_map_day_label", s.day)) + '</span>' +
+      '</li>'
+    );
+  }).join("");
+
+  // Day filter buttons (only for multi-day itineraries)
+  var dayFiltersHTML = "";
+  if (itin.days.length > 1) {
+    var filterBtnsHTML = '<button class="itin-day-filter-btn active" data-filter-day="all">' + esc(t("itin_map_filter_all")) + '</button>';
+    itin.days.forEach(function (day) {
+      filterBtnsHTML += '<button class="itin-day-filter-btn" data-filter-day="' + day.day + '">' + esc(t("itin_map_day_label", day.day)) + '</button>';
+    });
+    dayFiltersHTML = '<div class="itin-day-filters" id="itin-day-filters">' + filterBtnsHTML + '</div>';
+  }
+
+  var overlayHTML =
+    '<div class="itin-map-modal">' +
+    '<div class="itin-map-modal-header">' +
+    '<div class="itin-map-modal-title">' +
+    IC.route +
+    '<span>' + esc(title) + '</span>' +
+    '</div>' +
+    '<button class="itin-map-modal-close" id="itin-map-close" aria-label="' + esc(t("modal_close")) + '">' +
+    IC.xMark +
+    '</button>' +
+    '</div>' +
+    dayFiltersHTML +
+    '<div class="itin-map-modal-body">' +
+    '<ol class="itin-modal-stops">' + stopsListHTML + '</ol>' +
+    '<div id="itin-map-el" class="itin-map-el"></div>' +
+    '</div>' +
+    '</div>';
+
+  var old = document.getElementById("itin-map-overlay");
+  if (old) { closeItinMapModal(); return; }
+
+  var overlay = document.createElement("div");
+  overlay.id = "itin-map-overlay";
+  overlay.className = "modal-overlay";
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.setAttribute("aria-label", esc(t("itin_map_title")));
+  overlay.innerHTML = overlayHTML;
+  document.body.appendChild(overlay);
+  document.body.classList.add("modal-open");
+
+  overlay.addEventListener("click", function (e) {
+    if (e.target === overlay) closeItinMapModal(triggerEl);
+  });
+  var closeBtn = overlay.querySelector("#itin-map-close");
+  if (closeBtn) closeBtn.addEventListener("click", function () { closeItinMapModal(triggerEl); });
+
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      overlay.classList.add("modal-overlay-visible");
+      setTimeout(function () { initItinMap(stops); }, 80);
+    });
+  });
+
+  trapFocus(overlay);
+  if (closeBtn) setTimeout(function () { closeBtn.focus(); }, 60);
+}
+
+function closeItinMapModal(triggerEl) {
+  var overlay = document.getElementById("itin-map-overlay");
+  if (!overlay) return;
+  overlay.classList.remove("modal-overlay-visible");
+  if (overlay._cleanupTrap) overlay._cleanupTrap();
+  setTimeout(function () {
+    if (overlay.parentNode) overlay.remove();
+    document.body.classList.remove("modal-open");
+    if (triggerEl && triggerEl.focus) triggerEl.focus();
+  }, 270);
+}
+
+function initItinMap(stops) {
+  var mapEl = document.getElementById("itin-map-el");
+  if (!mapEl || typeof window.L === "undefined") return;
+
+  var located = stops.filter(function (s) {
+    return s.place && s.place.location && s.place.location.lat;
+  });
+
+  if (!located.length) {
+    mapEl.innerHTML = '<div class="map-unavail">' + IC.mapPin + " " + esc(t("itin_map_no_coord")) + "</div>";
+    mapEl.classList.add("map-unavail-wrap");
+    return;
+  }
+
+  try {
+    var isDark = document.documentElement.dataset.theme === "dark";
+    var tileUrl = isDark
+      ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+      : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+
+    var map = L.map("itin-map-el", { zoomControl: true, scrollWheelZoom: false, attributionControl: false });
+
+    L.tileLayer(tileUrl, {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> © <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
+      maxZoom: 19,
+    }).addTo(map);
+
+    // Per-day polylines
+    var polylinesByDay = {};
+    var dayNums = [];
+    stops.forEach(function (s) { if (dayNums.indexOf(s.day) === -1) dayNums.push(s.day); });
+    dayNums.forEach(function (d) {
+      var dayLatlngs = located.filter(function (s) { return s.day === d; }).map(function (s) {
+        return [s.place.location.lat, s.place.location.lng];
+      });
+      if (dayLatlngs.length > 1) {
+        polylinesByDay[d] = L.polyline(dayLatlngs, { color: "#C8432A", weight: 2.5, opacity: 0.6, dashArray: "6 5" });
+        polylinesByDay[d].addTo(map);
+      }
+    });
+
+    // Numbered markers grouped by day
+    var markersByDay = {};
+    dayNums.forEach(function (d) { markersByDay[d] = []; });
+    var globalIdx = 0;
+    stops.forEach(function (s) {
+      if (!s.place || !s.place.location || !s.place.location.lat) return;
+      globalIdx++;
+      var num = globalIdx;
+      var marker = L.marker([s.place.location.lat, s.place.location.lng], {
+        icon: L.divIcon({
+          className: "",
+          html: '<div class="itin-num-pin">' + num + '</div>',
+          iconSize: [28, 28],
+          iconAnchor: [14, 14],
+          popupAnchor: [0, -16],
+        }),
+        alt: s.place ? s.place.name : s.placeId,
+      });
+      marker.bindPopup(
+        "<strong>" + esc(num + ". " + (s.place ? s.place.name : s.placeId)) + "</strong>" +
+        '<br><span style="font-size:11px;color:#888">' + esc(t("itin_map_day_label", s.day)) + "</span>",
+        { closeButton: false }
+      );
+      marker.addTo(map);
+      markersByDay[s.day].push({ marker: marker, latlng: [s.place.location.lat, s.place.location.lng] });
+    });
+
+    // Initial bounds: all markers
+    var allLatlngs = located.map(function (s) { return [s.place.location.lat, s.place.location.lng]; });
+    map.fitBounds(L.latLngBounds(allLatlngs), { padding: [32, 32] });
+
+    // Day filter buttons
+    var filterBtns = document.querySelectorAll("#itin-day-filters .itin-day-filter-btn");
+    var stopItems = document.querySelectorAll("#itin-map-overlay .itin-modal-stop");
+    if (!filterBtns.length) return;
+
+    filterBtns.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        filterBtns.forEach(function (b) { b.classList.remove("active"); });
+        btn.classList.add("active");
+        var filterDay = btn.dataset.filterDay;
+
+        dayNums.forEach(function (d) {
+          var show = filterDay === "all" || parseInt(filterDay, 10) === d;
+          markersByDay[d].forEach(function (m) {
+            if (show) { if (!map.hasLayer(m.marker)) m.marker.addTo(map); }
+            else { if (map.hasLayer(m.marker)) map.removeLayer(m.marker); }
+          });
+          if (polylinesByDay[d]) {
+            if (show) { if (!map.hasLayer(polylinesByDay[d])) polylinesByDay[d].addTo(map); }
+            else { if (map.hasLayer(polylinesByDay[d])) map.removeLayer(polylinesByDay[d]); }
+          }
+        });
+
+        // Refit bounds
+        var visibleLatlngs = located.filter(function (s) {
+          return filterDay === "all" || parseInt(filterDay, 10) === s.day;
+        }).map(function (s) { return [s.place.location.lat, s.place.location.lng]; });
+        if (visibleLatlngs.length) map.fitBounds(L.latLngBounds(visibleLatlngs), { padding: [32, 32] });
+
+        // Filter stop list
+        stopItems.forEach(function (li) {
+          var show = filterDay === "all" || parseInt(filterDay, 10) === parseInt(li.dataset.day, 10);
+          li.classList.toggle("itin-stop-hidden", !show);
+        });
+      });
+    });
+  } catch (_) {}
+}
+
 
 function loadPlanFromUrl() {
   var hash = location.hash;

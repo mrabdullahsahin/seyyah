@@ -20,6 +20,7 @@
   },
   "places": [
     {
+      "id": "inanc-firin",
       "name": "İnanç Fırın",
       "category": "yemek",
       "description": "Tahinli Pide deneyimlemek için iyi bir yer.",
@@ -31,6 +32,7 @@
       }
     },
     {
+      "id": "rumeli-kardesler-sofrasi",
       "name": "Rumeli Kardeşler Sofrası",
       "category": "yemek",
       "description": "Süt helvası denemek için iyi bir mekan.",
@@ -44,6 +46,7 @@
       }
     },
     {
+      "id": "tarihi-aynali-carsi",
       "name": "Tarihi Aynalı Çarşı Pide Ve Cantık",
       "category": "yemek",
       "description": "Cantık denemek için iyi bir mekan.",
@@ -57,6 +60,7 @@
       }
     },
     {
+      "id": "kayhan-koftecisi",
       "name": "Kayhan Köftecisi",
       "category": "yemek",
       "description": "Köfte denemek için iyi bir mekan.",
@@ -70,6 +74,7 @@
       }
     },
     {
+      "id": "uludag-kebabcisi",
       "name": "Uludağ Kebapçısı Cemal & Cemil Usta Ataşehir Şubesi",
       "category": "yemek",
       "description": "İskender denemek için iyi bir mekan.",
@@ -81,6 +86,29 @@
         "lat": 40.97962634163912,
         "lng": 29.107654266332876
       }
+    }
+  ],
+  "itineraries": [
+    {
+      "id": "bursa-1-gun",
+      "duration": 1,
+      "title": "1 Günlük Bursa Lezzet Turu",
+      "title_en": "1-Day Bursa Food Tour",
+      "description": "Bursa'nın ikonik tatlarını tek günde keşfet: cantık, tahinli pide ve köfte.",
+      "description_en": "Discover Bursa's iconic flavors in one day: cantık, tahini flatbread and köfte.",
+      "days": [
+        {
+          "day": 1,
+          "title": "Tarihi Merkez Lezzetleri",
+          "title_en": "Historic Center Flavors",
+          "places": [
+            "inanc-firin",
+            "tarihi-aynali-carsi",
+            "rumeli-kardesler-sofrasi",
+            "kayhan-koftecisi"
+          ]
+        }
+      ]
     }
   ]
 }

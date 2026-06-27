@@ -20,6 +20,7 @@
   },
   "places": [
     {
+      "id": "mevlana-muzesi",
       "name": "Mevlana Müzesi ve Türbesi",
       "category": "muze",
       "description": "Celaleddin Rumi'nin türbesi ve dergahı. Konya'ya gelen herkesin mutlaka ziyaret ettiği huzurlu ve görkemli yer.",
@@ -37,6 +38,7 @@
       }
     },
     {
+      "id": "tandirci-emine-abla",
       "name": "Tandırcı Emine Abla",
       "category": "yemek",
       "description": "Konya'nın geleneksel tandır böreğini yemek için güzel bir yer.",
@@ -50,6 +52,7 @@
       }
     },
     {
+      "id": "kazimaga-lokantasi",
       "name": "Kazımağa Lokantası",
       "category": "yemek",
       "description": "Konya'nın esnaf lokantalarındandır. Kuru fasülyesini denemelisiniz.",
@@ -63,6 +66,7 @@
       }
     },
     {
+      "id": "sema-lokantasi",
       "name": "Sema Lokantası",
       "category": "yemek",
       "description": "Konya'nın esnaf lokantalarındandır. Su böreği dönerini denemelisiniz.",
@@ -76,6 +80,7 @@
       }
     },
     {
+      "id": "hasir-doner",
       "name": "Hasır Döner 6",
       "category": "yemek",
       "description": "İçi bir buçuk ekmeği alınmış şekilde yemelisiniz.",
@@ -89,6 +94,7 @@
       }
     },
     {
+      "id": "cihan-pide-firini",
       "name": "Cihan Pide Fırını",
       "category": "yemek",
       "description": "Esnaf mekanıdır. Etliekmek ve diğer ürünleri güzel.",
@@ -102,6 +108,7 @@
       }
     },
     {
+      "id": "buhara-inegol-koftecisi",
       "name": "Buhara İnegöl Köftecisi",
       "category": "yemek",
       "description": "Bu şubeyi arkadaşımgil işletiyor. Tavsiye ederim.",
@@ -115,6 +122,7 @@
       }
     },
     {
+      "id": "seranade-etliekmek",
       "name": "Seranade Etliekmek",
       "category": "yemek",
       "description": "Etliekmek konusunda iyiler.",
@@ -128,6 +136,7 @@
       }
     },
     {
+      "id": "osman-izmir-kokorec",
       "name": "Osman İzmir Kokoreç",
       "category": "yemek",
       "description": "Konya'da kokoreç konusunda en iyiler.",
@@ -141,6 +150,7 @@
       }
     },
     {
+      "id": "tarihi-konya-kellecisi",
       "name": "Tarihi Konya kellecisi",
       "category": "yemek",
       "description": "Konya'da kelle söğüş yiyebileceğiniz en iyi yer.",
@@ -154,6 +164,7 @@
       }
     },
     {
+      "id": "pasam-pastanesi",
       "name": "Paşam Pastanesi - Nişantaşı",
       "category": "tatlı",
       "description": "Konya'da pastane kültürü ve tatlıları konusunda en iyi mekan.",
@@ -167,6 +178,7 @@
       }
     },
     {
+      "id": "yag-somunu-pideci",
       "name": "Yağ Somunu Pideci Hasan Şendağlı",
       "category": "yemek",
       "description": "Konya'da yağ somununun icat edildiği mekan.",
@@ -180,6 +192,7 @@
       }
     },
     {
+      "id": "tarihi-tiritci-mithat",
       "name": "Tarihi Tiritci Mithat",
       "category": "yemek",
       "description": "Konya'da tirit yiyebileceğiniz iyi mekanlardan.",
@@ -193,6 +206,7 @@
       }
     },
     {
+      "id": "karamanoglu-tatlipark",
       "name": "Karamanoğlu Tatlıpark",
       "category": "tatlı",
       "description": "Konya'da saç arası yiyebileceğiniz iyi mekanlardan.",
@@ -206,6 +220,7 @@
       }
     },
     {
+      "id": "ali-baba-firin-kebap",
       "name": "Ali Baba Fırın Kebap",
       "category": "kebap",
       "description": "Konya'da fırın kebabı yiyebileceğiniz iyi mekanlardan.",
@@ -219,6 +234,7 @@
       }
     },
     {
+      "id": "lokmahane-carsi",
       "name": "Lokmahane Çarşı",
       "category": "yemek",
       "description": "Konya'da geleneksel etliekmeği deneyimleyebileceğiniz iyi bir mekan.",
@@ -232,6 +248,7 @@
       }
     },
     {
+      "id": "ornek-lokantasi",
       "name": "Örnek Lokantası",
       "category": "yemek",
       "description": "Konya'da geleneksel ramazanda çıkan tahinli pidesini deneyimleyebileceğiniz bir mekan yalnız sadece perşembe günleri çıkartıyorlar.",
@@ -245,6 +262,7 @@
       }
     },
     {
+      "id": "cigerci-fatih",
       "name": "Cigerci Fatih / Anadolu Şube",
       "category": "ızgara",
       "description": "Konya'da ciğer yiyebileceğiniz mekan",
@@ -256,6 +274,62 @@
         "lat": 37.933595213384635,
         "lng": 32.51231142777657
       }
+    }
+  ],
+  "itineraries": [
+    {
+      "id": "konya-1-gun",
+      "duration": 1,
+      "title": "1 Günlük Konya",
+      "title_en": "1-Day Konya",
+      "description": "Mevlana'dan etliekmeğe: Konya'nın ruhunu ve lezzetini tek günde yaşa.",
+      "description_en": "From Mevlana to etliekmek: experience Konya's soul and flavor in one day.",
+      "days": [
+        {
+          "day": 1,
+          "title": "Mevlana, Tirit ve Tatlı",
+          "title_en": "Mevlana, Tirit & Sweets",
+          "places": [
+            "mevlana-muzesi",
+            "tandirci-emine-abla",
+            "tarihi-tiritci-mithat",
+            "karamanoglu-tatlipark"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "konya-2-gun",
+      "duration": 2,
+      "title": "2 Günlük Konya",
+      "title_en": "2-Day Konya",
+      "description": "Konya'nın kültürel mirasını ve zengin mutfağını iki günde derinlemesine keşfet.",
+      "description_en": "Explore Konya's cultural heritage and rich cuisine in depth over two days.",
+      "days": [
+        {
+          "day": 1,
+          "title": "Kültür ve Geleneksel Lezzetler",
+          "title_en": "Culture & Traditional Flavors",
+          "places": [
+            "mevlana-muzesi",
+            "tandirci-emine-abla",
+            "kazimaga-lokantasi",
+            "pasam-pastanesi"
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Konya Mutfağı Turu",
+          "title_en": "Konya Cuisine Tour",
+          "places": [
+            "ali-baba-firin-kebap",
+            "tarihi-tiritci-mithat",
+            "karamanoglu-tatlipark",
+            "yag-somunu-pideci",
+            "sema-lokantasi"
+          ]
+        }
+      ]
     }
   ]
 }

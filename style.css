@@ -3544,3 +3544,455 @@ body.modal-open {
   gap: 1px;
   margin-left: 0.2rem;
 }
+
+/* ── 39. Güzergah (Itinerary) Kartları ──────────────────────────────── */
+
+/* Itinerary modunda yer listesi kontrollerini gizle */
+.detail-view.itinerary-mode .sort-bar,
+.detail-view.itinerary-mode .tag-filter,
+.detail-view.itinerary-mode .nearby-widget,
+.detail-view.itinerary-mode .map-section { display: none; }
+
+/* place-grid, itinerary modunda tek sütun olur */
+.detail-view.itinerary-mode #place-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.itin-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  transition: box-shadow var(--trans);
+}
+
+.itin-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+[data-theme="dark"] .itin-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.itin-card-header {
+  padding: 1.25rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.itin-duration-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--red);
+  background: var(--red-light);
+  border: 1px solid rgba(200, 67, 42, 0.2);
+  border-radius: var(--r-pill);
+  padding: 2px 10px;
+  margin-bottom: 0.6rem;
+}
+
+[data-theme="dark"] .itin-duration-badge {
+  background: rgba(200, 67, 42, 0.18);
+  border-color: rgba(200, 67, 42, 0.3);
+  color: #F5A896;
+}
+
+.itin-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 0.35rem;
+  line-height: 1.3;
+}
+
+.itin-desc {
+  font-size: 13px;
+  color: var(--ink-3);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.itin-days {
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.itin-day {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.itin-day-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+.itin-places-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.itin-place-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 13px;
+  color: var(--ink-2);
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--r-sm);
+  background: var(--bg-hover);
+}
+
+.itin-place-item svg {
+  color: var(--red);
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.itin-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.25rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg-hover);
+  gap: 1rem;
+}
+
+.itin-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 12px;
+  color: var(--ink-3);
+  flex-shrink: 0;
+}
+
+.itin-meta svg {
+  opacity: 0.6;
+}
+
+.btn-itin-load {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--red);
+  border: none;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: background var(--trans), transform var(--trans);
+  white-space: nowrap;
+}
+
+.btn-itin-load:hover {
+  background: #b33a24;
+  transform: translateY(-1px);
+}
+
+.btn-itin-load:active {
+  transform: translateY(0);
+}
+
+.btn-itin-load:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}
+
+/* Kart footer: meta sol, butonlar sağ */
+.itin-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* Mobil */
+@media (max-width: 480px) {
+  .itin-card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .itin-card-actions {
+    width: 100%;
+  }
+
+  .btn-itin-load,
+  .btn-itin-map {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* "Haritada Gör" butonu */
+.btn-itin-map {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-md);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: background var(--trans), border-color var(--trans), color var(--trans), transform var(--trans);
+  white-space: nowrap;
+}
+
+.btn-itin-map:hover {
+  border-color: var(--red);
+  color: var(--red);
+  background: var(--red-light);
+  transform: translateY(-1px);
+}
+
+.btn-itin-map:active { transform: translateY(0); }
+
+.btn-itin-map:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}
+
+/* ── 40. Güzergah Harita Modal'ı ─────────────────────────────────────── */
+
+.itin-map-modal {
+  background: var(--surface);
+  border-radius: var(--r-card) var(--r-card) 0 0;
+  width: 100%;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(40px);
+  transition: transform 0.28s cubic-bezier(0.34, 1.46, 0.64, 1);
+}
+
+@media (min-width: 620px) {
+  .itin-map-modal {
+    border-radius: var(--r-card);
+    max-width: 680px;
+    max-height: 88vh;
+    transform: scale(0.94) translateY(20px);
+  }
+}
+
+.modal-overlay-visible .itin-map-modal {
+  transform: translateY(0);
+}
+
+@media (min-width: 620px) {
+  .modal-overlay-visible .itin-map-modal {
+    transform: scale(1) translateY(0);
+  }
+}
+
+.itin-map-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.itin-map-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.itin-map-modal-title svg { color: var(--red); }
+
+.itin-map-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--bg-hover);
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--ink-3);
+  transition: background var(--trans), color var(--trans);
+  flex-shrink: 0;
+}
+
+.itin-map-modal-close:hover { background: var(--border); color: var(--ink); }
+
+.itin-map-modal-close:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+.itin-map-modal-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+@media (min-width: 620px) {
+  .itin-map-modal-body {
+    flex-direction: row;
+  }
+}
+
+/* Stop listesi */
+.itin-modal-stops {
+  list-style: none;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  overflow-y: auto;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  max-height: 140px;
+}
+
+@media (min-width: 620px) {
+  .itin-modal-stops {
+    width: 220px;
+    max-height: none;
+    border-bottom: none;
+    border-right: 1px solid var(--border);
+    padding: 1rem;
+  }
+}
+
+.itin-modal-stop {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+.itin-modal-stop-noloc { opacity: 0.45; }
+
+.itin-modal-stop-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.itin-modal-stop-noloc .itin-modal-stop-num {
+  background: var(--ink-3);
+}
+
+.itin-modal-stop-name {
+  flex: 1;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itin-modal-stop-day {
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Harita alanı */
+.itin-map-el {
+  flex: 1;
+  min-height: 280px;
+}
+
+@media (min-width: 620px) {
+  .itin-map-el { min-height: 420px; }
+}
+
+/* Numaralı pin marker */
+.itin-num-pin {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--red, #C8432A);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2.5px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.itin-num-pin:hover { transform: scale(1.15); }
+
+/* Day filter buttons */
+.itin-day-filters {
+  display: flex;
+  gap: 6px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.itin-day-filter-btn {
+  padding: 4px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--ink-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  font-family: inherit;
+}
+
+.itin-day-filter-btn:hover {
+  background: var(--border);
+  color: var(--ink);
+}
+
+.itin-day-filter-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.itin-modal-stop.itin-stop-hidden { display: none; }
