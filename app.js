@@ -459,6 +459,28 @@ const MAP_COL = {
   gezi: "#e67e22",
 };
 
+// Categories that aren't food places (used to group any custom food subcategory
+// — tatlı, çorba, baklava, kebap… — under the same icon/colour/duration as "yemek")
+const NON_FOOD_CATS = { cami: true, muze: true, gezi: true };
+function normalizeCat(cat) {
+  return NON_FOOD_CATS[cat] ? cat : "yemek";
+}
+
+// Human-readable label for a category: uses the translation if one exists,
+// otherwise falls back to the raw category string so custom categories
+// (e.g. "tatlı", "baklava") still display nicely instead of a literal key.
+function catLabel(cat) {
+  var label = (STRINGS[state.lang].cats || {})[cat];
+  if (label) return label;
+  return cat ? cat.charAt(0).toLocaleUpperCase("tr") + cat.slice(1) : "";
+}
+function catIcon(cat) {
+  return CAT_IC[normalizeCat(cat)] || "";
+}
+function catColor(cat) {
+  return MAP_COL[normalizeCat(cat)] || "#555";
+}
+
 // ── 5. Helpers ───────────────────────────────────────────────────────
 
 // All dynamic content passes through this function (XSS prevention)
@@ -818,9 +840,9 @@ function buildSimilarPlacesHTML(place) {
         esc(p.name) +
         '">' +
         '<div class="similar-card-cat">' +
-        (CAT_IC[p.category] || "") +
+        catIcon(p.category) +
         " " +
-        esc(t("cats." + p.category)) +
+        esc(catLabel(p.category)) +
         "</div>" +
         '<div class="similar-card-name">' +
         esc(p.name) +
@@ -1042,7 +1064,14 @@ function buildStatsPanel() {
         return catStats[k];
       }),
     );
-    var catOrder = ["yemek", "muze", "gezi", "cami"];
+    var KNOWN_CAT_ORDER = ["yemek", "muze", "gezi", "cami"];
+    var catOrder = KNOWN_CAT_ORDER.concat(
+      Object.keys(catStats)
+        .filter(function (c) {
+          return KNOWN_CAT_ORDER.indexOf(c) === -1;
+        })
+        .sort(),
+    );
     catHTML =
       '<div class="stats-cats">' +
       catOrder
@@ -1055,14 +1084,14 @@ function buildStatsPanel() {
           return (
             '<div class="stats-cat-row">' +
             '<span class="stats-cat-label">' +
-            (CAT_IC[cat] ? CAT_IC[cat] : "") +
+            catIcon(cat) +
             " " +
-            esc(t("cats." + cat)) +
+            esc(catLabel(cat)) +
             "</span>" +
             '<div class="stats-cat-bar" role="progressbar" aria-valuenow="' +
             esc(String(pct)) +
             '" aria-valuemin="0" aria-valuemax="100" aria-label="' +
-            esc(t("cats." + cat)) +
+            esc(catLabel(cat)) +
             '"><div class="stats-cat-fill" style="width:' +
             esc(String(pct)) +
             '%"></div></div>' +
@@ -1681,10 +1710,10 @@ function openBadgeHTML(openHours) {
 function badgeHTML(category) {
   return (
     '<span class="badge badge-' +
-    esc(category) +
+    esc(normalizeCat(category)) +
     '">' +
-    (CAT_IC[category] || "") +
-    esc(t("cats." + category)) +
+    catIcon(category) +
+    esc(catLabel(category)) +
     "</span>"
   );
 }
@@ -1913,8 +1942,23 @@ async function renderCityDetail() {
     state.category = "all";
   }
 
-  // Tabs
-  var categories = ["all", "yemek", "cami", "muze", "gezi"];
+  // Tabs — derived from whatever categories actually appear in this city's
+  // data, so any custom category (tatlı, baklava, kebap…) gets its own tab.
+  var KNOWN_CAT_ORDER = ["yemek", "cami", "muze", "gezi"];
+  var presentCats = {};
+  state.cityData.places.forEach(function (p) {
+    if (p.category) presentCats[p.category] = true;
+  });
+  var categories = ["all"].concat(
+    KNOWN_CAT_ORDER.filter(function (c) {
+      return presentCats[c];
+    }),
+    Object.keys(presentCats)
+      .filter(function (c) {
+        return KNOWN_CAT_ORDER.indexOf(c) === -1;
+      })
+      .sort(),
+  );
   var tabsHTML = categories
     .map(function (cat) {
       var count =
@@ -1929,15 +1973,15 @@ async function renderCityDetail() {
         (state.category === cat ? "tab-active" : "") +
         '" ' +
         'id="tab-' +
-        cat +
+        esc(cat) +
         '" data-cat="' +
-        cat +
+        esc(cat) +
         '" role="tab" aria-selected="' +
         (state.category === cat ? "true" : "false") +
         '" aria-controls="place-grid">' +
-        (CAT_IC[cat] || "") +
+        catIcon(cat) +
         " " +
-        esc(t("cats." + cat)) +
+        esc(catLabel(cat)) +
         ' <span class="tab-count">' +
         count +
         "</span></button>"
@@ -2431,8 +2475,8 @@ function initMap() {
   var markerGroup = L.featureGroup();
 
   allPlaces.forEach(function (place) {
-    var color = MAP_COL[place.category] || "#555";
-    var catLabel = t("cats." + place.category);
+    var color = catColor(place.category);
+    var catLbl = catLabel(place.category);
     var dirLink =
       '<br><a href="' +
       mapsUrl(place.location.lat, place.location.lng) +
@@ -2461,7 +2505,7 @@ function initMap() {
         esc(place.name) +
         "</strong><br>" +
         '<span style="color:#888;font-size:11px">' +
-        esc(catLabel) +
+        esc(catLbl) +
         "</span>" +
         dirLink,
       { closeButton: false },
@@ -2504,7 +2548,7 @@ function initMap() {
 
 function modalInnerHTML(place) {
   var hasLoc = place.location && place.location.lat && place.location.lng;
-  var bannerPalette = CAT_BANNER_PALETTE[place.category] || { from: "#333", to: "#111" };
+  var bannerPalette = CAT_BANNER_PALETTE[normalizeCat(place.category)] || { from: "#333", to: "#111" };
   var favKey = (state.slug || "") + "__" + slugify(place.name);
   var isFav = state.placeFavs.has(favKey);
   var planKey = (state.slug || "") + "__" + slugify(place.name);
@@ -2798,7 +2842,7 @@ function initModalMap(place) {
       attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> © <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
       maxZoom: 19,
     }).addTo(map);
-    var color = MAP_COL[place.category] || "#555";
+    var color = catColor(place.category);
     var marker = L.marker([place.location.lat, place.location.lng], {
       icon: L.divIcon({
         className: "map-marker",
@@ -4056,7 +4100,7 @@ function openAutocomplete(inp, items, isHist) {
         esc(slugify(item.name)) +
         '">' +
         '<span class="ac-item-icon" aria-hidden="true">' +
-        (CAT_IC[item.category] || IC.mapPin) +
+        (item.category ? catIcon(item.category) : IC.mapPin) +
         "</span>" +
         '<div class="ac-item-info">' +
         '<span class="ac-item-name">' +
@@ -4067,9 +4111,9 @@ function openAutocomplete(inp, items, isHist) {
         "</span>" +
         "</div>" +
         '<span class="ac-badge badge badge-' +
-        esc(item.category) +
+        esc(normalizeCat(item.category)) +
         '">' +
-        esc(t("cats." + item.category)) +
+        esc(catLabel(item.category)) +
         "</span>" +
         "</div>"
       );
@@ -4311,7 +4355,7 @@ function categoryToSchema(cat) {
     muze: "Museum",
     gezi: "TouristAttraction",
   };
-  return map[cat] || "TouristAttraction";
+  return map[normalizeCat(cat)] || "TouristAttraction";
 }
 
 /** Update the JSON-LD script tag */
@@ -4332,7 +4376,7 @@ function setJsonLd(obj) {
 function buildCityFAQ(cityData, cityMeta, isTr) {
   var cityName   = cityData.city || cityMeta.city;
   var places     = cityData.places || [];
-  var foods      = places.filter(function(p) { return p.category === 'yemek'; });
+  var foods      = places.filter(function(p) { return normalizeCat(p.category) === 'yemek'; });
   var museums    = places.filter(function(p) { return p.category === 'muze'; });
   var mosques    = places.filter(function(p) { return p.category === 'cami'; });
   var sights     = places.filter(function(p) { return p.category === 'gezi'; });
@@ -4445,8 +4489,8 @@ function buildPlaceFAQ(place, cityMeta, isTr) {
 function buildCityHowTo(cityData, cityMeta, isTr) {
   var cityName = cityData.city || cityMeta.city;
   var places   = cityData.places || [];
-  var sights   = places.filter(function(p) { return p.category !== 'yemek'; }).slice(0, 3);
-  var foods    = places.filter(function(p) { return p.category === 'yemek'; }).slice(0, 2);
+  var sights   = places.filter(function(p) { return normalizeCat(p.category) !== 'yemek'; }).slice(0, 3);
+  var foods    = places.filter(function(p) { return normalizeCat(p.category) === 'yemek'; }).slice(0, 2);
   var seasonNote = (cityData.seasons && cityData.seasons.note) || '';
 
   if (isTr) {
