@@ -440,7 +440,7 @@
     {
       "id": "bursa-uzay-restoran",
       "name": "Uzay Restoran",
-      "category": "tatli",
+      "category": "tatlı",
       "description": "Çikolatalı Bebe",
       "mustEat": ["Çikolatalı Bebe"],
       "priceLevel": 2,
