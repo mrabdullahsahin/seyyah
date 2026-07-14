@@ -86,6 +86,412 @@
         "lat": 40.97962634163912,
         "lng": 29.107654266332876
       }
+    },
+    {
+      "id": "bursa-gokhan-aparatif",
+      "name": "Gökhan Aperitif",
+      "category": "yemek",
+      "description": "Salçalı Tost, Kavurmalı Yumurta, Ciğerli Böbrekli Karışım",
+      "mustEat": ["Salçalı Tost","Kavurmalı Yumurta","Ciğerli Böbrekli Karışım"],
+      "priceLevel": 2,
+      "tags": ["tost","kahvaltı"],
+      "openHours": "07:30 – 17:00",
+      "location": {
+        "lat": 40.19654038634811,
+        "lng": 29.090034785078124
+      }
+    },
+    {
+      "id": "bursa-fasulyeli",
+      "name": "Fasulyeli",
+      "category": "yemek",
+      "description": "Kestaneli Kuru Fasulye, Domatesli Pilav, Süt Helvası, Bal Kabaklı Süt Helvası",
+      "mustEat": ["Kestaneli Kuru Fasulye","Domatesli Pilav","Süt Helvası","Bal Kabaklı Süt Helvası"],
+      "priceLevel": 2,
+      "tags": ["fasulye"],
+      "openHours": "07:00 – 18:00",
+      "location": {
+        "lat": 40.204019648981784,
+        "lng": 28.945026681415364
+      }
+    },
+    {
+      "id": "bursa-besler-ingegol-koftecisi",
+      "name": "Besler İnegöl Köftecisi",
+      "category": "yemek",
+      "description": "İnegöl Köfte, Sütlü Kadayıf",
+      "mustEat": ["İnegöl Köfte","Sütlü Kadayıf"],
+      "priceLevel": 2,
+      "tags": ["inegöl köfte"],
+      "openHours": "11:00 – 20:00",
+      "location": {
+        "lat": 40.0794273187571,
+        "lng": 29.511782779939683
+      }
+    },
+    {
+      "id": "bursa-kebapci-huseiyin-usta",
+      "name": "Kebapçı Hüseyin Usta",
+      "category": "yemek",
+      "description": "Bursa Döner Kebap, Üzüm Şırası",
+      "mustEat": ["Döner Kebap","Üzüm Şırası"],
+      "priceLevel": 2,
+      "tags": ["iskender", "üzüm şırası"],
+      "openHours": "11:00 – 20:45",
+      "location": {
+        "lat": 40.184497015370795,
+        "lng": 29.06681318012849
+      }
+    },
+    {
+      "id": "bursa-kardelen-kestane-sekeri",
+      "name": "Kardelen Kestane Şekeri",
+      "category": "yemek",
+      "description": "Kestane Şekeri",
+      "mustEat": ["Kestane Şekeri"],
+      "priceLevel": 2,
+      "tags": ["Kestane Şekeri"],
+      "openHours": "08:00 – 20:30",
+      "location": {
+        "lat": 40.18591400948191,
+        "lng": 29.06467738326615
+      }
+    },
+    {
+      "id": "bursa-sagiroglu-restoran",
+      "name": "Sağıroğlu Restoran",
+      "category": "yemek",
+      "description": "Gece Döneri",
+      "mustEat": ["Gece Döneri"],
+      "priceLevel": 2,
+      "tags": ["Gece Döneri"],
+      "openHours": "08:00 – 05:00",
+      "location": {
+        "lat": 40.203764132258854,
+        "lng": 28.99691502559503
+      }
+    },
+    {
+      "id": "bursa-et-mangal",
+      "name": "RKC Et Mangal",
+      "category": "yemek",
+      "description": "Gece Döneri",
+      "mustEat": ["Gece Döneri"],
+      "priceLevel": 2,
+      "tags": ["Gece Döneri"],
+      "openHours": "10:00 – 23:00",
+      "location": {
+        "lat": 40.194667196195724,
+        "lng": 28.9977740102509
+      }
+    },
+    {
+      "id": "bursa-seha-gida",
+      "name": "Seha Gıda",
+      "category": "yemek",
+      "description": "Kahvaltı için güzel şeyler var",
+      "mustEat": ["kahvaltı"],
+      "priceLevel": 2,
+      "tags": ["kahvaltı"],
+      "openHours": "08:00 – 19:00",
+      "location": {
+        "lat": 40.185126507556205,
+        "lng": 29.064201383266187
+      }
+    },
+    {
+      "id": "bursa-mehmet-helvaci",
+      "name": "Mehmet Helvacı",
+      "category": "yemek",
+      "description": "Helva",
+      "mustEat": ["helva"],
+      "priceLevel": 2,
+      "tags": ["helva"],
+      "openHours": "07:30 – 19:00",
+      "location": {
+        "lat": 40.184111689261734,
+        "lng": 29.071157725594247
+      }
+    },
+    {
+      "id": "bursa-pidecioglu",
+      "name": "Pidecioğlu",
+      "category": "yemek",
+      "description": "pide",
+      "mustEat": ["pide"],
+      "priceLevel": 2,
+      "tags": ["pide"],
+      "openHours": "10:30 – 19:00",
+      "location": {
+        "lat": 40.184167592520936,
+        "lng": 29.07062784093806
+      }
+    },
+    {
+      "id": "bursa-aci-dayi-cantik",
+      "name": "Acı Dayı Cantık",
+      "category": "yemek",
+      "description": "Cantık",
+      "mustEat": ["Cantık"],
+      "priceLevel": 2,
+      "tags": ["Cantık"],
+      "openHours": "08:00 – 19:00",
+      "location": {
+        "lat": 40.18450399158595,
+        "lng": 29.070845912102094
+      }
+    },
+    {
+      "id": "bursa-kebapci-idris",
+      "name": "Kebapçı İdris",
+      "category": "yemek",
+      "description": "Pideli Köfte, Şıra",
+      "mustEat": ["Pideli Köfte", "Şıra"],
+      "priceLevel": 2,
+      "tags": ["Pideli Köfte", "Şıra"],
+      "openHours": "10:00 – 19:00",
+      "location": {
+        "lat": 40.18426380943278,
+        "lng": 29.070303525594284
+      }
+    },
+    {
+      "id": "bursa-bagdat-hurma-tatlicisi",
+      "name": "Bağdat Hurma Tatlıcısı",
+      "category": "tatlı",
+      "description": "Hurma Tatlısı",
+      "mustEat": ["Hurma Tatlısı"],
+      "priceLevel": 2,
+      "tags": ["Hurma Tatlısı"],
+      "openHours": "08:00 – 21:00",
+      "location": {
+        "lat": 40.19448968251536,
+        "lng": 29.06415221025087
+      }
+    },
+    {
+      "id": "bursa-mehmet-tanju-geye-dondurma-ve-tatli",
+      "name": "Mehmet Tanju Geye Dondurma ve Tatlı ",
+      "category": "tatlı",
+      "description": "Kazandibi, Tavukgöğsü, Dondurma",
+      "mustEat": ["Kazandibi", "Tavukgöğsü", "Dondurma"],
+      "priceLevel": 2,
+      "tags": ["Kazandibi", "Tavukgöğsü", "Dondurma"],
+      "openHours": "11:00 – 22:00",
+      "location": {
+        "lat": 40.18304319939413,
+        "lng": 29.064108914191735
+      }
+    },
+    {
+      "id": "bursa-pacaci-husnu",
+      "name": "Paçacı Hüsnü",
+      "category": "çorba",
+      "description": "Kelle Paça",
+      "mustEat": ["Kelle Paça"],
+      "priceLevel": 2,
+      "tags": ["Kelle Paça"],
+      "openHours": "06:30 – 16:00",
+      "location": {
+        "lat": 40.205097305826484,
+        "lng": 28.992760983266987
+      }
+    },
+    {
+      "id": "bursa-sifagah",
+      "name": "Şifagah",
+      "category": "çorba",
+      "description": "Bade Çorbası",
+      "mustEat": ["Bade Çorbası"],
+      "priceLevel": 2,
+      "tags": ["Bade Çorbası"],
+      "openHours": "07:00 – 23:00",
+      "location": {
+        "lat": 40.20368509769461,
+        "lng": 28.95484423745448
+      }
+    },
+    {
+      "id": "bursa-inci-pide",
+      "name": "İnci Pide",
+      "category": "yemek",
+      "description": "Cantık",
+      "mustEat": ["Cantık"],
+      "priceLevel": 2,
+      "tags": ["Cantık"],
+      "openHours": "11:00 – 18:00",
+      "location": {
+        "lat": 40.19293336065435,
+        "lng": 29.089238789653393
+      }
+    },
+    {
+      "id": "bursa-rodop-koftecisi",
+      "name": "Rodop Köftecisi",
+      "category": "yemek",
+      "description": "Köfte",
+      "mustEat": ["Köfte"],
+      "priceLevel": 2,
+      "tags": ["Köfte"],
+      "openHours": "11:30 – 22:00",
+      "location": {
+        "lat": 40.2022431221416,
+        "lng": 29.02470961678265
+      }
+    },
+    {
+      "id": "bursa-kebapci-idris",
+      "name": "Kebapçı İdris",
+      "category": "yemek",
+      "description": "Pideli Köfte",
+      "mustEat": ["Pideli Köfte"],
+      "priceLevel": 2,
+      "tags": ["Pideli Köfte"],
+      "openHours": "10:00 – 19:00",
+      "location": {
+        "lat": 40.18428435140823,
+        "lng": 29.07027134096204
+      }
+    },
+    {
+      "id": "bursa-gokada-tonton",
+      "name": "Gökada Tonton",
+      "category": "yemek",
+      "description": "Tonton",
+      "mustEat": ["Tonton"],
+      "priceLevel": 2,
+      "tags": ["Tonton"],
+      "openHours": "09:30 – 19:00",
+      "location": {
+        "lat": 40.184588942460124,
+        "lng": 29.070992486507812
+      }
+    },
+    {
+      "id": "bursa-bizim-ora-kokorec",
+      "name": "Bizim Ora Kokoreç",
+      "category": "yemek",
+      "description": "Kokoreç",
+      "mustEat": ["Kokoreç"],
+      "priceLevel": 2,
+      "tags": ["Kokoreç"],
+      "openHours": "12:00 – 00:00",
+      "location": {
+        "lat": 40.36405064128304,
+        "lng": 29.035742496765835
+      }
+    },
+    {
+      "id": "bursa-abdal-simit-fırını",
+      "name": "Abdal Simit Fırını",
+      "category": "yemek",
+      "description": "Tahinli Pide",
+      "mustEat": ["Tahinli Pide"],
+      "priceLevel": 2,
+      "tags": ["Tahinli Pide"],
+      "openHours": "07:00 – 17:00",
+      "location": {
+        "lat": 40.1873241685435,
+        "lng": 29.068131725594334
+      }
+    },
+    {
+      "id": "bursa-yesil-pideli-kofte",
+      "name": "Yeşil Pideli Köfte",
+      "category": "yemek",
+      "description": "Pideli Köfte",
+      "mustEat": ["Pideli Köfte"],
+      "priceLevel": 2,
+      "tags": ["Pideli Köfte"],
+      "openHours": "11:00 – 20:30",
+      "location": {
+        "lat": 40.184320209310116,
+        "lng": 29.0698674390865
+      }
+    },
+    {
+      "id": "bursa-tarihi-tas-firin",
+      "name": "Tarihi Taş Fırın",
+      "category": "yemek",
+      "description": "Tahinli Pide",
+      "mustEat": ["Tahinli Pide"],
+      "priceLevel": 2,
+      "tags": ["Tahinli Pide"],
+      "openHours": "06:30 – 20:30",
+      "location": {
+        "lat": 40.187292737836444,
+        "lng": 29.067975116113136
+      }
+    },
+    {
+      "id": "bursa-seyyar-borek",
+      "name": "Seyyar Börek",
+      "category": "yemek",
+      "description": "Kol Böreği",
+      "mustEat": ["Kol Böreği"],
+      "priceLevel": 2,
+      "tags": ["Kol Böreği"],
+      "openHours": "07:00 – 15:00",
+      "location": {
+        "lat": 40.21575539890372,
+        "lng": 28.950470496759603
+      }
+    },
+    {
+      "id": "bursa-uzay-restoran",
+      "name": "Uzay Restoran",
+      "category": "tatli",
+      "description": "Çikolatalı Bebe",
+      "mustEat": ["Çikolatalı Bebe"],
+      "priceLevel": 2,
+      "tags": ["Çikolatalı Bebe"],
+      "openHours": "07:00 – 00:30",
+      "location": {
+        "lat": 40.21840532678782,
+        "lng": 28.94183095350121
+      }
+    },
+    {
+      "id": "bursa-uc-kofte",
+      "name": "Üç Köfte",
+      "category": "yemek",
+      "description": "Köfte",
+      "mustEat": ["Köfte"],
+      "priceLevel": 2,
+      "tags": ["Köfte"],
+      "openHours": "09:00 – 17:00",
+      "location": {
+        "lat": 40.185637002842185,
+        "lng": 29.06154822559425
+      }
+    },
+    {
+      "id": "bursa-akay-cig-borek",
+      "name": "Akay Çiğ Börek",
+      "category": "yemek",
+      "description": "Çiğ Börek",
+      "mustEat": ["Çiğ Börek"],
+      "priceLevel": 2,
+      "tags": ["Çiğ Börek"],
+      "openHours": "11:00 – 18:00",
+      "location": {
+        "lat": 40.185214175427284,
+        "lng": 29.060667769773953
+      }
+    },
+    {
+      "id": "bursa-akay-cig-borek",
+      "name": "Üsküp Pastanesi",
+      "category": "yemek",
+      "description": "Simit Poğaça",
+      "mustEat": ["Simit Poğaça"],
+      "priceLevel": 2,
+      "tags": ["Simit Poğaça"],
+      "openHours": "07:00 – 23:00",
+      "location": {
+        "lat": 40.1980459641452,
+        "lng": 29.071847525594862
+      }
     }
   ],
   "itineraries": [
