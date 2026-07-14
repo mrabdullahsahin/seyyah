@@ -2,235 +2,409 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://abdullahsahin.org/seyyah//</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#bursa</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#bursa/i-nanc-firin</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#bursa/rumeli-kardesler-sofrasi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#bursa/tarihi-aynali-carsi-pide-ve-cantik</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#bursa/kayhan-koftecisi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#bursa/uludag-kebapcisi-cemal-cemil-usta-atasehir-subesi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/gokhan-aperitif</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/fasulyeli</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/besler-i-negol-koftecisi</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/kebapci-huseyin-usta</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/kardelen-kestane-sekeri</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/sagiroglu-restoran</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/rkc-et-mangal</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/seha-gida</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/mehmet-helvaci</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/pidecioglu</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/aci-dayi-cantik</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/kebapci-i-dris</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/bagdat-hurma-tatlicisi</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/mehmet-tanju-geye-dondurma-ve-tatli</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/pacaci-husnu</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/sifagah</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/i-nci-pide</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/rodop-koftecisi</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/kebapci-i-dris</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/gokada-tonton</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/bizim-ora-kokorec</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/abdal-simit-firini</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/yesil-pideli-kofte</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/tarihi-tas-firin</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/seyyar-borek</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/uzay-restoran</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/uc-kofte</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/akay-cig-borek</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://abdullahsahin.org/seyyah//#bursa/uskup-pastanesi</loc>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#gaziantep</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#gaziantep/zeugma-mozaik-muzesi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#gaziantep/gaziantep-kalesi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#gaziantep/bakircilar-carsisi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#gaziantep/dogan-dondurma</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#gaziantep/tahmis-kahvesi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#gaziantep/kasap-selcuk-usta</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#gaziantep/tarihi-elmacipazari-gulluoglu-baklava</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#gaziantep/celebiogullari-baklavaci-elmaci-pazari</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#gaziantep/kocak-baklava</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#gaziantep/akincioglu-baklavalari</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#gaziantep/yesemek-gaziantep-mutfagi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#gaziantep/dukat-kebap</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/mevlana-muzesi-ve-turbesi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/tandirci-emine-abla</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/kazimaga-lokantasi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/sema-lokantasi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/hasir-doner-6</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/cihan-pide-firini</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/buhara-i-negol-koftecisi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/seranade-etliekmek</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/osman-i-zmir-kokorec</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/tarihi-konya-kellecisi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/pasam-pastanesi-nisantasi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/yag-somunu-pideci-hasan-sendagli</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/tarihi-tiritci-mithat</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/karamanoglu-tatlipark</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/ali-baba-firin-kebap</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/lokmahane-carsi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/ornek-lokantasi</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://abdullahsahin.org/seyyah//#konya/cigerci-fatih-anadolu-sube</loc>
-    <lastmod>2026-05-27</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
