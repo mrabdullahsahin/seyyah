@@ -767,6 +767,17 @@
         "lat": 40.393232812655114,
         "lng": 28.796660425603026
       }
+    },
+    {
+      "id": "bursa-trilye-tas-mektep-hafiza",
+      "name": "Taş Mektep Hafıza",
+      "category": "tarihi mekan",
+      "description": "Taş Mektep Hafıza",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.392377255503135,
+        "lng": 28.794710213462547
+      }
     }
   ],
   "itineraries": [
