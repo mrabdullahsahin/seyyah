@@ -1075,6 +1075,17 @@
         "lat": 40.17709219167923,
         "lng": 28.96946842189084
       }
+    },
+    {
+      "id": "bursa-nilufer-saglik-muzesi-1",
+      "name": "Nilüfer Belediyesi Dr. Ceyhun İrgil Sağlık Müzesi",
+      "category": "müze",
+      "description": "Nilüfer Belediyesi Dr. Ceyhun İrgil Sağlık Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.2149836999752,
+        "lng": 28.982571800462743
+      }
     }
   ],
   "itineraries": [
