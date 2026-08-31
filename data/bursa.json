@@ -1097,6 +1097,17 @@
         "lat": 40.21528183813591,
         "lng": 28.982048544124858
       }
+    },
+    {
+      "id": "bursa-nilufer-muzik-muzesi",
+      "name": "Nilüfer Belediyesi Dr. Hüseyin Parkan Sanlıkol Müzik Enstrümanları Müzesi",
+      "category": "müze",
+      "description": "Nilüfer Belediyesi Dr. Hüseyin Parkan Sanlıkol Müzik Enstrümanları Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.209082462588725,
+        "lng": 28.9970606654748
+      }
     }
   ],
   "itineraries": [
