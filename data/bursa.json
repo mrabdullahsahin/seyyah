@@ -1020,6 +1020,17 @@
         "lat": 40.18487134684643,
         "lng": 29.066873788794457
       }
+    },
+    {
+      "id": "bursa-sadirvanli-han",
+      "name": "Şadırvanlı Han",
+      "category": "han",
+      "description": "Şadırvanlı Han",
+      "tags": ["han"],
+      "location": {
+        "lat": 40.18451777078111,
+        "lng": 29.0712172083989
+      }
     }
   ],
   "itineraries": [
