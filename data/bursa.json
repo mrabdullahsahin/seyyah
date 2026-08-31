@@ -844,6 +844,17 @@
         "lat": 39.95080617429546,
         "lng": 28.394165024930015
       }
+    },
+    {
+      "id": "bursa-hayvanat-bahcesi",
+      "name": "Bursa hayvanat bahçesi",
+      "category": "doğa",
+      "description": "Bursa hayvanat bahçesi",
+      "tags": ["doğa"],
+      "location": {
+        "lat": 40.220472092977204,
+        "lng": 29.046905651668304
+      }
     }
   ],
   "itineraries": [
