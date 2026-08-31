@@ -1240,6 +1240,17 @@
         "lat": 40.18398664715507,
         "lng": 29.049855752552915
       }
+    },
+    {
+      "id": "bursa-gazi-orhan-parki",
+      "name": "Bursa Gazi Orhan Parkı",
+      "category": "mekan",
+      "description": "Bursa Gazi Orhan Parkı",
+      "tags": ["mekan"],
+      "location": {
+        "lat": 40.18389613365961,
+        "lng": 29.063074699970354
+      }
     }
   ],
   "itineraries": [
