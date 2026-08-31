@@ -987,6 +987,17 @@
         "lat": 40.2021024441977,
         "lng": 29.00154305581575
       }
+    },
+    {
+      "id": "bursa-panorama-muzesi",
+      "name": "Panorama 1326 Bursa Fetih Müzesi",
+      "category": "müze",
+      "description": "Panorama 1326 Bursa Fetih Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.18646369724153,
+        "lng": 29.075689356281927
+      }
     }
   ],
   "itineraries": [
