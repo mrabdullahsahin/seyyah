@@ -1108,6 +1108,17 @@
         "lat": 40.209082462588725,
         "lng": 28.9970606654748
       }
+    },
+    {
+      "id": "bursa-mudanya-mutareke-evi",
+      "name": "Mudanya Mütareke Evi",
+      "category": "müze",
+      "description": "Mudanya Mütareke Evi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.379909864163,
+        "lng": 28.881773192032828
+      }
     }
   ],
   "itineraries": [
