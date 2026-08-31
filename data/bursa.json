@@ -822,6 +822,17 @@
         "lat": 40.39290395377403,
         "lng": 28.795693039095138
       }
+    },
+    {
+      "id": "bursa-inkaya-cinar-agaci",
+      "name": "İnkaya Tarihi Çınar ağacı",
+      "category": "tarihi mekan",
+      "description": "Şehrin simgesi olan bu asırlık ağaç, 18 m çapa ulaşan dallarıyla 35 m uzunluğundadır.",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.18254089381697,
+        "lng": 29.016731225594093
+      }
     }
   ],
   "itineraries": [
