@@ -800,6 +800,17 @@
         "lat": 40.39346598220291,
         "lng": 28.79508549676707
       }
+    },
+    {
+      "id": "bursa-trilye-kultur-merkezi",
+      "name": "Trilye Kültür Merkezi",
+      "category": "tarihi mekan",
+      "description": "Trilye Kültür Merkezi",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.3919816478152,
+        "lng": 28.794214557943455
+      }
     }
   ],
   "itineraries": [
