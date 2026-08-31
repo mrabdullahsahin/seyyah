@@ -602,6 +602,17 @@
         "lat": 40.18232690723888,
         "lng": 29.07417115443008
       }
+    },
+    {
+      "id": "bursa-yesil-turbe",
+      "name": "Yeşil Türbe",
+      "category": "turbe",
+      "description": "1421'de bir Osmanlı sultanı için mermer ve yeşil çinilerden inşa edilmiş süslü, sekizgen mezar.",
+      "tags": ["turbe"],
+      "location": {
+        "lat": 40.18154001199996,
+        "lng": 29.07486852876593
+      }
     }
   ],
   "itineraries": [
