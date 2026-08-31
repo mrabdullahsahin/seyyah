@@ -635,6 +635,17 @@
         "lat": 40.18142429087819,
         "lng": 29.081115183266018
       }
+    },
+    {
+      "id": "bursa-osman-gazi-turbesi",
+      "name": "Osman Gazi Türbesi",
+      "category": "turbe",
+      "description": "Tepedeki yeniden inşa edilmiş Bizans dönemine ait binada, ilk Osmanlı padişahının türbesi.",
+      "tags": ["turbe"],
+      "location": {
+        "lat": 40.18692248109766,
+        "lng": 29.057346567945544
+      }
     }
   ],
   "itineraries": [
