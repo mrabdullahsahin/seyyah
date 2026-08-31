@@ -899,6 +899,17 @@
         "lat": 40.1825068197081,
         "lng": 29.066409939086324
       }
+    },
+    {
+      "id": "bursa-saltanat-kapisi",
+      "name": "Saltanat Kapısı",
+      "category": "tarihi mekan",
+      "description": "Saltanat Kapısı",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.18567069927234,
+        "lng": 29.058008464620187
+      }
     }
   ],
   "itineraries": [
