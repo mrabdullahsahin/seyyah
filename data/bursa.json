@@ -1196,6 +1196,17 @@
         "lat": 40.185049104191876,
         "lng": 29.05854119860988
       }
+    },
+    {
+      "id": "bursa-goc-tarihi-muzesi",
+      "name": "Bursa Göç Tarihi Müzesi",
+      "category": "müze",
+      "description": "Bursa Göç Tarihi Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.20062065219834,
+        "lng": 29.052075540938702
+      }
     }
   ],
   "itineraries": [
