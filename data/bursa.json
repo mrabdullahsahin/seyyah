@@ -1152,6 +1152,17 @@
         "lat": 40.17602149811935,
         "lng": 29.072588212101685
       }
+    },
+    {
+      "id": "bursa-aralik-han",
+      "name": "Aralık Han",
+      "category": "han",
+      "description": "Aralık Han",
+      "tags": ["han"],
+      "location": {
+        "lat": 40.18284618315265,
+        "lng": 29.05944693908628
+      }
     }
   ],
   "itineraries": [
