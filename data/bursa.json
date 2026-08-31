@@ -855,6 +855,17 @@
         "lat": 40.220472092977204,
         "lng": 29.046905651668304
       }
+    },
+    {
+      "id": "bursa-tophane-parki",
+      "name": "Tophane Parkı",
+      "category": "doğa",
+      "description": "Tophane Parkı",
+      "tags": ["doğa"],
+      "location": {
+        "lat": 40.18767757092945,
+        "lng": 29.056619336916334
+      }
     }
   ],
   "itineraries": [
