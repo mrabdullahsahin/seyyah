@@ -954,6 +954,17 @@
         "lat": 40.18506222184322,
         "lng": 29.058519325594222
       }
+    },
+    {
+      "id": "bursa-ayasofya-camii",
+      "name": "İznik Ayasofya Camii",
+      "category": "cami",
+      "description": "İznik Ayasofya Camii",
+      "tags": ["cami"],
+      "location": {
+        "lat": 40.42945504224335,
+        "lng": 29.720124040948274
+      }
     }
   ],
   "itineraries": [
