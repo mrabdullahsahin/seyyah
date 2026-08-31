@@ -668,6 +668,17 @@
         "lat": 40.18501852836707,
         "lng": 29.061673840938017
       }
+    },
+    {
+      "id": "bursa-tophane-saat-kulesi",
+      "name": "Tophane Saat Kulesi",
+      "category": "tarihi mekan",
+      "description": "15 metre yüksekliğinde, neoklasik tarzdaki gösterişli saat kulesi 1905 yılında yeniden inşa edilmiştir.",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.18763322519447,
+        "lng": 29.05753272559444
+      }
     }
   ],
   "itineraries": [
