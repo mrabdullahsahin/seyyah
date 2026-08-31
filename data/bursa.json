@@ -690,6 +690,17 @@
         "lat": 40.1857094307901,
         "lng": 29.057880341952234
       }
+    },
+    {
+      "id": "bursa-cumalikizik-koyu",
+      "name": "Cumalıkızık Köyü",
+      "category": "tarihi mekan",
+      "description": "Cumalıkızık Köyü",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.17650840636968,
+        "lng": 29.172116733045097
+      }
     }
   ],
   "itineraries": [
