@@ -1130,6 +1130,17 @@
         "lat": 40.37667431887711,
         "lng": 28.88199457361821
       }
+    },
+    {
+      "id": "bursa-muradiye-el-yazmalari-muzesi",
+      "name": "Muradiye El Yazmaları Müzesi",
+      "category": "müze",
+      "description": "Muradiye El Yazmaları Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.19114410728032,
+        "lng": 29.045571639086624
+      }
     }
   ],
   "itineraries": [
