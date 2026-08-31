@@ -789,6 +789,17 @@
         "lat": 40.39266671252609,
         "lng": 28.794335154439036
       }
+    },
+    {
+      "id": "bursa-trilye-kemerli-klise",
+      "name": "Kemerli Kilise",
+      "category": "tarihi mekan",
+      "description": "Kemerli Kilise",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.39346598220291,
+        "lng": 28.79508549676707
+      }
     }
   ],
   "itineraries": [
