@@ -734,6 +734,17 @@
         "lat": 40.17442902407548,
         "lng": 29.17259142559391
       }
+    },
+    {
+      "id": "bursa-cumalikizik-koy-muzesi",
+      "name": "Cumalıkızık Köy Müzesi",
+      "category": "müze",
+      "description": "Cumalıkızık Köy Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.17510943242164,
+        "lng": 29.17187259358619
+      }
     }
   ],
   "itineraries": [
