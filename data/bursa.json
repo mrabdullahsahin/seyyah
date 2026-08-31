@@ -492,6 +492,17 @@
         "lat": 40.1980459641452,
         "lng": 29.071847525594862
       }
+    },
+    {
+      "id": "bursa-ulu-cami",
+      "name": "Ulu Cami",
+      "category": "cami",
+      "description": "Bursa Ulu Cami",
+      "tags": ["Cami"],
+      "location": {
+        "lat": 40.184007288188624,
+        "lng": 29.06187483832058
+      }
     }
   ],
   "itineraries": [
