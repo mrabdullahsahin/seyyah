@@ -1031,6 +1031,17 @@
         "lat": 40.18451777078111,
         "lng": 29.0712172083989
       }
+    },
+    {
+      "id": "bursa-geyve-han",
+      "name": "Geyve Han",
+      "category": "han",
+      "description": "Geyve Han",
+      "tags": ["han"],
+      "location": {
+        "lat": 40.185301507175566,
+        "lng": 29.062891539086525
+      }
     }
   ],
   "itineraries": [
