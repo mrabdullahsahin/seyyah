@@ -624,6 +624,17 @@
         "lat": 40.19081578249547,
         "lng": 29.045885152578823
       }
+    },
+    {
+      "id": "bursa-emir-sultan-camii",
+      "name": "Emir Sultan Camii",
+      "category": "cami",
+      "description": "1300'lerde kurulup 1850'lerde yeniden inşa edilen yüksek minareli Barok Osmanlı camisi.",
+      "tags": ["cami"],
+      "location": {
+        "lat": 40.18142429087819,
+        "lng": 29.081115183266018
+      }
     }
   ],
   "itineraries": [
