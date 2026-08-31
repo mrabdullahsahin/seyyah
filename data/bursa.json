@@ -1064,6 +1064,17 @@
         "lat": 40.17754191617785,
         "lng": 28.96964712744553
       }
+    },
+    {
+      "id": "bursa-nilufer-edebiyat-muzesi",
+      "name": "Nilüfer Belediyesi Edebiyat Müzesi",
+      "category": "müze",
+      "description": "Nilüfer Belediyesi Edebiyat Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.17709219167923,
+        "lng": 28.96946842189084
+      }
     }
   ],
   "itineraries": [
