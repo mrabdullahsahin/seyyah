@@ -1229,6 +1229,17 @@
         "lat": 40.182350109764705,
         "lng": 29.055943076357316
       }
+    },
+    {
+      "id": "bursa-zindankapi",
+      "name": "Bursa Zindankapı",
+      "category": "müze",
+      "description": "Bursa Zindankapı",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.18398664715507,
+        "lng": 29.049855752552915
+      }
     }
   ],
   "itineraries": [
