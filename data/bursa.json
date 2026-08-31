@@ -1185,6 +1185,17 @@
         "lat": 40.19954137619859,
         "lng": 29.052817696758897
       }
+    },
+    {
+      "id": "bursa-bicak-muzesi",
+      "name": "Bursa Bıçak Müzesi",
+      "category": "müze",
+      "description": "Bursa Bıçak Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.185049104191876,
+        "lng": 29.05854119860988
+      }
     }
   ],
   "itineraries": [
