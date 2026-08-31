@@ -1207,6 +1207,17 @@
         "lat": 40.20062065219834,
         "lng": 29.052075540938702
       }
+    },
+    {
+      "id": "bursa-vakif-kulturu-muzesi",
+      "name": "Bursa Vakıf Kültürü Müzesi",
+      "category": "müze",
+      "description": "Bursa Vakıf Kültürü Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.19977463852634,
+        "lng": 29.051549954430822
+      }
     }
   ],
   "itineraries": [
