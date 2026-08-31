@@ -866,6 +866,17 @@
         "lat": 40.18767757092945,
         "lng": 29.056619336916334
       }
+    },
+    {
+      "id": "bursa-hunkar-kosku-muzesi",
+      "name": "Hünkâr Köşkü Müzesi",
+      "category": "müze",
+      "description": "Hünkâr Köşkü Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.174283931136856,
+        "lng": 29.065055681414062
+      }
     }
   ],
   "itineraries": [
