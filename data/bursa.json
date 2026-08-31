@@ -525,6 +525,17 @@
         "lat": 40.18530972110304,
         "lng": 29.06096601316474
       }
+    },
+    {
+      "id": "bursa-emir-han",
+      "name": "Emir Han",
+      "category": "han",
+      "description": "Emir Han",
+      "tags": ["han"],
+      "location": {
+        "lat": 40.18476340842215,
+        "lng": 29.06229232657505
+      }
     }
   ],
   "itineraries": [
