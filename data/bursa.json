@@ -613,6 +613,17 @@
         "lat": 40.18154001199996,
         "lng": 29.07486852876593
       }
+    },
+    {
+      "id": "bursa-muradiye-kulliyesi",
+      "name": "Muradiye Külliyesi",
+      "category": "turbe",
+      "description": "Sultan II. Murat tarafından yaptırılan cami, medrese ve sultanların türbelerinin bulunduğu külliye.",
+      "tags": ["turbe"],
+      "location": {
+        "lat": 40.19081578249547,
+        "lng": 29.045885152578823
+      }
     }
   ],
   "itineraries": [
