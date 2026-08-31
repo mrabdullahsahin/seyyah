@@ -888,6 +888,17 @@
         "lat": 40.19605553519961,
         "lng": 29.041036083266643
       }
+    },
+    {
+      "id": "bursa-kent-muzesi",
+      "name": "Bursa Kent Müzesi",
+      "category": "müze",
+      "description": "Bursa Kent Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.1825068197081,
+        "lng": 29.066409939086324
+      }
     }
   ],
   "itineraries": [
