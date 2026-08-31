@@ -1053,6 +1053,17 @@
         "lat": 40.192116579194234,
         "lng": 29.045928469774154
       }
+    },
+    {
+      "id": "bursa-nilufer-fotograf-muzesi",
+      "name": "Nilüfer Belediyesi Fotoğraf Müzesi",
+      "category": "müze",
+      "description": "Nilüfer Belediyesi Fotoğraf Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.17754191617785,
+        "lng": 28.96964712744553
+      }
     }
   ],
   "itineraries": [
