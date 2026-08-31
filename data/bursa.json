@@ -1141,6 +1141,17 @@
         "lat": 40.19114410728032,
         "lng": 29.045571639086624
       }
+    },
+    {
+      "id": "bursa-umurbey-ipek-muzesi",
+      "name": "Umurbey İpek Üretim Ve Tasarım Merkezi",
+      "category": "müze",
+      "description": "Umurbey İpek Üretim Ve Tasarım Merkezi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.17602149811935,
+        "lng": 29.072588212101685
+      }
     }
   ],
   "itineraries": [
