@@ -921,6 +921,17 @@
         "lat": 40.185909684047445,
         "lng": 29.06025171025055
       }
+    },
+    {
+      "id": "bursa-ishak-pasa-cami",
+      "name": "İshak Paşa Cami",
+      "category": "cami",
+      "description": "İshak Paşa Cami",
+      "tags": ["cami"],
+      "location": {
+        "lat": 40.078631494816484,
+        "lng": 29.51244996791795
+      }
     }
   ],
   "itineraries": [
