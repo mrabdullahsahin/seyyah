@@ -932,6 +932,17 @@
         "lat": 40.078631494816484,
         "lng": 29.51244996791795
       }
+    },
+    {
+      "id": "bursa-iznik-roma-tiyatrosu",
+      "name": "İznik Roma Tiyatrosu",
+      "category": "tarihi mekan",
+      "description": "İznik Roma Tiyatrosu",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.42751718007566,
+        "lng": 29.717822759467165
+      }
     }
   ],
   "itineraries": [
