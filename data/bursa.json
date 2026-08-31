@@ -503,6 +503,17 @@
         "lat": 40.184007288188624,
         "lng": 29.06187483832058
       }
+    },
+    {
+      "id": "bursa-koza-han",
+      "name": "Koza Han",
+      "category": "han",
+      "description": "Koza Han'da Türk Kahvesi içilebilir.",
+      "tags": ["han"],
+      "location": {
+        "lat": 40.184669371018884,
+        "lng": 29.063515184873207
+      }
     }
   ],
   "itineraries": [
