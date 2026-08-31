@@ -723,6 +723,17 @@
         "lat": 40.17488470786183,
         "lng": 29.171855287011713
       }
+    },
+    {
+      "id": "bursa-cumalikizik-koyu-cin-araligi",
+      "name": "Cumalıkızık Köyü - Cin Aralığı",
+      "category": "tarihi mekan",
+      "description": "Cumalıkızık Köyü - Cin Aralığı",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.17442902407548,
+        "lng": 29.17259142559391
+      }
     }
   ],
   "itineraries": [
