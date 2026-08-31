@@ -965,6 +965,17 @@
         "lat": 40.42945504224335,
         "lng": 29.720124040948274
       }
+    },
+    {
+      "id": "bursa-karacabey-longoz-ormanlari",
+      "name": "Karacabey Longoz Ormanları",
+      "category": "doğa",
+      "description": "Karacabey Longoz Ormanları",
+      "tags": ["doğa"],
+      "location": {
+        "lat": 40.38835313189601,
+        "lng": 28.424972570745435
+      }
     }
   ],
   "itineraries": [
