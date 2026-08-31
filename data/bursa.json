@@ -679,6 +679,17 @@
         "lat": 40.18763322519447,
         "lng": 29.05753272559444
       }
+    },
+    {
+      "id": "bursa-hisar-kapisi",
+      "name": "Hisar Kapısı",
+      "category": "tarihi mekan",
+      "description": "Hisar Kapısı",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.1857094307901,
+        "lng": 29.057880341952234
+      }
     }
   ],
   "itineraries": [
