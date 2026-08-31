@@ -833,6 +833,17 @@
         "lat": 40.18254089381697,
         "lng": 29.016731225594093
       }
+    },
+    {
+      "id": "bursa-suuctu-selalesi",
+      "name": "Suuçtu Tabiat Parkı ve Şelalesi",
+      "category": "doğa",
+      "description": "Sarp bir kayadan doğal göllere dökülen, etrafı orman yeşillikleri ve piknik masaları ile çevrili şelale.",
+      "tags": ["doğa"],
+      "location": {
+        "lat": 39.95080617429546,
+        "lng": 28.394165024930015
+      }
     }
   ],
   "itineraries": [
