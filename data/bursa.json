@@ -1042,6 +1042,17 @@
         "lat": 40.185301507175566,
         "lng": 29.062891539086525
       }
+    },
+    {
+      "id": "bursa-uluumay-muzesi",
+      "name": "Uluumay Osmanlı Halk Kıyafetleri Ve Takılar Müzesi",
+      "category": "müze",
+      "description": "Uluumay Osmanlı Halk Kıyafetleri Ve Takılar Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.192116579194234,
+        "lng": 29.045928469774154
+      }
     }
   ],
   "itineraries": [
