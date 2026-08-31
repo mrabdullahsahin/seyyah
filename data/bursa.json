@@ -558,6 +558,17 @@
         "lat": 40.18210572007086,
         "lng": 29.070877158365942
       }
+    },
+    {
+      "id": "bursa-zeyniler-seyir-terasi",
+      "name": "Zeyniler Seyir Terası",
+      "category": "mekan",
+      "description": "Manzara seyir noktası",
+      "tags": ["mekan"],
+      "location": {
+        "lat": 40.16810680169691,
+        "lng": 29.111820063892157
+      }
     }
   ],
   "itineraries": [
