@@ -1174,6 +1174,17 @@
         "lat": 40.18307678568697,
         "lng": 29.059456454430073
       }
+    },
+    {
+      "id": "bursa-merinos-muzesi",
+      "name": "Merinos Tekstil Sanayi Müzesi",
+      "category": "müze",
+      "description": "Merinos Tekstil Sanayi Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.19954137619859,
+        "lng": 29.052817696758897
+      }
     }
   ],
   "itineraries": [
