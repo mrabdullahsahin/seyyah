@@ -910,6 +910,17 @@
         "lat": 40.18567069927234,
         "lng": 29.058008464620187
       }
+    },
+    {
+      "id": "bursa-pirinc-han",
+      "name": "Pirinç Han",
+      "category": "tarihi mekan",
+      "description": "Pirinç Han",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.185909684047445,
+        "lng": 29.06025171025055
+      }
     }
   ],
   "itineraries": [
