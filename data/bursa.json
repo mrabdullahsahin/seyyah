@@ -657,6 +657,17 @@
         "lat": 40.18694988478827,
         "lng": 29.057767725594353
       }
+    },
+    {
+      "id": "bursa-kapali-carsi",
+      "name": "Bursa Kapalı Çarşı",
+      "category": "tarihi mekan",
+      "description": "Bursa Kapalı Çarşı",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.18501852836707,
+        "lng": 29.061673840938017
+      }
     }
   ],
   "itineraries": [
