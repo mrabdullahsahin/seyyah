@@ -547,6 +547,17 @@
         "lat": 40.185070997073936,
         "lng": 29.063929423742632
       }
+    },
+    {
+      "id": "bursa-irgandi-koprusu",
+      "name": "Irgandı Köprüsü",
+      "category": "tarihi mekan",
+      "description": "Osmanlı Dönemi'nde inşa edilen kemerli taş köprünün çevresinde geleneksel el sanatları dükkanları bulunur.",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.18210572007086,
+        "lng": 29.070877158365942
+      }
     }
   ],
   "itineraries": [
