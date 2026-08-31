@@ -877,6 +877,17 @@
         "lat": 40.174283931136856,
         "lng": 29.065055681414062
       }
+    },
+    {
+      "id": "bursa-arkeoloji-muzesi",
+      "name": "Bursa Arkeoloji Müzesi",
+      "category": "müze",
+      "description": "Bursa Arkeoloji Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.19605553519961,
+        "lng": 29.041036083266643
+      }
     }
   ],
   "itineraries": [
