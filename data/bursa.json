@@ -646,6 +646,17 @@
         "lat": 40.18692248109766,
         "lng": 29.057346567945544
       }
+    },
+    {
+      "id": "bursa-orhan-gazi-turbesi",
+      "name": "Orhan Gazi Türbesi",
+      "category": "turbe",
+      "description": "Orhan Gazi Türbesi",
+      "tags": ["turbe"],
+      "location": {
+        "lat": 40.18694988478827,
+        "lng": 29.057767725594353
+      }
     }
   ],
   "itineraries": [
