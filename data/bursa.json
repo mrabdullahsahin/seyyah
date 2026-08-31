@@ -1086,6 +1086,17 @@
         "lat": 40.2149836999752,
         "lng": 28.982571800462743
       }
+    },
+    {
+      "id": "bursa-nilufer-saglik-muzesi-2",
+      "name": "Nilüfer Sağlık Müzesi",
+      "category": "müze",
+      "description": "Nilüfer Sağlık Müzesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.21528183813591,
+        "lng": 28.982048544124858
+      }
     }
   ],
   "itineraries": [
