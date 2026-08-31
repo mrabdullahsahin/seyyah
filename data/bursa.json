@@ -514,6 +514,17 @@
         "lat": 40.184669371018884,
         "lng": 29.063515184873207
       }
+    },
+    {
+      "id": "bursa-eski-ipek-han",
+      "name": "Eski İpek Han",
+      "category": "han",
+      "description": "Eski İpek Han",
+      "tags": ["han"],
+      "location": {
+        "lat": 40.18530972110304,
+        "lng": 29.06096601316474
+      }
     }
   ],
   "itineraries": [
