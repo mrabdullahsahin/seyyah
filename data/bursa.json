@@ -756,6 +756,17 @@
         "lat": 40.175385724011456,
         "lng": 29.17145842559383
       }
+    },
+    {
+      "id": "bursa-trilye-fatih-cami",
+      "name": "Trilye Fatih Camii",
+      "category": "cami",
+      "description": "Trilye Fatih Camii",
+      "tags": ["cami"],
+      "location": {
+        "lat": 40.393232812655114,
+        "lng": 28.796660425603026
+      }
     }
   ],
   "itineraries": [
