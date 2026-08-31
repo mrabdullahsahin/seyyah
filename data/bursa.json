@@ -591,6 +591,17 @@
         "lat": 40.20203599823597,
         "lng": 29.0274163697746
       }
+    },
+    {
+      "id": "bursa-yesil-cami",
+      "name": "Yeşil Cami",
+      "category": "cami",
+      "description": "Cami",
+      "tags": ["cami"],
+      "location": {
+        "lat": 40.18232690723888,
+        "lng": 29.07417115443008
+      }
     }
   ],
   "itineraries": [
