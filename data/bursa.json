@@ -569,6 +569,17 @@
         "lat": 40.16810680169691,
         "lng": 29.111820063892157
       }
+    },
+    {
+      "id": "bursa-sahintepe",
+      "name": "Şahin Tepe",
+      "category": "mekan",
+      "description": "Manzara seyir noktası",
+      "tags": ["mekan"],
+      "location": {
+        "lat": 40.1923860564387,
+        "lng": 29.031256067922623
+      }
     }
   ],
   "itineraries": [
