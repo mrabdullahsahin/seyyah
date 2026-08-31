@@ -976,6 +976,17 @@
         "lat": 40.38835313189601,
         "lng": 28.424972570745435
       }
+    },
+    {
+      "id": "bursa-hudavendigar-kent-parki",
+      "name": "Hüdavendigar Kent Parkı",
+      "category": "doğa",
+      "description": "Hüdavendigar Kent Parkı",
+      "tags": ["doğa"],
+      "location": {
+        "lat": 40.2021024441977,
+        "lng": 29.00154305581575
+      }
     }
   ],
   "itineraries": [
