@@ -1175,6 +1175,159 @@
           ]
         }
       ]
+    },
+    {
+      "id": "bursa-3-gun",
+      "duration": 3,
+      "title": "3 Günlük Bursa Turu",
+      "title_en": "3-Day Bursa Tour",
+      "description": "Tarihi çarşı, Yeşil semt ve Cumalıkızık: Bursa'yı üç günde, çoğunlukla yürüyerek keşfet.",
+      "description_en": "Historic bazaar, the Green district and Cumalıkızık: explore Bursa in three days, mostly on foot.",
+      "days": [
+        {
+          "day": 1,
+          "title": "Tarihi Çarşı ve Hanlar Turu (Yürüyerek)",
+          "title_en": "Historic Bazaar & Caravanserais (On Foot)",
+          "places": [
+            "bursa-seha-gida",
+            "bursa-ulu-cami",
+            "bursa-koza-han",
+            "bursa-kapali-carsi",
+            "bursa-akay-cig-borek",
+            "bursa-hisar-kapisi",
+            "bursa-tophane-saat-kulesi",
+            "bursa-tophane-parki",
+            "bursa-uc-kofte"
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Yeşil Semt, Emir Sultan ve Irgandı (Yürüyerek)",
+          "title_en": "Yeşil District, Emir Sultan & Irgandı (On Foot)",
+          "places": [
+            "bursa-mehmet-helvaci",
+            "bursa-irgandi-koprusu",
+            "bursa-yesil-cami",
+            "bursa-yesil-turbe",
+            "bursa-emir-sultan-camii",
+            "bursa-panorama-muzesi",
+            "bursa-aci-dayi-cantik",
+            "bursa-kebapci-huseiyin-usta",
+            "bursa-bagdat-hurma-tatlicisi"
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Muradiye ve Cumalıkızık Köyü (Araçla Gidiş, Köyde Yürüyerek)",
+          "title_en": "Muradiye & Cumalıkızık Village (Drive There, Walk the Village)",
+          "places": [
+            "inanc-firin",
+            "bursa-muradiye-kulliyesi",
+            "bursa-uluumay-muzesi",
+            "bursa-cumalikizik-koyu",
+            "bursa-cumalikizik-koyu-cami",
+            "bursa-cumalikizik-koyu-kupeli-ev",
+            "bursa-cumalikizik-koyu-cin-araligi",
+            "bursa-cumalikizik-koy-muzesi",
+            "bursa-zeyniler-seyir-terasi",
+            "bursa-kebapci-idris"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bursa-5-gun",
+      "duration": 5,
+      "title": "5 Günlük Bursa Turu",
+      "title_en": "5-Day Bursa Tour",
+      "description": "Tarihi merkezden Cumalıkızık'a, Mudanya'dan Trilye'ye: Bursa'yı beş günde derinlemesine keşfet. Şehir içi günlerde arabaya hiç ihtiyaç yok; şehir dışı günlerde ise araç sadece gidiş-dönüş için kullanılır, günün tamamı yürüyerek gezilir.",
+      "description_en": "From the historic center to Cumalıkızık, from Mudanya to Trilye: explore Bursa in depth over five days. In-city days need no car at all; on the out-of-town days the car is only used to get there and back, while the whole day is spent exploring on foot.",
+      "days": [
+        {
+          "day": 1,
+          "title": "Ulu Cami ve Kapalı Çarşı Çevresi (Tamamen Yürüyerek)",
+          "title_en": "Ulu Cami & Kapalı Çarşı Area (Entirely On Foot)",
+          "places": [
+            "bursa-seha-gida",
+            "bursa-ulu-cami",
+            "bursa-koza-han",
+            "bursa-eski-ipek-han",
+            "bursa-fidan-han",
+            "bursa-kapali-carsi",
+            "tarihi-aynali-carsi",
+            "bursa-kardelen-kestane-sekeri",
+            "bursa-uc-kofte"
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Tophane, Hanlar ve Osmanlı Türbeleri (Tamamen Yürüyerek)",
+          "title_en": "Tophane, Caravanserais & Ottoman Tombs (Entirely On Foot)",
+          "places": [
+            "bursa-akay-cig-borek",
+            "bursa-pirinc-han",
+            "bursa-balibey-han",
+            "bursa-hisar-kapisi",
+            "bursa-saltanat-kapisi",
+            "bursa-tophane-saat-kulesi",
+            "bursa-osman-gazi-turbesi",
+            "bursa-orhan-gazi-turbesi",
+            "bursa-tophane-parki",
+            "bursa-tarihi-tas-firin"
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Yeşil Semt ve Irgandı Köprüsü (Tamamen Yürüyerek)",
+          "title_en": "Yeşil District & Irgandı Bridge (Entirely On Foot)",
+          "places": [
+            "bursa-mehmet-helvaci",
+            "bursa-irgandi-koprusu",
+            "bursa-yesil-pideli-kofte",
+            "bursa-yesil-cami",
+            "bursa-yesil-turbe",
+            "bursa-emir-sultan-camii",
+            "bursa-panorama-muzesi",
+            "bursa-kent-muzesi",
+            "bursa-mehmet-tanju-geye-dondurma-ve-tatli"
+          ]
+        },
+        {
+          "day": 4,
+          "title": "Muradiye Külliyesi ve Cumalıkızık Köyü (Araçla Gidiş, Sonra Tamamen Yürüyerek)",
+          "title_en": "Muradiye Complex & Cumalıkızık Village (Drive There, Then Entirely On Foot)",
+          "places": [
+            "inanc-firin",
+            "bursa-muradiye-kulliyesi",
+            "bursa-muradiye-el-yazmalari-muzesi",
+            "bursa-uluumay-muzesi",
+            "bursa-arkeoloji-muzesi",
+            "bursa-cumalikizik-koyu",
+            "bursa-cumalikizik-koyu-cami",
+            "bursa-cumalikizik-koyu-kupeli-ev",
+            "bursa-cumalikizik-koyu-cin-araligi",
+            "bursa-cumalikizik-koy-muzesi",
+            "bursa-cumalikizik-koy-bulanlar-konak",
+            "bursa-zeyniler-seyir-terasi"
+          ]
+        },
+        {
+          "day": 5,
+          "title": "Mudanya ve Trilye Sahil Turu (Araçla Gidiş, Kasabalarda Tamamen Yürüyerek)",
+          "title_en": "Mudanya & Trilye Coastal Tour (Drive There, Then Entirely On Foot)",
+          "places": [
+            "bursa-mudanya-mutareke-evi",
+            "bursa-mudanya-tahir-pasa-konagi",
+            "bursa-trilye-fatih-cami",
+            "bursa-trilye-kemerli-klise",
+            "bursa-trilye-dundar-evi",
+            "bursa-trilye-tas-mektep-hafiza",
+            "bursa-trilye-kultur-merkezi",
+            "bursa-trilye-tabut-ev",
+            "bursa-sagiroglu-restoran"
+          ]
+        }
+      ]
     }
   ]
 }
