@@ -1163,6 +1163,17 @@
         "lat": 40.18284618315265,
         "lng": 29.05944693908628
       }
+    },
+    {
+      "id": "bursa-akarsu-hani",
+      "name": "Akarsu İşhanı No.4",
+      "category": "tarihi mekan",
+      "description": "Akarsu İşhanı No.4",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.18307678568697,
+        "lng": 29.059456454430073
+      }
     }
   ],
   "itineraries": [
