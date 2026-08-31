@@ -1251,7 +1251,21 @@
         "lat": 40.18389613365961,
         "lng": 29.063074699970354
       }
-    }
+    },
+    {
+      "id": "bursa-ulus-pastanesi",
+      "name": "Ulus Pastanesi",
+      "category": "tatlı",
+      "description": "Marşal Pastasi",
+      "mustEat": ["Marşal Pastasi"],
+      "priceLevel": 2,
+      "tags": ["Çikolatalı Bebe"],
+      "openHours": "09:00 – 21:00",
+      "location": {
+        "lat": 40.18427309875293,
+        "lng": 29.06069103267309
+      }
+    },
   ],
   "itineraries": [
     {
