@@ -1119,6 +1119,17 @@
         "lat": 40.379909864163,
         "lng": 28.881773192032828
       }
+    },
+    {
+      "id": "bursa-mudanya-tahir-pasa-konagi",
+      "name": "Tahir Paşa Konağı",
+      "category": "müze",
+      "description": "Tahir Paşa Konağı",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.37667431887711,
+        "lng": 28.88199457361821
+      }
     }
   ],
   "itineraries": [
