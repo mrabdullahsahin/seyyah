@@ -778,6 +778,17 @@
         "lat": 40.392377255503135,
         "lng": 28.794710213462547
       }
+    },
+    {
+      "id": "bursa-trilye-dundar-evi",
+      "name": "Dündar Evi (Hagios Ioannes Church)",
+      "category": "tarihi mekan",
+      "description": "Dündar Evi (Hagios Ioannes Church)",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.39266671252609,
+        "lng": 28.794335154439036
+      }
     }
   ],
   "itineraries": [
