@@ -811,6 +811,17 @@
         "lat": 40.3919816478152,
         "lng": 28.794214557943455
       }
+    },
+    {
+      "id": "bursa-trilye-tabut-ev",
+      "name": "Trilye Tabut Ev",
+      "category": "tarihi mekan",
+      "description": "Trilye Tabut Ev",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.39290395377403,
+        "lng": 28.795693039095138
+      }
     }
   ],
   "itineraries": [
