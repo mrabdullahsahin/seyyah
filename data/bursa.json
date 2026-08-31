@@ -943,6 +943,17 @@
         "lat": 40.42751718007566,
         "lng": 29.717822759467165
       }
+    },
+    {
+      "id": "bursa-balibey-han",
+      "name": "Balibey Han",
+      "category": "han",
+      "description": "Balibey Han",
+      "tags": ["han"],
+      "location": {
+        "lat": 40.18506222184322,
+        "lng": 29.058519325594222
+      }
     }
   ],
   "itineraries": [
