@@ -998,6 +998,17 @@
         "lat": 40.18646369724153,
         "lng": 29.075689356281927
       }
+    },
+    {
+      "id": "bursa-tuz-han",
+      "name": "Tuz Han",
+      "category": "han",
+      "description": "Tuz Han",
+      "tags": ["han"],
+      "location": {
+        "lat": 40.184764792647,
+        "lng": 29.065736532157324
+      }
     }
   ],
   "itineraries": [
