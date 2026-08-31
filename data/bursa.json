@@ -580,6 +580,17 @@
         "lat": 40.1923860564387,
         "lng": 29.031256067922623
       }
+    },
+    {
+      "id": "bursa-tofas-anadolu-arabalari-muzesi",
+      "name": "Tofaş Anadolu Arabalar Müzesi",
+      "category": "müze",
+      "description": "Müze",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.176716225847535,
+        "lng": 29.07103006792198
+      }
     }
   ],
   "itineraries": [
