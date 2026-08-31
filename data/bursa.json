@@ -1218,6 +1218,17 @@
         "lat": 40.19977463852634,
         "lng": 29.051549954430822
       }
+    },
+    {
+      "id": "bursa-mevlevihanesi",
+      "name": "Bursa Mevlevihanesi",
+      "category": "müze",
+      "description": "Bursa Mevlevihanesi",
+      "tags": ["müze"],
+      "location": {
+        "lat": 40.182350109764705,
+        "lng": 29.055943076357316
+      }
     }
   ],
   "itineraries": [
