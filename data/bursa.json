@@ -1009,6 +1009,17 @@
         "lat": 40.184764792647,
         "lng": 29.065736532157324
       }
+    },
+    {
+      "id": "bursa-cukur-han",
+      "name": "Çukur Han",
+      "category": "han",
+      "description": "Çukur Han",
+      "tags": ["han"],
+      "location": {
+        "lat": 40.18487134684643,
+        "lng": 29.066873788794457
+      }
     }
   ],
   "itineraries": [
