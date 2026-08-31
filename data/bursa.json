@@ -745,6 +745,17 @@
         "lat": 40.17510943242164,
         "lng": 29.17187259358619
       }
+    },
+    {
+      "id": "bursa-cumalikizik-koy-bulanlar-konak",
+      "name": "Cumalıkızık Bulanlar Konak",
+      "category": "tarihi mekan",
+      "description": "Cumalıkızık Bulanlar Konak",
+      "tags": ["tarihi mekan"],
+      "location": {
+        "lat": 40.175385724011456,
+        "lng": 29.17145842559383
+      }
     }
   ],
   "itineraries": [
