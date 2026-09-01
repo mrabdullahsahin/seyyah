@@ -3665,6 +3665,18 @@ body.modal-open {
   opacity: 0.7;
 }
 
+.itin-place-item-clickable {
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.itin-place-item-clickable:hover,
+.itin-place-item-clickable:focus-visible {
+  background: var(--bg-active, var(--border-md));
+  color: var(--ink);
+  outline: none;
+}
+
 .itin-card-footer {
   display: flex;
   align-items: center;

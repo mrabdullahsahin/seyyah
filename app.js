@@ -3487,7 +3487,13 @@ function renderItinerariesHTML() {
                 if (state.cityData.places[pi].id === placeId) { p = state.cityData.places[pi]; break; }
               }
               return (
-                '<li class="itin-place-item">' +
+                '<li class="itin-place-item' +
+                (p ? " itin-place-item-clickable" : "") +
+                '"' +
+                (p
+                  ? ' data-place-id="' + esc(p.id) + '" tabindex="0" role="button" aria-label="' + esc(p.name) + '"'
+                  : "") +
+                ">" +
                 IC.mapPin +
                 " " +
                 esc(p ? p.name : placeId) +
@@ -3598,6 +3604,25 @@ function bindItineraryEvents(container) {
       openItinMapModal(btn.dataset.itinId, btn);
     });
   });
+
+  container.querySelectorAll(".itin-place-item-clickable[data-place-id]").forEach(function (li) {
+    var openFromItinPlace = function () {
+      var placeId = li.dataset.placeId;
+      var place =
+        state.cityData &&
+        state.cityData.places.find(function (p) {
+          return p.id === placeId;
+        });
+      if (place) openPlaceModal(place);
+    };
+    li.addEventListener("click", openFromItinPlace);
+    li.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openFromItinPlace();
+      }
+    });
+  });
 }
 
 function openItinMapModal(itinId, triggerEl) {
@@ -3704,6 +3729,60 @@ function closeItinMapModal(triggerEl) {
   }, 270);
 }
 
+// Builds the popup content shown when a route-map marker is clicked —
+// includes category, description, hours and a directions link so the
+// popup works as a mini detail card for that stop.
+function buildItinStopPopupHTML(stop, num) {
+  var place = stop.place;
+  var name = place ? place.name : stop.placeId;
+  var html = "<strong>" + esc(num + ". " + name) + "</strong>";
+
+  if (!place) {
+    html +=
+      '<br><span style="font-size:11px;color:#888">' +
+      esc(t("itin_map_day_label", stop.day)) +
+      "</span>";
+    return html;
+  }
+
+  html +=
+    '<br><span style="font-size:11px;color:' +
+    catColor(place.category) +
+    '">' +
+    esc(catLabel(place.category)) +
+    "</span>" +
+    '<span style="font-size:11px;color:#888"> · ' +
+    esc(t("itin_map_day_label", stop.day)) +
+    "</span>";
+
+  if (place.description) {
+    html +=
+      '<p style="margin:6px 0 0;font-size:12px;line-height:1.4">' +
+      esc(place.description) +
+      "</p>";
+  }
+
+  if (place.openHours) {
+    html +=
+      '<div style="margin-top:6px;font-size:11px;color:#888">' +
+      esc(t("open_hours")) +
+      " " +
+      esc(place.openHours) +
+      "</div>";
+  }
+
+  if (place.location && place.location.lat) {
+    html +=
+      '<br><a href="' +
+      mapsUrl(place.location.lat, place.location.lng) +
+      '" target="_blank" rel="noopener">' +
+      esc(t("directions")) +
+      "</a>";
+  }
+
+  return html;
+}
+
 function initItinMap(stops) {
   var mapEl = document.getElementById("itin-map-el");
   if (!mapEl || typeof window.L === "undefined") return;
@@ -3763,11 +3842,10 @@ function initItinMap(stops) {
         }),
         alt: s.place ? s.place.name : s.placeId,
       });
-      marker.bindPopup(
-        "<strong>" + esc(num + ". " + (s.place ? s.place.name : s.placeId)) + "</strong>" +
-        '<br><span style="font-size:11px;color:#888">' + esc(t("itin_map_day_label", s.day)) + "</span>",
-        { closeButton: false }
-      );
+      marker.bindPopup(buildItinStopPopupHTML(s, num), {
+        closeButton: false,
+        maxWidth: 240,
+      });
       marker.addTo(map);
       markersByDay[s.day].push({ marker: marker, latlng: [s.place.location.lat, s.place.location.lng] });
     });

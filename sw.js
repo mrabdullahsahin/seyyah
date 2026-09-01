@@ -1,7 +1,7 @@
 'use strict';
 
 // Bumping the version number automatically clears the old cache
-var CACHE_NAME = 'seyyah-v1';
+var CACHE_NAME = 'seyyah-v3';
 
 // App shell + all data files to precache
 var PRECACHE = [
